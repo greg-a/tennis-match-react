@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import './App.css';
 import Jumbotron from "./components/Jumbotron";
+import Scheduler from "./pages/Scheduler"
 
 
 
@@ -9,7 +9,8 @@ function App() {
 
   return ( 
   <Router>
-    <Route exact path="/test" component={Jumbotron} />
+    <Jumbotron />
+    <Route exact path="/test" component={Scheduler} />
   </Router>
   )
 }
