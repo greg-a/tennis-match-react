@@ -1,10 +1,15 @@
 import React from "react";
+import Thumbnail from "../Thumbnail";
 import { Container, Row, Col } from "../Grid";
 
+// For entire feed of FeedItem components
 export function Feed({ children }) {
     return <ul className="list-group">{children}</ul>
 }
+
+// For each event just scheduled or just completed
 export function FeedItem({
+    //later replace with hybrid image of both participating players
     thumbnail = "https://placehold.it/300x300",
     message
 }) {
