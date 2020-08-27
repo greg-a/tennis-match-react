@@ -10,7 +10,6 @@ module.exports = function (app) {
         var username = req.body.username;
         var password = req.body.password;
 
-
         if (username && password) {
             var hashed_password = crypto.createHash("sha1").update(req.body.password).digest("hex");
             db.User.findAll({
@@ -20,22 +19,39 @@ module.exports = function (app) {
                 }
             }).then(function (results) {
                 if (results.length > 0) {
+                    console.log("YOU ARE LOGGED IN");
                     req.session.loggedin = true;
                     req.session.userID = results[0].id;
                     req.session.username = results[0].username;
                     req.session.useremail = results[0].email;
                     // res.redirect("/loggedin");
-                    res.send("loggedin");
+                    res.send({
+                        statusString: "loggedin"
+                    });
                 } else {
-                    res.send("wrongPassOrUser");
+                    console.log("WRONG PASS OR USER")
+                    res.send({
+                        statusString: "wrongPassOrUser"
+                    });
                 }
             });
 
         } else {
-            res.send("noPassOrUser");
+            res.send({
+                statusString: "noPassOrUser"
+            });
         }
 
     });
+
+    // trying to authenticate react router
+    app.get("/api/checklogin", function(req,res) {
+        if (req.session.loggedin) {
+            res.sendStatus(200)
+        } else {
+            res.sendStatus(404)
+        }
+    })
 
     // Create account
     app.post("/api", function (req, res) {
