@@ -24,6 +24,8 @@ function LoginForm(props) {
         onClick={props.handleFormSubmit}
         id="login-button">Submit</button>
     </form>
+    <br></br>
+    <p>First time here? <a href="/signup">SIGN UP!</a></p>
     </div>
     )
 }
