@@ -7,6 +7,13 @@ function NewEventForm(props) {
             {/* <div><p>{props.loginInstructions}</p></div> */}
             <form>
                 <div className="form-group">
+                    <label for="eventTitle">Event Title</label>
+                    <input type="text" className="form-control" id="eventTitle" name="eventTitle"
+                        onChange={props.handleInputChange}
+                        value={props.eventTitle}
+                    />
+                </div>
+                <div className="form-group">
                     <label for="newDate">Date</label>
                     <input type="date" className="form-control" id="newDate" name="newDate"
                         onChange={props.handleInputChange}
@@ -93,9 +100,9 @@ function NewEventForm(props) {
                         <option value="45">:45</option>
                     </select>
                 </div>
-                {/* <button type="button" className="btn btn-primary"
+                <button type="button" className="btn btn-primary"
                     onClick={props.handleFormSubmit}
-                    id="login-button">Submit</button> */}
+                    id="login-button">Submit</button>
             </form>
             <br></br>
             <p>First time here? <a href="/signup">SIGN UP!</a></p>
