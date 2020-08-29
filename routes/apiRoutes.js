@@ -44,7 +44,7 @@ module.exports = function (app) {
 
     });
 
-    // trying to authenticate react router
+    //authenticate user logged in w react router
     app.get("/api/checklogin", function(req,res) {
         if (req.session.loggedin) {
             res.sendStatus(200)
@@ -74,16 +74,22 @@ module.exports = function (app) {
                         email: email
                     }
                     db.User.create(postObj).then(function (results2) {
-                        res.send("userCreateSuccess");
+                        res.send({
+                            statusString: "userCreateSuccess"
+                        });
                     });
 
                 } else {
-                    res.send("userAlreadyExists");
+                    res.send({
+                        statusString: "userAlreadyExists"
+                    });
                 }
             });
 
         } else {
-            res.send("formNotComplete");
+            res.send({
+                statusString: "formNotComplete"
+            });
         }
     });
 
