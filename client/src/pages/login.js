@@ -43,7 +43,7 @@ class Login extends React.Component {
                     });
                 } else if(res.statusString==="loggedin") {
                     console.log("wow it worked");
-                    window.location.href="/test";
+                    window.location.href="/scheduler";
                 }
             })
             .catch(err => console.log(err));
