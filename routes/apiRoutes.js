@@ -119,7 +119,9 @@ module.exports = function (app) {
                 end: req.body.end,
                 UserId: req.session.userID
             }).then(function (results) {
-                res.send("eventCreated");
+                res.send({
+                    statusString: "eventCreated"
+                });
             });
         } else {
             res.status(400).end();
