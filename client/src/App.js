@@ -5,6 +5,7 @@ import Signup from "./pages/signup";
 import withAuth from "./withAuth";
 import Scheduler from "./pages/scheduler";
 import NewEvent from "./pages/newEvent";
+import Messenger from "./pages/messenger";
 
 
 
@@ -18,6 +19,7 @@ function App() {
     <Route exact path="/signup" component={Signup} /> 
     <Route exact path="/scheduler" component={Scheduler} />
     <Route exact path="/newevent" component={NewEvent} />
+    <Route exact path="/messenger" component={Messenger} />
   </Router>
   )
 }

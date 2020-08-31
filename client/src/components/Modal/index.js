@@ -16,7 +16,7 @@ function CenteredModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Button className="mr-3" href="#">Create Event</Button>
+                <Button className="mr-3" href="/newevent">Create Event</Button>
                 <Button className="mr-3" href="#">Find Events</Button>
             </Modal.Body>
             <Modal.Footer>
