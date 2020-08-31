@@ -93,6 +93,24 @@ module.exports = function (app) {
         }
     });
 
+    // get profile info
+    app.get("/api/profile", function(req,res) {
+        if (req.session.loggedin) {
+            db.User.findOne({
+                where: {
+                    id: req.session.userID
+                }
+            })
+            .then(function(results) {
+                res.json(results);
+            })
+            .catch(err=>console.log(err));
+        } else {
+            res.sendStatus(404)
+        }
+        
+    });
+
     app.put("/api", function(req,res) {
         // console.log("UPDATE VALUES: " + JSON.parse(req.body));
         // console.log("STATE: " + typeof req.body.state);
@@ -106,7 +124,8 @@ module.exports = function (app) {
             }
         ).then(function(result) {
             // res.json(result);
-            res.send("profileUpdated");
+            // res.send("profileUpdated");
+            res.sendStatus(200)
         })
     });
 
