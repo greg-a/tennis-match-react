@@ -1,6 +1,9 @@
 require("dotenv").config();
 var express = require("express");
 var session = require('express-session');
+const server = require('http').createServer(app);
+const options = { /* ... */ };
+const io = require('socket.io')(server, options);
 
 
 var db = require("./models");
@@ -27,6 +30,17 @@ require("./routes/apiRoutes")(app);
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
+
+// socket io initialization for chat   
+io.on('connection', socket => { 
+  console.log("socket io is connected");
+
+  socket.on("message", data => {
+    console.log("Message received: ", data);
+  });
+
+  socket.on("disconnect", function(){})
+ });
 
 var syncOptions = { force: false };
 
