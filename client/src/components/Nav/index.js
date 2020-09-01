@@ -1,54 +1,77 @@
-import React from "react";
+import React from 'react';
 import "./style.css";
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PhoneIcon from '@material-ui/icons/Phone';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
-function Nav(props) {
+const useStyles = makeStyles({
+  root: {
+    flexGrow: 1
+  },
+});
+
+export default function Nav() {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <div className="nav-container">
 
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Logo</a>
-        </li>
-        <li class="nav-item">
-          <a
-            href="/feed"
-            onClick={() => props.handlePageChange("Feed")}
-            className={props.currentPage === "Home" ? "nav-link active" : "nav-link"}
-          >
-            Feed
-            </a>
-        </li>
-        <li class="nav-item">
-          <a
-            href="/newevent"
-            onClick={() => props.handlePageChange("Scheduler")}
-            className={props.currentPage === "Scheduler" ? "nav-link active" : "nav-link"}
-          >
-            Scheduler
-            </a>
-        </li>
-        <li>
-          <a
-            href="/schedule"
-            onClick={() => props.handlePageChange("Schedule")}
-            className={props.currentPage === "Schedule" ? "nav-link active" : "nav-link"}
-          >
-            Schedule
-            </a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="/profile">Profile</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Sign Out</a>
-          </div>
-        </li>
-      </ul>
+    <div>
+      <div className="upper-nav">
+        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+          Open Menu
+      </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClose}>Logout</MenuItem>
+        </Menu>
+      </div>
 
-
+      <div>
+        <Paper square className={classes.root}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="fullWidth"
+            indicatorColor="primary"
+            textColor="primary"
+            aria-label="icon tabs example"
+          >
+            <Tab icon={<PhoneIcon />} aria-label="phone" />
+            <Tab icon={<FavoriteIcon />} aria-label="favorite" />
+            <Tab icon={<PersonPinIcon />} aria-label="person" />
+          </Tabs>
+        </Paper>
+      </div>
     </div>
+
   );
 }
-
-export default Nav;
