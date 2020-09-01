@@ -1,9 +1,8 @@
 require("dotenv").config();
 var express = require("express");
 var session = require('express-session');
-const server = require('http').createServer(app);
-const options = { /* ... */ };
-const io = require('socket.io')(server, options);
+const socketIo = require("socket.io");
+const http = require("http");
 
 
 var db = require("./models");
@@ -17,7 +16,7 @@ app.use(express.json());
 // app.use(express.static("public"));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
-}
+};
 
 app.use(session({
   secret: "tennis123",
@@ -31,16 +30,21 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-// socket io initialization for chat   
-io.on('connection', socket => { 
-  console.log("socket io is connected");
+// socket io initialization for chat 
+const server = http.createServer(app);
+const io = socketIo(server);
 
-  socket.on("message", data => {
+io.on('connection', (socket) => {
+  console.log("socket user connected");
+
+  socket.on("message", (data) => {
     console.log("Message received: ", data);
   });
 
-  socket.on("disconnect", function(){})
- });
+  socket.on("disconnect", () => {
+    console.log("socket user disconnected")
+  })
+});
 
 var syncOptions = { force: false };
 
