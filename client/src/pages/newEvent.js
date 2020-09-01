@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewEventForm from '../components/NewEventForm';
+import Nav from '../components/Nav';
 
 class NewEvent extends Component {
 
@@ -57,7 +58,9 @@ class NewEvent extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div>
+                <Nav />
+                <div className="container">
                 <NewEventForm
                     handleInputChange = {this.handleInputChange}
                     eventTitle = {this.state.eventTitle}
@@ -69,6 +72,8 @@ class NewEvent extends Component {
                     handleFormSubmit={this.handleFormSubmit}
                 />
             </div>
+            </div>
+            
 
         )
     }

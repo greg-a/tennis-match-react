@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from "@fullcalendar/interaction";
 import CenteredModal from "../components/Modal";
+import Nav from "../components/Nav";
 
 class Scheduler extends Component {
 
@@ -37,7 +38,9 @@ class Scheduler extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div>
+        <Nav/>
+        <div className="container">
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
           dateClick={this.handleDateClick}
@@ -50,6 +53,8 @@ class Scheduler extends Component {
           thisDate={this.state.thisDate}
         />
       </div>
+      </div>  
+      
     )
   }
 
