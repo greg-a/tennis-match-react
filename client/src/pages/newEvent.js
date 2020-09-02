@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewEventForm from '../components/NewEventForm';
+import Nav from "../components/Nav";
 
 class NewEvent extends Component {
 
@@ -9,7 +10,8 @@ class NewEvent extends Component {
         startTimeMinute: "00",
         endTimeHour: "00",
         endTimeMinute: "00",
-        eventTitle: ""
+        eventTitle: "",
+        navValue: "tab-two"
     }
 
     handleInputChange = event => {
@@ -21,14 +23,14 @@ class NewEvent extends Component {
 
     handleFormSubmit = event => {
         event.preventDefault();
-        let currentYear = this.state.newDate.substring(0,4);
+        let currentYear = this.state.newDate.substring(0, 4);
         console.log(currentYear);
-        let currentMonth = this.state.newDate.substring(5,7);
+        let currentMonth = this.state.newDate.substring(5, 7);
         let currentMonthAdj = parseInt(currentMonth) - 1;
         console.log(currentMonth);
         console.log(currentMonthAdj);
 
-        let currentDay = this.state.newDate.substring(8,10);
+        let currentDay = this.state.newDate.substring(8, 10);
         console.log(currentDay);
 
         let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
@@ -47,7 +49,7 @@ class NewEvent extends Component {
                 end: currentEndDate
             })
         })
-            .then(res=>res.json())
+            .then(res => res.json())
             .then(res => {
                 console.log(res.statusString);
             })
@@ -57,19 +59,23 @@ class NewEvent extends Component {
 
     render() {
         return (
-            <div className="container">
-                <NewEventForm
-                    handleInputChange = {this.handleInputChange}
-                    eventTitle = {this.state.eventTitle}
-                    newDate = {this.state.newDate}
-                    startTimeHour = {this.state.startTimeHour}
-                    startTimeMinute = {this.state.startTimeMinute}
-                    endTimeHour = {this.state.endTimeHour}
-                    endTimeMinute = {this.state.endTimeMinute}
-                    handleFormSubmit={this.handleFormSubmit}
+            <div>
+                <Nav
+                    value={this.state.navValue}
                 />
+                <div className="container">
+                    <NewEventForm
+                        handleInputChange={this.handleInputChange}
+                        eventTitle={this.state.eventTitle}
+                        newDate={this.state.newDate}
+                        startTimeHour={this.state.startTimeHour}
+                        startTimeMinute={this.state.startTimeMinute}
+                        endTimeHour={this.state.endTimeHour}
+                        endTimeMinute={this.state.endTimeMinute}
+                        handleFormSubmit={this.handleFormSubmit}
+                    />
+                </div>
             </div>
-
         )
     }
 

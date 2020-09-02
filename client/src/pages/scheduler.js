@@ -11,7 +11,7 @@ class Scheduler extends Component {
     savedDates: [],
     modalShow: false,
     thisDate: "", 
-    currentPage: "Scheduler"
+    navValue: "tab-three"
   }
 
   componentDidMount() {
@@ -41,7 +41,7 @@ class Scheduler extends Component {
     return (
       <div>
         <Nav
-        currentPage={this.state.currentPage}
+        value={this.state.navValue}
         />
         <div className="container">
         <FullCalendar

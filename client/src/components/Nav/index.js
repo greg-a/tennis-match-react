@@ -32,10 +32,10 @@ const useStyles = makeStyles({
 
 export default function Nav(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(props.value);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValue(event.target.value);
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -121,9 +121,9 @@ export default function Nav(props) {
             textColor="primary"
             aria-label="icon tabs example"
           >
-            <Tab href="/feed" icon={<Public />} aria-label="public" />
-            <Tab href="/newevent" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" />
-            <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" className={props.currentPage === "Scheduler" ? "nav-link active" : "nav-link"}/>
+            <Tab href="/feed" icon={<Public />} aria-label="public" value="tab-one"/>
+            <Tab href="/newevent" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" value="tab-two"/>
+            <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" value="tab-three"/>
           </Tabs>
         </Paper>
       </div>

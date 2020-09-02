@@ -10,7 +10,8 @@ import Profile from "./pages/profile"
 
 function App() {
 
-  return ( 
+  return (
+    
   <Router>
     {/* <Jumbotron /> */}
     <Route exact path="/" component={withAuth(Scheduler)} />
