@@ -10,7 +10,8 @@ class Scheduler extends Component {
   state = {
     savedDates: [],
     modalShow: false,
-    thisDate: ""
+    thisDate: "", 
+    currentPage: "Scheduler"
   }
 
   componentDidMount() {
@@ -39,7 +40,9 @@ class Scheduler extends Component {
   render() {
     return (
       <div>
-        <Nav/>
+        <Nav
+        currentPage={this.state.currentPage}
+        />
         <div className="container">
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}

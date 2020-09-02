@@ -123,7 +123,7 @@ export default function Nav(props) {
           >
             <Tab href="/feed" icon={<Public />} aria-label="public" />
             <Tab href="/newevent" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" />
-            <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" />
+            <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" className={props.currentPage === "Scheduler" ? "nav-link active" : "nav-link"}/>
           </Tabs>
         </Paper>
       </div>
