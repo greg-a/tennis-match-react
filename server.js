@@ -1,14 +1,27 @@
 require("dotenv").config();
 var express = require("express");
 var session = require('express-session');
-const socketIo = require("socket.io");
-const http = require("http");
-
+var app = express();
+const server = require('http').createServer(app);
+const io = require("socket.io")(server);
 
 var db = require("./models");
 
-var app = express();
+
 var PORT = process.env.PORT || 3001;
+
+// socket io initialization for chat
+io.on('connection', (socket) => {
+  console.log("user connected");
+
+  socket.on("message", (data) => {
+    console.log("Message received: ", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected")
+  })
+});
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -28,22 +41,6 @@ app.use(session({
 require("./routes/apiRoutes")(app);
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
-
-// socket io initialization for chat 
-const server = http.createServer(app);
-const io = socketIo(server);
-
-io.on('connection', (socket) => {
-  console.log("socket user connected");
-
-  socket.on("message", (data) => {
-    console.log("Message received: ", data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("socket user disconnected")
-  })
 });
 
 var syncOptions = { force: false };

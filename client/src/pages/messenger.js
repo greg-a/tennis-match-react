@@ -1,4 +1,4 @@
-import React, { Component, useRef, useEffect } from "react";
+import React, { Component } from "react";
 import Chatbox from "../components/Chatbox";
 import io from 'socket.io-client';
 
