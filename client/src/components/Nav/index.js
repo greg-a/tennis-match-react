@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Nav() {
+export default function Nav(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -65,9 +65,9 @@ export default function Nav() {
             textColor="primary"
             aria-label="icon tabs example"
           >
-            <Tab icon={<PhoneIcon />} aria-label="phone" />
-            <Tab icon={<FavoriteIcon />} aria-label="favorite" />
-            <Tab icon={<PersonPinIcon />} aria-label="person" />
+            <Tab href="/feed" icon={<PhoneIcon />} aria-label="phone" />
+            <Tab href="/newevent" icon={<FavoriteIcon />} aria-label="favorite" />
+            <Tab href="/scheduler" icon={<PersonPinIcon />} aria-label="person" />
           </Tabs>
         </Paper>
       </div>
