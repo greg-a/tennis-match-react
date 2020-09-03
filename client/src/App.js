@@ -11,7 +11,8 @@ import Feed from "./pages/feed";
 
 function App() {
 
-  return ( 
+  return (
+    
   <Router>
     {/* <Jumbotron /> */}
     <Route exact path="/" component={withAuth(Scheduler)} />

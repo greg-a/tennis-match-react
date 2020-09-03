@@ -3,7 +3,7 @@ import Thumbnail from "../Thumbnail";
 import { Container, Row, Col } from "../Grid";
 
 // For entire feed of FeedItem components
-export function Feed({ children }) {
+export default function FeedList({ children }) {
     return <ul className="list-group">{children}</ul>
 }
 

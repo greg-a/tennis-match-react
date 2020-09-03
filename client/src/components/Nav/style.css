@@ -2,3 +2,12 @@
     display: flex;
     justify-content: space-between;
 } */
+
+.upper-nav {
+    background-color: rgb(145, 230, 48);
+}
+
+.title-name {
+    text-align: center;
+}
+

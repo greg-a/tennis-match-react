@@ -8,6 +8,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "mdbreact": "^4.27.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
     "sequelize": "^6.3.4",

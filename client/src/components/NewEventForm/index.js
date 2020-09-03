@@ -36,7 +36,7 @@ function NewEventForm(props) {
                         <option value="09">9 AM</option>
                         <option value="10">10 AM</option>
                         <option value="11">11 AM</option>
-                        <option value="12">12 AM</option>
+                        <option value="12">12 PM</option>
                         <option value="13">1 PM</option>
                         <option value="14">2 PM</option>
                         <option value="15">3 PM</option>
@@ -76,7 +76,7 @@ function NewEventForm(props) {
                         <option value="09">9 AM</option>
                         <option value="10">10 AM</option>
                         <option value="11">11 AM</option>
-                        <option value="12">12 AM</option>
+                        <option value="12">12 PM</option>
                         <option value="13">1 PM</option>
                         <option value="14">2 PM</option>
                         <option value="15">3 PM</option>
