@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from "@fullcalendar/interaction";
+import FullCalendar, { formatDate } from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import CenteredModal from "../components/Modal";
 import Nav from "../components/Nav";
 
@@ -45,10 +46,15 @@ class Scheduler extends Component {
         />
         <div className="container">
         <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           dateClick={this.handleDateClick}
           initialView="dayGridMonth"
           events={this.state.savedDates}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          }}
         />
         <CenteredModal
           show={this.state.modalShow}
