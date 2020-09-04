@@ -8,6 +8,7 @@ import NewEvent from "./pages/newEvent";
 import Profile from "./pages/profile";
 import Messenger from "./pages/messenger";
 import Feed from "./pages/feed";
+import ProposeMatch from "./pages/proposeMatch"
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
     <Route exact path="/feed" component={Feed} />
     <Route exact path="/newevent" component={withAuth(NewEvent)} />
     <Route exact path ="/profile" component={withAuth(Profile)} />
+    <Route exact path="/proposematch" component={withAuth(ProposeMatch)} />
   </Router>
   )
 }

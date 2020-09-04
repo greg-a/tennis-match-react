@@ -24,19 +24,14 @@ class NewEvent extends Component {
     handleFormSubmit = event => {
         event.preventDefault();
         let currentYear = this.state.newDate.substring(0, 4);
-        console.log(currentYear);
+        
         let currentMonth = this.state.newDate.substring(5, 7);
         let currentMonthAdj = parseInt(currentMonth) - 1;
-        console.log(currentMonth);
-        console.log(currentMonthAdj);
 
         let currentDay = this.state.newDate.substring(8, 10);
-        console.log(currentDay);
 
         let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
-        console.log("start: " + currentStartDate);
         let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
-        console.log("end: " + currentEndDate);
 
         fetch("/api/calendar", {
             method: "POST",
@@ -46,7 +41,8 @@ class NewEvent extends Component {
             body: JSON.stringify({
                 title: this.state.eventTitle,
                 start: currentStartDate,
-                end: currentEndDate
+                end: currentEndDate,
+                eventStatus: "available"
             })
         })
             .then(res => res.json())

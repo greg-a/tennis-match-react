@@ -3,6 +3,7 @@ var db = require("../models");
 var crypto = require('crypto');
 const { Sequelize, sequelize } = require("../models");
 const { timeStamp } = require("console");
+const Op = Sequelize.Op;
 
 module.exports = function (app) {
     // login in auth
@@ -132,12 +133,10 @@ module.exports = function (app) {
     // create event
     app.post("/api/calendar", function(req,res) {
         if (req.session.loggedin) {
-            db.Event.create({
-                title: req.body.title,
-                start: req.body.start,
-                end: req.body.end,
-                UserId: req.session.userID
-            }).then(function (results) {
+            let requestData = req.body;
+            requestData.UserId = req.session.userID;
+            db.Event.create(requestData)
+                .then(function (results) {
                 res.send({
                     statusString: "eventCreated"
                 });
@@ -153,6 +152,23 @@ module.exports = function (app) {
     app.get("/api/calendar", function(req, res) {
         if (req.session.loggedin) {
             db.Event.findAll({ where: { UserId: req.session.userID }}).then(function(results) {
+                res.json(results);
+            });
+        } else {
+            res.status(400).end();
+        }
+        
+    });
+
+    // searching for players with availibility on chosen day
+    app.get("/api/calendar/propose", function(req, res) {
+        if (req.session.loggedin) {
+            console.log("THIS IS THE QUERY" + req.query.date);
+            db.Event.findAll({ where: { 
+                [Op.and]:[
+                {start: { [Op.like]: req.query.date + "%" }},
+                {UserId: {[Op.not]: req.session.userID}}]
+             }}).then(function(results) {
                 res.json(results);
             });
         } else {
@@ -182,6 +198,12 @@ module.exports = function (app) {
         }).catch(function(error) {
           console.log(error);
         })
+      });
+
+    //   path to log a user out of sessions
+      app.get("/logout", function(req,res) {
+        req.session.destroy();
+        res.redirect("/");
       });
 
     // Delete an example by id
