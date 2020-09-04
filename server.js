@@ -16,6 +16,7 @@ io.on('connection', (socket) => {
 
   socket.on("message", (data) => {
     console.log("Message received: ", data);
+    io.emit("newMessage", data)
   });
 
   socket.on("disconnect", () => {

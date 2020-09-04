@@ -22,7 +22,7 @@ function NewEventForm(props) {
                 </div>
                 <div className="form-group">
                     <label for="startTimeHour">Hour</label>
-                    <select name="startTimeHour" id="startTimeHour" onChange={props.handleInputChange}
+                    <select className="form-control" name="startTimeHour" id="startTimeHour" onChange={props.handleInputChange}
                         value={props.startTimeHour}>
                         <option value="00">12 AM</option>
                         <option value="01">1 AM</option>
@@ -52,7 +52,7 @@ function NewEventForm(props) {
                 </div>
                 <div className="form-group">
                     <label for="startTimeMinute">Minute</label>
-                    <select name="startTimeMinute" id="startTimeMinute" onChange={props.handleInputChange}
+                    <select className="form-control" name="startTimeMinute" id="startTimeMinute" onChange={props.handleInputChange}
                         value={props.startTimeMinute}>
                         <option value="00">:00</option>
                         <option value="15">:15</option>
@@ -62,7 +62,7 @@ function NewEventForm(props) {
                 </div>
                 <div className="form-group">
                     <label for="endTimeHour">Hour</label>
-                    <select name="endTimeHour" id="endTimeHour" onChange={props.handleInputChange}
+                    <select className="form-control" name="endTimeHour" id="endTimeHour" onChange={props.handleInputChange}
                         value={props.endTimeHour}>
                         <option value="00">12 AM</option>
                         <option value="01">1 AM</option>
@@ -92,7 +92,7 @@ function NewEventForm(props) {
                 </div>
                 <div className="form-group">
                     <label for="endTimeMinute">Minute</label>
-                    <select name="endTimeMinute" id="endTimeMinute" onChange={props.handleInputChange}
+                    <select className="form-control" name="endTimeMinute" id="endTimeMinute" onChange={props.handleInputChange}
                         value={props.endTimeMinute}>
                         <option value="00">:00</option>
                         <option value="15">:15</option>
