@@ -12,16 +12,33 @@ var PORT = process.env.PORT || 3001;
 
 // socket io initialization for chat
 io.on('connection', (socket) => {
-  console.log("user connected");
 
-  socket.on("message", (data) => {
-    console.log("Message received: ", data);
-    io.emit("newMessage", data)
+  //user joins a room
+  socket.on("joinRoom", ({ username, room }) => {
+    const user = { socketId: socket.id, username: username, room: room };
+
+    socket.join(user.room);
+
+    console.log(user.username + " has joined " + user.room);
+  });
+
+  //Receives a new message
+  socket.on("input", data => {
+    const user = { socketId: socket.id, username: data.user, room: data.room };
+
+    //emits new message to specific room
+    io.in(user.room).emit("output", data);
+    console.log("New message: " + JSON.stringify(data))
+
+    // Check how many users are in the room
+    // var room = io.sockets.adapter.rooms[user.room];
+    // console.log("Members in this room: " + room.length);
   });
 
   socket.on("disconnect", () => {
     console.log("user disconnected")
   })
+
 });
 
 // Middleware
