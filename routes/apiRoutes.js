@@ -163,11 +163,11 @@ module.exports = function (app) {
     // searching for players with availibility on chosen day
     app.get("/api/calendar/propose", function(req, res) {
         if (req.session.loggedin) {
-            console.log("THIS IS THE QUERY" + req.query.date);
             db.Event.findAll({ where: { 
                 [Op.and]:[
                 {start: { [Op.like]: req.query.date + "%" }},
-                {UserId: {[Op.not]: req.session.userID}}]
+                {UserId: {[Op.not]: req.session.userID}},
+                {eventStatus: "available"}]
              }}).then(function(results) {
                 res.json(results);
             });
