@@ -3,6 +3,7 @@ import ProposeMatchForm from '../components/ProposeMatchForm';
 // import ProposeCard2 from '../components/ProposeCard2';
 import ProposeCard from '../components/ProposeCard';
 import moment from 'moment';
+
 class ProposeMatch extends Component {
 
     state = {
