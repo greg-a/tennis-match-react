@@ -112,10 +112,9 @@ module.exports = function (app) {
         
     });
 
+    // update user info
     app.put("/api", function(req,res) {
-        // console.log("UPDATE VALUES: " + JSON.parse(req.body));
-        // console.log("STATE: " + typeof req.body.state);
-        // console.log("USERID: " + req.session.userID);
+        if (req.session.loggedin) {
         db.User.update(
             req.body,
             {
@@ -124,10 +123,11 @@ module.exports = function (app) {
                 }
             }
         ).then(function(result) {
-            // res.json(result);
-            // res.send("profileUpdated");
             res.sendStatus(200)
         })
+        } else {
+            res.status(400).end();
+        }
     });
 
     // create event
@@ -148,10 +148,20 @@ module.exports = function (app) {
     });
 
     // get events for calendar
-    // Protect API so people can't see stored events via Postman, etc????
     app.get("/api/calendar", function(req, res) {
         if (req.session.loggedin) {
-            db.Event.findAll({ where: { UserId: req.session.userID }}).then(function(results) {
+            db.Event.findAll({ 
+                where: { 
+                    [Op.or]:[
+                        {UserId: req.session.userID },
+                        {
+                            eventStatus: "confirmed",
+                            confirmedByUser: req.session.userID
+                        }
+                    ]
+                    
+                }
+            }).then(function(results) {
                 res.json(results);
             });
         } else {
@@ -175,6 +185,43 @@ module.exports = function (app) {
             res.status(400).end();
         }
         
+    });
+
+    // Get logged in user's requests
+    app.get("/api/calendar/requests", function(req, res) {
+        if (req.session.loggedin) {
+            db.Event.findAll({ where: { 
+                [Op.and]:[
+                {confirmedByUser: req.session.userID},
+                {eventStatus: "propose"}]
+             }}).then(function(results) {
+                res.json(results);
+            });
+        } else {
+            res.status(400).end();
+        }
+        
+    });
+
+    app.put("/api/calendar/requests", function(req,res) {
+        if (req.session.loggedin) {
+            db.Event.update(
+                {
+                    title: "confirmed match",
+                    eventStatus:"confirmed"
+                },
+                {
+                    where: {
+                        id: req.body.id
+                    }
+                }
+            ).then(function(result) {
+                res.send(result);
+            })
+            } else {
+                res.status(400).end();
+            }
+
     });
 
     // overlap of schedule between users

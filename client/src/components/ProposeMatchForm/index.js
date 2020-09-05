@@ -1,5 +1,4 @@
 import React from "react";
-import session from "express-session";
 
 function ProposeMatchForm(props) {
     return (
