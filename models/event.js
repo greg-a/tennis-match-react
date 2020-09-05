@@ -11,7 +11,9 @@ module.exports = function(sequelize, DataTypes) {
         end: {
             type: DataTypes.STRING,
             allowNull: true
-        }
+        },
+        confirmedByUser: DataTypes.INTEGER,
+        eventStatus: DataTypes.STRING
     });
 
     Event.associate = function(models) {

@@ -3,6 +3,7 @@ var db = require("../models");
 var crypto = require('crypto');
 const { Sequelize, sequelize } = require("../models");
 const { timeStamp } = require("console");
+const Op = Sequelize.Op;
 
 module.exports = function (app) {
     // login in auth
@@ -111,10 +112,9 @@ module.exports = function (app) {
         
     });
 
+    // update user info
     app.put("/api", function(req,res) {
-        // console.log("UPDATE VALUES: " + JSON.parse(req.body));
-        // console.log("STATE: " + typeof req.body.state);
-        // console.log("USERID: " + req.session.userID);
+        if (req.session.loggedin) {
         db.User.update(
             req.body,
             {
@@ -123,25 +123,24 @@ module.exports = function (app) {
                 }
             }
         ).then(function(result) {
-            // res.json(result);
-            // res.send("profileUpdated");
             res.sendStatus(200)
         })
+        } else {
+            res.status(400).end();
+        }
     });
 
     // create event
     app.post("/api/calendar", function(req,res) {
         if (req.session.loggedin) {
-            db.Event.create({
-                title: req.body.title,
-                start: req.body.start,
-                end: req.body.end,
-                UserId: req.session.userID
-            }).then(function (results) {
+            let requestData = req.body;
+            requestData.UserId = req.session.userID;
+            db.Event.create(requestData)
+                .then(function (results) {
                 res.send({
                     statusString: "eventCreated"
                 });
-            });
+            }).catch(err => res.send(err));
         } else {
             res.status(400).end();
         }
@@ -149,16 +148,80 @@ module.exports = function (app) {
     });
 
     // get events for calendar
-    // Protect API so people can't see stored events via Postman, etc????
     app.get("/api/calendar", function(req, res) {
         if (req.session.loggedin) {
-            db.Event.findAll({ where: { UserId: req.session.userID }}).then(function(results) {
+            db.Event.findAll({ 
+                where: { 
+                    [Op.or]:[
+                        {UserId: req.session.userID },
+                        {
+                            eventStatus: "confirmed",
+                            confirmedByUser: req.session.userID
+                        }
+                    ]
+                    
+                }
+            }).then(function(results) {
                 res.json(results);
             });
         } else {
             res.status(400).end();
         }
         
+    });
+
+    // searching for players with availibility on chosen day
+    app.get("/api/calendar/propose", function(req, res) {
+        if (req.session.loggedin) {
+            db.Event.findAll({ where: { 
+                [Op.and]:[
+                {start: { [Op.like]: req.query.date + "%" }},
+                {UserId: {[Op.not]: req.session.userID}},
+                {eventStatus: "available"}]
+             }}).then(function(results) {
+                res.json(results);
+            });
+        } else {
+            res.status(400).end();
+        }
+        
+    });
+
+    // Get logged in user's requests
+    app.get("/api/calendar/requests", function(req, res) {
+        if (req.session.loggedin) {
+            db.Event.findAll({ where: { 
+                [Op.and]:[
+                {confirmedByUser: req.session.userID},
+                {eventStatus: "propose"}]
+             }}).then(function(results) {
+                res.json(results);
+            });
+        } else {
+            res.status(400).end();
+        }
+        
+    });
+
+    app.put("/api/calendar/requests", function(req,res) {
+        if (req.session.loggedin) {
+            db.Event.update(
+                {
+                    title: "confirmed match",
+                    eventStatus:"confirmed"
+                },
+                {
+                    where: {
+                        id: req.body.id
+                    }
+                }
+            ).then(function(result) {
+                res.send(result);
+            })
+            } else {
+                res.status(400).end();
+            }
+
     });
 
     // overlap of schedule between users
@@ -182,6 +245,12 @@ module.exports = function (app) {
         }).catch(function(error) {
           console.log(error);
         })
+      });
+
+    //   path to log a user out of sessions
+      app.get("/logout", function(req,res) {
+        req.session.destroy();
+        res.redirect("/");
       });
 
     // Delete an example by id
