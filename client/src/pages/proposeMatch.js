@@ -11,7 +11,8 @@ class ProposeMatch extends Component {
         startTimeMinute: "",
         endTimeHour: "",
         endTimeMinute: "",
-        searchResult: []
+        searchResult: [],
+        instructions: "Pick a date to search for other players' availability."
     }
 
     handleInputChange = event => {
@@ -65,6 +66,32 @@ class ProposeMatch extends Component {
             .then(res => res.json())
             .then(res => {
                 console.log(res.statusString);
+                if(res.statusString==="eventCreated") {
+                    this.setState(
+                        {
+                            newDate: "",
+                            startTimeHour: "",
+                            startTimeMinute: "",
+                            endTimeHour: "",
+                            endTimeMinute: "",
+                            searchResult: [],
+                            instructions: "Your request for a match has been sent!"
+                        }
+                    )
+                } else {
+                    console.log(res);
+                    this.setState(
+                        {
+                            newDate: "",
+                            startTimeHour: "",
+                            startTimeMinute: "",
+                            endTimeHour: "",
+                            endTimeMinute: "",
+                            searchResult: [],
+                            instructions: "Oops! Something went wrong. Please try again."
+                        }
+                    )
+                }
             })
             .catch(err => console.log(err));
 
@@ -100,6 +127,7 @@ class ProposeMatch extends Component {
                 <ProposeMatchForm
                     handleInputChange = {this.handleInputChange}
                     newDate = {this.state.newDate}
+                    instructions = {this.state.instructions}
                     handleFormSubmit={this.handleFormSubmit}
                 />
                 {this.state.searchResult.map((event, i) => (
@@ -117,17 +145,7 @@ class ProposeMatch extends Component {
                     handleProposeSubmit = {this.handleProposeSubmit}
                     />
                 ))
-
                 }
-
-                    {/* <ProposeCard
-                    title={this.state.searchResult[0].title}
-                    username={this.state.searchResult[0].UserId}
-                    starttime={moment(this.state.searchResult[0].start).format("hh:mm a")}
-                    endtime={moment(this.state.searchResult[0].end).format("hh:mm a")}
-                    // startIntArr={this.state.searchResult[0].startIntArr}
-                    // endIntArr={this.state.searchResult[0].endIntArr}
-                    /> */}
             </div>
 
         )

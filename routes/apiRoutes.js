@@ -140,7 +140,7 @@ module.exports = function (app) {
                 res.send({
                     statusString: "eventCreated"
                 });
-            });
+            }).catch(err => res.send(err));
         } else {
             res.status(400).end();
         }

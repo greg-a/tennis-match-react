@@ -18,6 +18,8 @@ function ProposeMatchForm(props) {
                     onClick={props.handleFormSubmit}
                     >Search</button>
             </form>
+            <br />
+            <p>{props.instructions}</p>
         </div>
     )
 }
