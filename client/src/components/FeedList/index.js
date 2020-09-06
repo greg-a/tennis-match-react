@@ -3,15 +3,17 @@ import Thumbnail from "../Thumbnail";
 import { Container, Row, Col } from "../Grid";
 
 // For entire feed of FeedItem components
-export default function FeedList({ children }) {
+export function FeedList({ children }) {
     return <ul className="list-group">{children}</ul>
 }
 
 // For each event just scheduled or just completed
-export function FeedItem({
+export function FeedListItem({
     //later replace with hybrid image of both participating players
     thumbnail = "https://placehold.it/300x300",
-    message
+    organizer,
+    date,
+    time
 }) {
     return (
         <li className="list-group-item">
@@ -21,7 +23,7 @@ export function FeedItem({
                         <Thumbnail src={thumbnail} />
                     </Col>
                     <Col size="xs-8 sm-9">
-                        <p>{message}</p>
+                        <p>{organizer} scheduled a match for {date} at {time}.</p>
                     </Col>
                 </Row>
             </Container>
