@@ -2,7 +2,7 @@
 import React from 'react';
 import {Link} from 'react';
 import "./style.css";
-// import Drawer from "../Drawer";
+import Drawer from "../Drawer";
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -39,7 +39,7 @@ export default function Nav(props) {
     <div>
       <div className="upper-nav row">
         <div className="col-3 col-sm-4">
-          {/* <Drawer /> */}
+          <Drawer />
         </div>
 
         <div className="title-name col-9 col-sm-4">
