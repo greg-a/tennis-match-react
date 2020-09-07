@@ -106,7 +106,8 @@ class ProposeMatch extends Component {
                             endTimeHour: "",
                             endTimeMinute: "",
                             searchResult: [],
-                            instructions: "Oops! Something went wrong. Please try again."
+                            instructions: "Oops! Something went wrong. Please try again.",
+                            modalShow: false
                         }
                     )
                 }
