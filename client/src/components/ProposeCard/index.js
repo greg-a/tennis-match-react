@@ -11,7 +11,7 @@ function ProposeCard(props) {
                         <p className="card-text" >Start Time: {props.starttime}</p>
                         <p className="card-text" >End Time: {props.endtime}</p>
 
-                        <form >
+                        {/* <form >
                             <div className="form-row">
                                 <div className="form-group mr-1" >
                                     <label for="startTimeHour" >Start Hour</label>
@@ -63,8 +63,8 @@ function ProposeCard(props) {
                                     </select>
                                 </div>
                             </div>
-                            <button type="button" className="btn btn-primary" data-userid={props.userid} onClick={props.handleProposeSubmit}>Propose Match</button>
-                        </form>
+                        </form> */}
+                        <button type="button" className="btn btn-primary" data-userid={props.userid} onClick={props.handleEventClick} data-index={props.eventIndex}>Propose Match</button>
                     </div>
                 </div>
         </div>

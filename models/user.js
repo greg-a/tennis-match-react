@@ -49,6 +49,10 @@ module.exports = function(sequelize, DataTypes) {
         User.hasMany(models.Event, {
             onDelete: "cascade"
         });
+
+        User.hasMany(models.Room, {
+            onDelete: "cascade"
+        });
     };
 
     return User;
