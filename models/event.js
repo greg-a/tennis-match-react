@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: true
         },
-        confirmedByUser: DataTypes.INTEGER,
+        // confirmedByUser: DataTypes.INTEGER,
         eventStatus: DataTypes.STRING
     });
 
@@ -21,7 +21,11 @@ module.exports = function(sequelize, DataTypes) {
           foreignKey: {
             allowNull: false
           }
-        });
+        }),
+        Event.belongsTo(models.User, {
+          as: 'secondUser',
+          foreignKey: 'confirmedByUser'
+        })
       };
 
     return Event;
