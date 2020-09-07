@@ -177,7 +177,10 @@ module.exports = function (app) {
                 where: {
                     eventStatus: "confirmed"
                 },
-                include: db.User
+                include: [
+                {model: db.User},
+                {model: db.User,
+                as: 'secondUser'}]
             }).then(function(results) {
                 res.json(results)
             })

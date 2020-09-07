@@ -96,7 +96,7 @@ export function ProposeModal(props) {
                 </form>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.handleProposeSubmit}>Propose Match</Button>
+                <Button data-userid={props.userid} onClick={props.handleProposeSubmit}>Propose Match</Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal>
