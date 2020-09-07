@@ -41,13 +41,27 @@ const Drawer = (props) => {
     setState({ ...state, [anchor]: open });
   };
 
+  const handleLogout = () => {
+    fetch("/logout")
+        .then(res => {
+            console.log(res);
+            window.location.href = "/";
+        })
+        .catch(err => console.log(err));
+}
+
 
   const itemsList = [
     {
         text: "Profile",
         icon: <AccountCircleIcon />,
         onClick: () => history.push("/profile")
-    }
+    },
+    {
+        text: "Log Out",
+        icon: <ExitToAppIcon />,
+        onClick: handleLogout
+    },
 
 ];
 
