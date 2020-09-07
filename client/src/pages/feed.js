@@ -14,7 +14,7 @@ class Feed extends React.Component {
     }
 
     getDates = () => {
-        fetch("/api/calendar")
+        fetch("/api/confirmed")
             .then(res => res.json())
             .then((dates) => {
                 console.log(dates);
@@ -30,8 +30,8 @@ class Feed extends React.Component {
                     value={this.state.navValue}
                 />
                 <Container>
-                    <FeedListItem />
-                    {/* <Row>
+                    {/* <FeedListItem /> */}
+                    <Row>
                         <Col size="xs-12">
                             {!this.state.matches.length ? (
                                 <h4 className="text-center">No scheduled matches</h4>
@@ -48,7 +48,7 @@ class Feed extends React.Component {
                                     </FeedList>
                                 )}
                         </Col>
-                    </Row> */}
+                    </Row>
                 </Container>
 
             </div>
