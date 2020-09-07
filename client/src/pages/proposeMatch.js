@@ -67,6 +67,8 @@ class ProposeMatch extends Component {
 
         let currentProposeToUsedId = event.target.dataset.userid;
 
+        console.log("CURRENT PROPOSE USER: " + currentProposeToUsedId);
+
         fetch("/api/calendar", {
             method: "POST",
             headers: {

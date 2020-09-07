@@ -177,8 +177,11 @@ module.exports = function (app) {
                 where: {
                     eventStatus: "confirmed"
                 },
-                include: db.User
-            }).then(function (results) {
+                include: [
+                {model: db.User},
+                {model: db.User,
+                as: 'secondUser'}]
+            }).then(function(results) {
                 res.json(results)
             })
         } else {
@@ -270,7 +273,7 @@ module.exports = function (app) {
     //   path to log a user out of sessions
     app.get("/logout", function (req, res) {
         req.session.destroy();
-        res.redirect("/");
+        res.sendStatus(200);
     });
     // saves new message to messages table
     app.post("/api/message", function (req, res) {
