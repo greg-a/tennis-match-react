@@ -1,11 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     var Room = sequelize.define("Room", {
         // Giving the Author model a name of type STRING
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        recipient: {
+        createdBy: {
             type: DataTypes.STRING,
             allowNull: false
         }
@@ -16,8 +12,11 @@ module.exports = function (sequelize, DataTypes) {
             foreignKey: {
                 allowNull: false
             }
-        });
-
+        }),
+        Room.belongsTo(models.User, {
+            as: 'secondUser',
+            foreignKey: 'recipient'
+        }),
         Room.hasMany(models.Messages, {
             onDelete: "cascade"
         });

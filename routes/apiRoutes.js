@@ -171,14 +171,14 @@ module.exports = function (app) {
     });
 
     // confirmed events for feed
-    app.get("/api/confirmed", function(req,res) {
+    app.get("/api/confirmed", function (req, res) {
         if (req.session.loggedin) {
             db.Event.findAll({
                 where: {
                     eventStatus: "confirmed"
                 },
                 include: db.User
-            }).then(function(results) {
+            }).then(function (results) {
                 res.json(results)
             })
         } else {
@@ -272,25 +272,59 @@ module.exports = function (app) {
         req.session.destroy();
         res.redirect("/");
     });
-
+    // saves new message to messages table
     app.post("/api/message", function (req, res) {
         if (req.session.loggedin) {
             let requestData = req.body;
             requestData.UserId = req.session.userID;
-            requestData.RoomId = 1;
+
+
             console.log("send message to db: " + JSON.stringify(requestData))
             db.Messages.create(requestData)
                 .then(function (results) {
-                    res.send({
-                        statusString: "messageSent"
-                    });
-                    console.log("sent")
+                    res.json(results);
+                    console.log("database: " + results)
                 }).catch(err => res.send(err));
         }
         else {
             res.status(400).end();
         }
-    })
+    });
+    // saves new message to rooms table
+    app.post("/api/room", function (req, res) {
+        if (req.session.loggedin) {
+            let requestData = req.body;
+            requestData.createdBy = req.session.usern
+            requestData.UserId = req.session.userID;
+            console.log(req.session)
+
+            db.Room.create(requestData)
+                .then(function (results) {
+                    res.json(results);
+                    console.log("database: " + results)
+                }).catch(err => res.send(err));
+        }
+        else {
+            res.status(400).end();
+        }
+    });
+    // returns list of users that match search parameters
+    app.get("/api/users/:user", function (req, res) {
+        if (req.session.loggedin) {
+            db.User.findAll({
+                where: {
+                    username: {[Op.like]: req.params.user + "%"} //would like to make this to include searching by first name and exclude current user
+                }
+                })
+                .then(function (results) {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
+        } else {
+            res.sendStatus(404)
+        }
+
+    });
 
     // Delete an example by id
     //   app.delete("/api/examples/:id", function(req, res) {
