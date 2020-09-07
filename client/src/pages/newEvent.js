@@ -32,7 +32,7 @@ class NewEvent extends Component {
 
         let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
         let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
-
+        console.log("start date: " + currentStartDate)
         fetch("/api/calendar", {
             method: "POST",
             headers: {

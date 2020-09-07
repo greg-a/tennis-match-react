@@ -46,7 +46,7 @@ module.exports = function (app) {
     });
 
     //authenticate user logged in w react router
-    app.get("/api/checklogin", function(req,res) {
+    app.get("/api/checklogin", function (req, res) {
         if (req.session.loggedin) {
             res.sendStatus(200)
         } else {
@@ -95,79 +95,79 @@ module.exports = function (app) {
     });
 
     // get profile info
-    app.get("/api/profile", function(req,res) {
+    app.get("/api/profile", function (req, res) {
         if (req.session.loggedin) {
             db.User.findOne({
                 where: {
                     id: req.session.userID
                 }
             })
-            .then(function(results) {
-                res.json(results);
-            })
-            .catch(err=>console.log(err));
+                .then(function (results) {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
         } else {
             res.sendStatus(404)
         }
-        
+
     });
 
     // update user info
-    app.put("/api", function(req,res) {
+    app.put("/api", function (req, res) {
         if (req.session.loggedin) {
-        db.User.update(
-            req.body,
-            {
-                where: {
-                    id: req.session.userID
+            db.User.update(
+                req.body,
+                {
+                    where: {
+                        id: req.session.userID
+                    }
                 }
-            }
-        ).then(function(result) {
-            res.sendStatus(200)
-        })
+            ).then(function (result) {
+                res.sendStatus(200)
+            })
         } else {
             res.status(400).end();
         }
     });
 
     // create event
-    app.post("/api/calendar", function(req,res) {
+    app.post("/api/calendar", function (req, res) {
         if (req.session.loggedin) {
             let requestData = req.body;
             requestData.UserId = req.session.userID;
             db.Event.create(requestData)
                 .then(function (results) {
-                res.send({
-                    statusString: "eventCreated"
-                });
-            }).catch(err => res.send(err));
+                    res.send({
+                        statusString: "eventCreated"
+                    });
+                }).catch(err => res.send(err));
         } else {
             res.status(400).end();
         }
-        
+
     });
 
     // get events for calendar
-    app.get("/api/calendar", function(req, res) {
+    app.get("/api/calendar", function (req, res) {
         if (req.session.loggedin) {
-            db.Event.findAll({ 
-                where: { 
-                    [Op.or]:[
-                        {UserId: req.session.userID },
+            db.Event.findAll({
+                where: {
+                    [Op.or]: [
+                        { UserId: req.session.userID },
                         {
                             eventStatus: "confirmed",
                             confirmedByUser: req.session.userID
                         }
                     ]
-                    
+
                 }
-            }).then(function(results) {
+            }).then(function (results) {
                 res.json(results);
             });
         } else {
             res.status(400).end();
         }
-        
+
     });
 
     // confirmed events for feed
@@ -187,56 +187,60 @@ module.exports = function (app) {
     });
 
     // searching for players with availibility on chosen day
-    app.get("/api/calendar/propose", function(req, res) {
+    app.get("/api/calendar/propose", function (req, res) {
         if (req.session.loggedin) {
-            db.Event.findAll({ where: { 
-                [Op.and]:[
-                {start: { [Op.like]: req.query.date + "%" }},
-                {UserId: {[Op.not]: req.session.userID}},
-                {eventStatus: "available"}]
-             }}).then(function(results) {
+            db.Event.findAll({
+                where: {
+                    [Op.and]: [
+                        { start: { [Op.like]: req.query.date + "%" } },
+                        { UserId: { [Op.not]: req.session.userID } },
+                        { eventStatus: "available" }]
+                }
+            }).then(function (results) {
                 res.json(results);
             });
         } else {
             res.status(400).end();
         }
-        
+
     });
 
     // Get logged in user's requests
-    app.get("/api/calendar/requests", function(req, res) {
+    app.get("/api/calendar/requests", function (req, res) {
         if (req.session.loggedin) {
-            db.Event.findAll({ where: { 
-                [Op.and]:[
-                {confirmedByUser: req.session.userID},
-                {eventStatus: "propose"}]
-             }}).then(function(results) {
+            db.Event.findAll({
+                where: {
+                    [Op.and]: [
+                        { confirmedByUser: req.session.userID },
+                        { eventStatus: "propose" }]
+                }
+            }).then(function (results) {
                 res.json(results);
             });
         } else {
             res.status(400).end();
         }
-        
+
     });
 
-    app.put("/api/calendar/requests", function(req,res) {
+    app.put("/api/calendar/requests", function (req, res) {
         if (req.session.loggedin) {
             db.Event.update(
                 {
                     title: "confirmed match",
-                    eventStatus:"confirmed"
+                    eventStatus: "confirmed"
                 },
                 {
                     where: {
                         id: req.body.id
                     }
                 }
-            ).then(function(result) {
+            ).then(function (result) {
                 res.send(result);
             })
-            } else {
-                res.status(400).end();
-            }
+        } else {
+            res.status(400).end();
+        }
 
     });
 
@@ -244,30 +248,49 @@ module.exports = function (app) {
     app.get("/api/overlap", function (req, res) {
         // This uses User 1 as the input into the query. All returns are in reference to User 1's events. Change this by changing the createdByUser = values in the query
         // let userNum=req.body.userNum;
-        let userNum=1;
-        sequelize.query("SELECT t2.*, t1.id overlapWithEventID, t1.UserID chosenUser, t3.username eventUserName FROM events t1 JOIN events t2 JOIN users t3 WHERE t1.UserID = " + userNum + " AND t3.id = t2.UserID AND t2.UserID != " + userNum + " AND date(t1.end) >= CURDATE() AND TIMESTAMPDIFF(MINUTE, GREATEST(t1.start, t2.start), LEAST(t1.`end`, t2.`end`)) >= 30;", {type: Sequelize.QueryTypes.SELECT}).then(function (result) {
-          res.json(result);
+        let userNum = 1;
+        sequelize.query("SELECT t2.*, t1.id overlapWithEventID, t1.UserID chosenUser, t3.username eventUserName FROM events t1 JOIN events t2 JOIN users t3 WHERE t1.UserID = " + userNum + " AND t3.id = t2.UserID AND t2.UserID != " + userNum + " AND date(t1.end) >= CURDATE() AND TIMESTAMPDIFF(MINUTE, GREATEST(t1.start, t2.start), LEAST(t1.`end`, t2.`end`)) >= 30;", { type: Sequelize.QueryTypes.SELECT }).then(function (result) {
+            res.json(result);
         });
-      });
+    });
 
     //   part of overlap test , getting a users events
-      app.get("/api/events/:user", function(req,res){
+    app.get("/api/events/:user", function (req, res) {
         db.Event.findAll({
-          where: {
-            UserId: req.params.user
-          }
-        }).then(function(userEvents){
-          res.json(userEvents);
-        }).catch(function(error) {
-          console.log(error);
+            where: {
+                UserId: req.params.user
+            }
+        }).then(function (userEvents) {
+            res.json(userEvents);
+        }).catch(function (error) {
+            console.log(error);
         })
-      });
+    });
 
     //   path to log a user out of sessions
-      app.get("/logout", function(req,res) {
+    app.get("/logout", function (req, res) {
         req.session.destroy();
         res.redirect("/");
-      });
+    });
+
+    app.post("/api/message", function (req, res) {
+        if (req.session.loggedin) {
+            let requestData = req.body;
+            requestData.UserId = req.session.userID;
+            requestData.RoomId = 1;
+            console.log("send message to db: " + JSON.stringify(requestData))
+            db.Messages.create(requestData)
+                .then(function (results) {
+                    res.send({
+                        statusString: "messageSent"
+                    });
+                    console.log("sent")
+                }).catch(err => res.send(err));
+        }
+        else {
+            res.status(400).end();
+        }
+    })
 
     // Delete an example by id
     //   app.delete("/api/examples/:id", function(req, res) {

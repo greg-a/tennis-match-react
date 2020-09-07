@@ -68,6 +68,21 @@ class Messenger extends Component {
                 room: this.state.room
             });
 
+            fetch("/api/message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: this.state.sendMessage,
+                    RoomId: this.state.room
+                })
+            })
+            .then(res => {
+                console.log("Your message was sent!");
+            })
+            .catch(err => console.log(err));
+
             this.setState({ sendMessage: "" });
         }
     };

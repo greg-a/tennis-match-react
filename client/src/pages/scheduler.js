@@ -3,7 +3,7 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import CenteredModal from "../components/Modal";
+import { SchedulerModal } from "../components/Modal";
 import Nav from "../components/Nav";
 
 class Scheduler extends Component {
@@ -11,7 +11,7 @@ class Scheduler extends Component {
   state = {
     savedDates: [],
     modalShow: false,
-    thisDate: "", 
+    thisDate: "",
     navValue: "tab-three"
   }
 
@@ -42,28 +42,28 @@ class Scheduler extends Component {
     return (
       <div>
         <Nav
-        value={this.state.navValue}
+          value={this.state.navValue}
         />
         <div className="container">
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          dateClick={this.handleDateClick}
-          initialView="dayGridMonth"
-          events={this.state.savedDates}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-          }}
-        />
-        <CenteredModal
-          show={this.state.modalShow}
-          onHide={() => this.setModalShow(false)}
-          thisDate={this.state.thisDate}
-        />
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            dateClick={this.handleDateClick}
+            initialView="dayGridMonth"
+            events={this.state.savedDates}
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            }}
+          />
+          <SchedulerModal
+            show={this.state.modalShow}
+            onHide={() => this.setModalShow(false)}
+            thisDate={this.state.thisDate}
+          />
+        </div>
       </div>
-      </div>  
-      
+
     )
   }
 
