@@ -170,6 +170,22 @@ module.exports = function (app) {
 
     });
 
+    // confirmed events for feed
+    app.get("/api/confirmed", function(req,res) {
+        if (req.session.loggedin) {
+            db.Event.findAll({
+                where: {
+                    eventStatus: "confirmed"
+                },
+                include: db.User
+            }).then(function(results) {
+                res.json(results)
+            })
+        } else {
+            res.status(400).end();
+        }
+    });
+
     // searching for players with availibility on chosen day
     app.get("/api/calendar/propose", function (req, res) {
         if (req.session.loggedin) {
