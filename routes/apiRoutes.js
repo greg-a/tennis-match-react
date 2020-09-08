@@ -326,7 +326,28 @@ module.exports = function (app) {
         } else {
             res.sendStatus(404)
         }
+    });
 
+    app.get("/api/room", function (req, res) {
+        if (req.session.loggedin) {
+            db.Room.findAll({
+                where: {
+                    [Op.or]: [
+                        { UserId: req.session.userID },
+                        { recipient: req.session.userID }
+                      ]
+                },
+                include: {
+                    model: db.Messages
+                }
+                })
+                .then(function (results) {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
+        } else {
+            res.sendStatus(404)
+        }
     });
 
     // Delete an example by id

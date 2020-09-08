@@ -51,6 +51,13 @@ class Messenger extends Component {
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
 
+            fetch("api/room")
+            .then(res => res.json())
+            .then((roomInfo) => {
+                console.log(roomInfo);
+            })
+            .catch(err => console.log(err));
+
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {
                 console.log(data);
