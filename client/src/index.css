@@ -16,3 +16,8 @@ code {
 .fc-day:hover {
   cursor: pointer;
 }
+
+@font-face {
+  font-family: 'coolvetica';
+  src: local('coolvetica'), url(./fonts/coolvetica.ttf) format('truetype');
+}
