@@ -10,11 +10,12 @@ import Public from '@material-ui/icons/Public';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EventIcon from '@material-ui/icons/Event';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
-  }
-});
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
 export default function Nav(props) {
   const classes = useStyles();
@@ -32,8 +33,8 @@ export default function Nav(props) {
           <Drawer />
         </div>
 
-        <div className="title-name col-9 col-sm-4">
-          TennisMatch
+        <div className="title-name col-6 col-sm-4">
+          <div className="app-name">TennisMatch</div>
         </div>
 
       </div>
@@ -48,7 +49,7 @@ export default function Nav(props) {
             textColor="primary"
             aria-label="icon tabs example"
           >
-            <Tab href="/feed" icon={<Public />} aria-label="public" value="tab-one"/>
+            <Tab href="/feed" icon={<Public />} aria-label="public" value="tab-one" />
             <Tab href="/newevent" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" value="tab-two"/>
             <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" value="tab-three"/>
           </Tabs>
