@@ -7,20 +7,20 @@ module.exports = function (sequelize, DataTypes) {
         }
     });
 
-    Room.associate = function (models) {
-        Room.belongsTo(models.User, {
-            foreignKey: {
-                allowNull: false
-            }
-        }),
-        Room.belongsTo(models.User, {
-            as: 'secondUser',
-            foreignKey: 'recipient'
-        }),
-        Room.hasMany(models.Messages, {
-            onDelete: "cascade"
-        });
-    };
+    // Room.associate = function (models) {
+    //     Room.belongsTo(models.User, {
+    //         foreignKey: {
+    //             allowNull: false
+    //         }
+    //     }),
+    //     Room.belongsTo(models.User, {
+    //         as: 'secondUser',
+    //         foreignKey: 'recipient'
+    //     }),
+    //     Room.hasMany(models.Messages, {
+    //         onDelete: "cascade"
+    //     });
+    // };
 
     return Room;
 };

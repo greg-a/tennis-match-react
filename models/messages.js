@@ -7,16 +7,13 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     Messages.associate = function(models) {
-        Messages.belongsTo(models.Room, {
-          foreignKey: {
-            allowNull: true
-          }
-        });
-
+      Messages.belongsTo(models.User, {
+        as: 'sender',
+        foreignKey: "firstUser"
+      }),
         Messages.belongsTo(models.User, {
-          foreignKey: {
-            allowNull: true
-          }
+          as: 'recipient',
+          foreignKey: "secondUser"
         });
       };
 

@@ -279,29 +279,11 @@ module.exports = function (app) {
     app.post("/api/message", function (req, res) {
         if (req.session.loggedin) {
             let requestData = req.body;
-            requestData.UserId = req.session.userID;
+            requestData.firstUser = req.session.userID;
 
 
             console.log("send message to db: " + JSON.stringify(requestData))
             db.Messages.create(requestData)
-                .then(function (results) {
-                    res.json(results);
-                    console.log("database: " + results)
-                }).catch(err => res.send(err));
-        }
-        else {
-            res.status(400).end();
-        }
-    });
-    // saves new message to rooms table
-    app.post("/api/room", function (req, res) {
-        if (req.session.loggedin) {
-            let requestData = req.body;
-            requestData.createdBy = req.session.usern
-            requestData.UserId = req.session.userID;
-            console.log(req.session)
-
-            db.Room.create(requestData)
                 .then(function (results) {
                     res.json(results);
                     console.log("database: " + results)
@@ -328,18 +310,19 @@ module.exports = function (app) {
         }
     });
 
-    app.get("/api/room", function (req, res) {
+    app.get("/api/messages", function (req, res) {
         if (req.session.loggedin) {
-            db.Room.findAll({
+            db.Messages.findAll({
                 where: {
                     [Op.or]: [
-                        { UserId: req.session.userID },
-                        { recipient: req.session.userID }
-                      ]
+                        { firstUser: req.session.userID },
+                        { secondUser: req.session.userID }
+                      ],
                 },
-                include: {
-                    model: db.Messages
-                }
+                include: [
+                    {model: db.User, as: "sender"},
+                    {model: db.User, as: "recipient"}
+                ]
                 })
                 .then(function (results) {
                     res.json(results);
