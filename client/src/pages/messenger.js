@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import io from 'socket.io-client';
 import Nav from "../components/Nav";
+import moment from 'moment';
 
 class Messenger extends Component {
     state = {
@@ -18,6 +19,7 @@ class Messenger extends Component {
     
     componentDidMount() {
         this.getProfileInfo();
+        console.log("this is a new day: " + new Date)
     };
 
 
@@ -44,11 +46,14 @@ class Messenger extends Component {
                     let newMessage = {
                         message: "",
                         sender: "",
-                        recipient: ""
-                    }
-                    newMessage.message += message.message
-                    newMessage.sender += message.User.username
-                    newMessage.recipient += message.recipient.username
+                        recipient: "",
+                        timeStampe: ""
+                    };
+
+                    newMessage.message += message.message;
+                    newMessage.sender += message.User.username;
+                    newMessage.recipient += message.recipient.username;
+                    newMessage.timeStampe += message.createdAt;
                     messagesArr.push(newMessage);
                 })
                 this.setState({ allMessages: messagesArr });
