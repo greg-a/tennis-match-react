@@ -171,7 +171,7 @@ module.exports = function (app) {
     });
 
     // confirmed events for feed
-    app.get("/api/confirmed", function(req,res) {
+    app.get("/api/confirmed", function (req, res) {
         if (req.session.loggedin) {
             db.Event.findAll({
                 where: {
@@ -275,25 +275,62 @@ module.exports = function (app) {
         req.session.destroy();
         res.sendStatus(200);
     });
-
+    // saves new message to messages table
     app.post("/api/message", function (req, res) {
         if (req.session.loggedin) {
             let requestData = req.body;
             requestData.UserId = req.session.userID;
-            requestData.RoomId = 1;
+
+
             console.log("send message to db: " + JSON.stringify(requestData))
             db.Messages.create(requestData)
                 .then(function (results) {
-                    res.send({
-                        statusString: "messageSent"
-                    });
-                    console.log("sent")
+                    res.json(results);
                 }).catch(err => res.send(err));
         }
         else {
             res.status(400).end();
         }
-    })
+    });
+    // returns list of users that match search parameters
+    app.get("/api/users/:user", function (req, res) {
+        if (req.session.loggedin) {
+            db.User.findAll({
+                where: {
+                    username: {[Op.like]: req.params.user + "%"} //would like to make this to include searching by first name and exclude current user
+                }
+                })
+                .then(function (results) {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
+        } else {
+            res.sendStatus(404)
+        }
+    });
+
+    app.get("/api/messages", function (req, res) {
+        if (req.session.loggedin) {
+            db.Messages.findAll({
+                where: {
+                    [Op.or]: [
+                        { UserId: req.session.userID },
+                        { secondUser: req.session.userID }
+                      ],
+                },
+                include: [
+                    {model: db.User},
+                    {model: db.User, as: "recipient"}
+                ]
+                })
+                .then(function (results) {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
+        } else {
+            res.sendStatus(404)
+        }
+    });
 
     // Delete an example by id
     //   app.delete("/api/examples/:id", function(req, res) {
