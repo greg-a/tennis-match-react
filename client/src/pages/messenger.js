@@ -47,7 +47,7 @@ class Messenger extends Component {
                         recipient: ""
                     }
                     newMessage.message += message.message
-                    newMessage.sender += message.sender.username
+                    newMessage.sender += message.User.username
                     newMessage.recipient += message.recipient.username
                     messagesArr.push(newMessage);
                 })
@@ -69,13 +69,22 @@ class Messenger extends Component {
         console.log(event.target.value)
     };
 
+    createRoom = (x, y) => {
+        if (x > y) {
+            return x + "+" + y
+        }
+        else {
+            return y + "+" + x
+        }
+    }
+
     handleInputChange = event => {
         if (event.type === "click") {
             //sends request to server to join a room based on click event
             const username = this.state.user.username;
             const recipientUsername = event.target.dataset.recipient;
             const recipientId = event.target.dataset.friendid;
-            const room = event.target.dataset.friendid + "+" + this.state.user.userid;
+            const room = this.createRoom(event.target.dataset.friendid, this.state.user.userid);
             const socket = io();
 
             this.setState({ sendTo: { id: recipientId, username: recipientUsername },room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
@@ -86,16 +95,22 @@ class Messenger extends Component {
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {
                 console.log(data);
-                this.setState(state => {
-                    const allMessages = state.allMessages.concat(data);
-                    return { allMessages };
-                });
+                let socketMessage = {
+                    message: data.message,
+                    sender: data.user,
+                    recipient: data.recipient
+                };
+                
+                let allMessages = this.state.allMessages;
+                allMessages.push(socketMessage);
 
+                this.setState({ allMessages: allMessages })
+            
                 return () => {
                     socket.disconnect()
                 };
             });
-
+            this.setState({ userSearch: "", users: [] })
         }
         else {
             this.setState({ sendMessage: event.target.value });
@@ -111,7 +126,8 @@ class Messenger extends Component {
             socket.emit("input", {
                 user: this.state.user.username,
                 message: this.state.sendMessage,
-                room: this.state.room
+                room: this.state.room,
+                recipient: this.state.sendTo.username
             });
 
             fetch("/api/message", {

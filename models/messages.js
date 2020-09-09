@@ -8,8 +8,9 @@ module.exports = function(sequelize, DataTypes) {
 
     Messages.associate = function(models) {
       Messages.belongsTo(models.User, {
-        as: 'sender',
-        foreignKey: "firstUser"
+        foreignKey: {
+          allowNull: false
+        }
       }),
         Messages.belongsTo(models.User, {
           as: 'recipient',

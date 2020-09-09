@@ -279,7 +279,7 @@ module.exports = function (app) {
     app.post("/api/message", function (req, res) {
         if (req.session.loggedin) {
             let requestData = req.body;
-            requestData.firstUser = req.session.userID;
+            requestData.UserId = req.session.userID;
 
 
             console.log("send message to db: " + JSON.stringify(requestData))
@@ -315,12 +315,12 @@ module.exports = function (app) {
             db.Messages.findAll({
                 where: {
                     [Op.or]: [
-                        { firstUser: req.session.userID },
+                        { UserId: req.session.userID },
                         { secondUser: req.session.userID }
                       ],
                 },
                 include: [
-                    {model: db.User, as: "sender"},
+                    {model: db.User},
                     {model: db.User, as: "recipient"}
                 ]
                 })
