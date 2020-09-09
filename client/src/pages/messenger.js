@@ -101,10 +101,10 @@ class Messenger extends Component {
                     recipient: data.recipient
                 };
                 
-                let allMessages = this.state.allMessages;
-                allMessages.push(socketMessage);
+                let showMessages = this.state.showMessages;
+                showMessages.push(socketMessage);
 
-                this.setState({ allMessages: allMessages })
+                this.setState({ showMessages: showMessages })
             
                 return () => {
                     socket.disconnect()

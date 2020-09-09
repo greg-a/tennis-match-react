@@ -286,7 +286,6 @@ module.exports = function (app) {
             db.Messages.create(requestData)
                 .then(function (results) {
                     res.json(results);
-                    console.log("database: " + results)
                 }).catch(err => res.send(err));
         }
         else {
