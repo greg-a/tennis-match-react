@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProposeMatchForm from '../components/ProposeMatchForm';
-// import ProposeCard2 from '../components/ProposeCard2';
+import ProposeUserSearch from '../components/ProposeUserSearch'
 import ProposeCard from '../components/ProposeCard';
 import moment from 'moment';
 import { ProposeModal } from "../components/Modal";
@@ -15,8 +15,12 @@ class ProposeMatch extends Component {
         endTimeMinute: "",
         searchResult: [],
         clickedResult: [],
-        instructions: "Pick a date to search for other players' availability.",
-        modalShow: false
+        instructions: "",
+        userSearch: "",
+        userResults: [],
+        userId: "",
+        modalShow: false,
+        subsectionShow: ""
     };
 
     setModalShow = bVal => {
@@ -39,8 +43,39 @@ class ProposeMatch extends Component {
         });
     };
 
+    handleUsernameChange = event => {
+        const { name, value } = event.target;
+        this.setState({
+            [name]: value
+        }, ()=>{
+            let searchURL = "/api/username?username=" + this.state.userSearch;
+            fetch(searchURL)
+            .then(res => res.json())
+            .then(res=> {
+                console.log(res)
+                this.setState({
+                    userResults: res
+                },()=>{
+                    for (let i=0;i<(this.state.userResults).length;i++) {
+                        let currentUserResults = this.state.userResults;
+                    if (this.state.userSearch===currentUserResults[i].username) {
+                        let currentUserId = currentUserResults[i].id;
+                        this.setState({
+                            userId: currentUserId
+                        })
+                    }
+                    }
+                });
+            })
+            .catch(err=>console.log(err));
+        });
+    };
+
     handleFormSubmit = event => {
         event.preventDefault();
+        this.setState({
+            instructions: "Pick an availability and propose a time."
+        })
         let searchURL = "/api/calendar/propose?date=" + this.state.newDate;
         console.log(searchURL);
         fetch(searchURL)
@@ -64,10 +99,15 @@ class ProposeMatch extends Component {
 
         let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
         let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
+        let currentProposeToUserId;
+        if (event.target.dataset.userid) {
+            currentProposeToUserId = event.target.dataset.userid;
+        } else {
+            currentProposeToUserId = this.state.userId
+        }
+        
 
-        let currentProposeToUsedId = event.target.dataset.userid;
-
-        console.log("CURRENT PROPOSE USER: " + currentProposeToUsedId);
+        console.log("CURRENT PROPOSE USER: " + currentProposeToUserId);
 
         fetch("/api/calendar", {
             method: "POST",
@@ -78,7 +118,7 @@ class ProposeMatch extends Component {
                 title: "proposed match",
                 start: currentStartDate,
                 end: currentEndDate,
-                confirmedByUser: currentProposeToUsedId,
+                confirmedByUser: currentProposeToUserId,
                 eventStatus: "propose"
             })
         })
@@ -95,7 +135,10 @@ class ProposeMatch extends Component {
                             endTimeMinute: "",
                             searchResult: [],
                             instructions: "Your request for a match has been sent!",
-                            modalShow: false
+                            modalShow: false,
+                            userSearch: "",
+                            userResults: [],
+                            userId: ""
                         }
                     )
                 } else {
@@ -109,7 +152,10 @@ class ProposeMatch extends Component {
                             endTimeMinute: "",
                             searchResult: [],
                             instructions: "Oops! Something went wrong. Please try again.",
-                            modalShow: false
+                            modalShow: false,
+                            userSearch: "",
+                            userResults: [],
+                            userId: ""
                         }
                     )
                 }
@@ -139,18 +185,79 @@ class ProposeMatch extends Component {
         this.setState({ searchResult: searchArr });
     }
 
-
-
-
-    render() {
-        return (
-            <div className="container">
+    subsectionRender = () => {
+        if (this.state.subsectionShow==="player") {
+            return (
+                <ProposeUserSearch 
+                userSearch={this.state.userSearch}
+                handleUsernameChange={this.handleUsernameChange}
+                handleInputChange={this.handleInputChange}
+                handleProposeSubmit={this.handleProposeSubmit}
+                userResults={this.state.userResults}
+                newDate={this.state.newDate}
+                startTimeHour={this.state.startTimeHour}
+                startTimeMinute={this.state.startTimeMinute}
+                endTimeHour={this.state.endTimeHour}
+                endTimeMinute={this.state.endTimeMinute}
+                instructions={this.state.instructions}
+                />
+            )
+        } else if (this.state.subsectionShow==="date") {
+            return (
                 <ProposeMatchForm
                     handleInputChange={this.handleInputChange}
                     newDate={this.state.newDate}
                     instructions={this.state.instructions}
                     handleFormSubmit={this.handleFormSubmit}
                 />
+            )
+        }
+    }
+
+    setSubShow = (event) => {
+        console.log(event.target.value);
+        this.setState({
+            newDate: "",
+            startTimeHour: "",
+            startTimeMinute: "",
+            endTimeHour: "",
+            endTimeMinute: "",
+            searchResult: [],
+            clickedResult: [],
+            
+            userSearch: "",
+            userResults: [],
+            userId: "",
+            modalShow: false,
+            subsectionShow: event.target.value
+        }, ()=>{
+            if (this.state.subsectionShow==="player") {
+                this.setState({
+                    instructions: "Type in a player's name and fill out the form below",
+                })
+            } else if (this.state.subsectionShow==="date") {
+                this.setState({
+                    instructions: "Pick a date to search for other players' availability."
+                })
+            }
+        })
+    }
+
+
+
+
+    render() {
+        return (
+            <div className="container">
+                <button type="button" className="btn btn-primary mr-2" onClick={this.setSubShow}value="date">Search By Date</button>
+                <button type="button" className="btn btn-primary" onClick={this.setSubShow} value="player">Propose Match to a Player</button>
+                {this.subsectionRender()}
+                {/* <ProposeMatchForm
+                    handleInputChange={this.handleInputChange}
+                    newDate={this.state.newDate}
+                    instructions={this.state.instructions}
+                    handleFormSubmit={this.handleFormSubmit}
+                /> */}
                 {this.state.searchResult.map((event, i) => (
                     <ProposeCard
                         key={i}
@@ -168,6 +275,20 @@ class ProposeMatch extends Component {
                     />
                 ))
                 }
+
+                {/* <ProposeUserSearch 
+                userSearch={this.state.userSearch}
+                handleUsernameChange={this.handleUsernameChange}
+                handleInputChange={this.handleInputChange}
+                handleProposeSubmit={this.handleProposeSubmit}
+                userResults={this.state.userResults}
+                newDate={this.state.newDate}
+                startTimeHour={this.state.startTimeHour}
+                startTimeMinute={this.state.startTimeMinute}
+                endTimeHour={this.state.endTimeHour}
+                endTimeMinute={this.state.endTimeMinute}
+                /> */}
+
                 {this.state.clickedResult.map(event => (
                 <ProposeModal
                 show={this.state.modalShow}
@@ -180,6 +301,8 @@ class ProposeMatch extends Component {
                 endIntArr={event.endIntArr}
                 startTimeHour={this.state.startTimeHour}
                 startTimeMinute={this.state.startTimeMinute}
+                endTimeHour={this.state.endTimeHour}
+                endTimeMinute={this.state.endTimeMinute}
                 handleInputChange={this.handleInputChange}
                 handleProposeSubmit={this.handleProposeSubmit}
                 />
