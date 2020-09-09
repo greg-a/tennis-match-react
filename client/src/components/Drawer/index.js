@@ -22,6 +22,10 @@ const useStyles = makeStyles({
   fullList: {
     width: 'auto',
   },
+  tennisButton: {
+    color: "white",
+    fontSize: "3em"
+  }
 });
 
 const Drawer = (props) => {
@@ -95,7 +99,7 @@ const Drawer = (props) => {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}><SportsTennisIcon className="tennis-icon"/></Button>
+          <Button onClick={toggleDrawer(anchor, true)} ><SportsTennisIcon className={clsx(classes.tennisButton)}/></Button>
           <MUIDrawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
           </MUIDrawer>
