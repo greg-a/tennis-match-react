@@ -1,14 +1,25 @@
-import React, { Component, useRef, useEffect } from "react";
+import React, { Component } from "react";
 import io from 'socket.io-client';
+import Nav from "../components/Nav";
 
 class Messenger extends Component {
     state = {
         sendMessage: "",
-        viewMessages: [],
-        username: "",
+        allMessages: [],
+        showMessages: [],
+        user: {},
+        sendTo: {},
         room: "",
-        friends: ["Jarrett", "Patrick"]
+        users: [],
+        userSearch: "",
+        navValue: "tab-one"
     };
+
+    
+    componentDidMount() {
+        this.getProfileInfo();
+    };
+
 
     getProfileInfo = () => {
         fetch("/api/profile")
@@ -16,40 +27,90 @@ class Messenger extends Component {
             .then((profileInfo) => {
                 console.log(profileInfo);
                 this.setState({
-                    username: profileInfo.username
+                    user: {
+                        username: profileInfo.username,
+                        userid: profileInfo.id
+                    }
                 })
             })
             .catch(err => console.log(err));
-    }
 
-    componentDidMount() {
-        this.getProfileInfo();
+        fetch("/api/messages")
+            .then(res => res.json())
+            .then((messages) => {
+                console.log("messages: " + JSON.stringify(messages));
+                let messagesArr = [];
+                messages.forEach(message => {
+                    let newMessage = {
+                        message: "",
+                        sender: "",
+                        recipient: ""
+                    }
+                    newMessage.message += message.message
+                    newMessage.sender += message.User.username
+                    newMessage.recipient += message.recipient.username
+                    messagesArr.push(newMessage);
+                })
+                this.setState({ allMessages: messagesArr });
+                console.log("state: " + JSON.stringify(this.state.allMessages))
+            })
+            .catch(err => console.log(err));
+    };
+
+    handleUserSearch = event => {
+        fetch("api/users/" + event.target.value)
+            .then(res => res.json())
+            .then((users) => {
+                console.log(users);
+                this.setState({ users: users })
+            })
+            .catch(err => console.log(err));
+
+        console.log(event.target.value)
+    };
+
+    createRoom = (x, y) => {
+        if (x > y) {
+            return x + "+" + y
+        }
+        else {
+            return y + "+" + x
+        }
     }
 
     handleInputChange = event => {
         if (event.type === "click") {
             //sends request to server to join a room based on click event
-            this.setState({ room: event.target.innerHTML });
-            const username = this.state.username;
-            const room = event.target.innerHTML;
+            const username = this.state.user.username;
+            const recipientUsername = event.target.dataset.recipient;
+            const recipientId = event.target.dataset.friendid;
+            const room = this.createRoom(event.target.dataset.friendid, this.state.user.userid);
             const socket = io();
+
+            this.setState({ sendTo: { id: recipientId, username: recipientUsername },room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
 
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {
-                console.log(data)
-                this.setState(state => {
-                    const viewMessages = state.viewMessages.concat(data);
-                    return { viewMessages };
-                })
-    
+                console.log(data);
+                let socketMessage = {
+                    message: data.message,
+                    sender: data.user,
+                    recipient: data.recipient
+                };
+                
+                let showMessages = this.state.showMessages;
+                showMessages.push(socketMessage);
+
+                this.setState({ showMessages: showMessages })
+            
                 return () => {
                     socket.disconnect()
-                }
-            })
-        
+                };
+            });
+            this.setState({ userSearch: "", users: [] })
         }
         else {
             this.setState({ sendMessage: event.target.value });
@@ -63,9 +124,10 @@ class Messenger extends Component {
             const socket = io();
 
             socket.emit("input", {
-                user: this.state.username,
+                user: this.state.user.username,
                 message: this.state.sendMessage,
-                room: this.state.room
+                room: this.state.room,
+                recipient: this.state.sendTo.username
             });
 
             fetch("/api/message", {
@@ -75,13 +137,14 @@ class Messenger extends Component {
                 },
                 body: JSON.stringify({
                     message: this.state.sendMessage,
-                    RoomId: this.state.room
+                    secondUser: this.state.sendTo.id
                 })
             })
-            .then(res => {
-                console.log("Your message was sent!");
-            })
-            .catch(err => console.log(err));
+                .then(res => {
+                    console.log("Your message was sent!");
+                    console.log(res);
+                })
+                .catch(err => console.log(err));
 
             this.setState({ sendMessage: "" });
         }
@@ -89,28 +152,34 @@ class Messenger extends Component {
 
     render() {
         return (
-            <div className="container">
-                <h2>{this.state.room}</h2>
-                <ul className="list-group messages-list p-5">
-                    {this.state.viewMessages.map(data => (
-                        <li className="list-group-item">
-                            {data.user}: {data.message}
-                        </li>
-                    ))}
-                </ul>
-                <div className="input-group pr-5">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">Message</span>
+            <div>
+                <Nav
+                    value={this.state.navValue}
+                />
+                <div className="container">
+                    <h2>{this.state.sendTo.username}</h2>
+                    <ul className="list-group messages-list p-5">
+                        {this.state.showMessages.map(data => (
+                            <li className="list-group-item">
+                                {data.sender}: {data.message}
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="input-group pr-5">
+                        <div className="input-group-prepend">
+                            <span className="input-group-text">Message</span>
+                        </div>
+                        <textarea className="form-control" aria-label="With textarea" placeholder="Send message..." name="sendMessage" onChange={this.handleInputChange} onKeyDown={this.pushSendMessage} value={this.state.sendMessage}></textarea>
                     </div>
-                    <textarea className="form-control" aria-label="With textarea" placeholder="Send message..." name="sendMessage" onChange={this.handleInputChange} onKeyDown={this.pushSendMessage} value={this.state.sendMessage}></textarea>
+                    <ul className="list-group messages-list p-5">
+                        <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" onChange={this.handleUserSearch}></input>
+                        {this.state.users.map(user => (
+                            <li className="list-group-item list-group-item-action" name="room" onClick={this.handleInputChange} data-friendid={user.id} data-recipient={user.username}>
+                                {user.username}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-                <ul className="list-group messages-list p-5">
-                    {this.state.friends.map(friend => (
-                        <li className="list-group-item list-group-item-action" name="room" onClick={this.handleInputChange}>
-                            {friend}
-                        </li>
-                    ))}
-                </ul>
             </div>
         )
     }

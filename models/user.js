@@ -50,9 +50,9 @@ module.exports = function(sequelize, DataTypes) {
             onDelete: "cascade"
         });
 
-        User.hasMany(models.Room, {
+        User.hasMany(models.Messages, {
             onDelete: "cascade"
-        });
+        })
     };
 
     return User;
