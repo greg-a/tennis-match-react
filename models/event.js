@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         end: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: false
         },
         // confirmedByUser: DataTypes.INTEGER,
         eventStatus: DataTypes.STRING
