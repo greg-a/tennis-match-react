@@ -10,6 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import SportsTennisIcon from '@material-ui/icons/SportsTennis';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {withRouter} from "react-router-dom";
@@ -94,7 +95,7 @@ const Drawer = (props) => {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>MENU</Button>
+          <Button onClick={toggleDrawer(anchor, true)}><SportsTennisIcon className="tennis-icon"/></Button>
           <MUIDrawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
           </MUIDrawer>
