@@ -32,7 +32,7 @@ class Feed extends React.Component {
                 <Container>
                     {/* <FeedListItem /> */}
                     <Row>
-                        <Col size="xs-12">
+                        <Col size="12">
                             {!this.state.matches.length ? (
                                 <h4 className="text-center">No scheduled matches</h4>
                             ) : (
@@ -40,8 +40,12 @@ class Feed extends React.Component {
                                         {this.state.matches.map(match => {
                                             return (
                                                 <FeedListItem
-                                                    organizer={match.userID}
-                                                    date={match.newDate}
+                                                    organizer={match.User.username}
+                                                    confirmer={match.secondUser.username}
+                                                    month={match.start.substring(5, 7)}
+                                                    day={match.start.substring(8,10)}
+                                                    hour={match.start.substring(11,13)}
+                                                    minute={match.start.substring(14,16)}
                                                 />
                                             );
                                         })}

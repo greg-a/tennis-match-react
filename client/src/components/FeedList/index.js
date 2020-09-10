@@ -12,8 +12,11 @@ export function FeedListItem({
     //later replace with hybrid image of both participating players
     thumbnail = "https://placehold.it/300x300",
     organizer,
-    date,
-    time
+    confirmer,
+    month,
+    day,
+    hour,
+    minute
 }) {
     return (
         <li className="list-group-item">
@@ -23,7 +26,7 @@ export function FeedListItem({
                         <Thumbnail src={thumbnail} />
                     </Col>
                     <Col size="xs-8 sm-9">
-                        <p>{organizer} scheduled a match for {date} at {time}.</p>
+                        <p>{organizer} scheduled a match with {confirmer} on {month}/{day} at {hour}:{minute}.</p>
                     </Col>
                 </Row>
             </Container>
