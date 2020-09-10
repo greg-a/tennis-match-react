@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import io from 'socket.io-client';
 import Nav from "../components/Nav";
-import moment from 'moment';
 
 class Messenger extends Component {
     state = {
@@ -16,10 +15,10 @@ class Messenger extends Component {
         navValue: "tab-one"
     };
 
-    
+
     componentDidMount() {
         this.getProfileInfo();
-        console.log("this is a new day: " + new Date)
+        console.log("this is a new day: " + new Date);
     };
 
 
@@ -47,7 +46,7 @@ class Messenger extends Component {
                         message: "",
                         sender: "",
                         recipient: "",
-                        timeStampe: ""
+                        timeStamp: ""
                     };
 
                     newMessage.message += message.message;
@@ -63,7 +62,7 @@ class Messenger extends Component {
     };
 
     handleUserSearch = event => {
-        fetch("api/users/" + event.target.value)
+        fetch("api/username?username=" + event.target.value)
             .then(res => res.json())
             .then((users) => {
                 console.log(users);
@@ -92,7 +91,7 @@ class Messenger extends Component {
             const room = this.createRoom(event.target.dataset.friendid, this.state.user.userid);
             const socket = io();
 
-            this.setState({ sendTo: { id: recipientId, username: recipientUsername },room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
+            this.setState({ sendTo: { id: recipientId, username: recipientUsername }, room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
@@ -105,12 +104,12 @@ class Messenger extends Component {
                     sender: data.user,
                     recipient: data.recipient
                 };
-                
+
                 let showMessages = this.state.showMessages;
                 showMessages.push(socketMessage);
 
                 this.setState({ showMessages: showMessages })
-            
+
                 return () => {
                     socket.disconnect()
                 };
@@ -180,7 +179,7 @@ class Messenger extends Component {
                         <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" onChange={this.handleUserSearch}></input>
                         {this.state.users.map(user => (
                             <li className="list-group-item list-group-item-action" name="room" onClick={this.handleInputChange} data-friendid={user.id} data-recipient={user.username}>
-                                {user.username}
+                                {user.firstname ? `${user.username} (${user.firstname} ${user.lastname})` : user.username}
                             </li>
                         ))}
                     </ul>
