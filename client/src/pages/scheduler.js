@@ -3,14 +3,15 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { SchedulerModal } from "../components/Modal";
+import { SchedulerModal, EventDetailsModal } from "../components/Modal";
 import Nav from "../components/Nav";
 
 class Scheduler extends Component {
 
   state = {
     savedDates: [],
-    modalShow: false,
+    dateModalShow: false,
+    eventModalShow: false,
     thisDate: "",
     navValue: "tab-three"
   }
@@ -29,13 +30,16 @@ class Scheduler extends Component {
       .catch(err => console.log(err));
   }
 
-  setModalShow = bVal => {
-    this.setState({ modalShow: bVal });
+  setModalShow = (mName, bVal) => {
+    this.setState({ [mName]: bVal });
   };
 
-  handleDateClick = (arg) => {
-    this.setState({ modalShow: true, thisDate: arg.dateStr });
-    console.log(this.state.savedDates);
+  handleDateClick = arg => {
+    this.setState({ dateModalShow: true, thisDate: arg.dateStr });
+  };
+
+  handleEventClick = arg => {
+    this.setState({ eventModalShow: true, thisDate: arg.dateStr });
   };
 
   render() {
@@ -55,11 +59,17 @@ class Scheduler extends Component {
               center: 'title',
               right: 'dayGridMonth,timeGridWeek,timeGridDay'
             }}
+            eventClick={this.handleEventClick}
           />
           <SchedulerModal
-            show={this.state.modalShow}
-            onHide={() => this.setModalShow(false)}
+            show={this.state.dateModalShow}
+            onHide={() => this.setModalShow("dateModalShow", false)}
             thisDate={this.state.thisDate}
+          />
+          <EventDetailsModal
+            show={this.state.eventModalShow}
+            onHide={() => this.setModalShow("eventModalShow", false)}
+            eventName="Singles"
           />
         </div>
       </div>

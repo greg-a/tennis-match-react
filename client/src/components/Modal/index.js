@@ -103,3 +103,27 @@ export function ProposeModal(props) {
     );
 }
 
+export function EventDetailsModal(props) {
+    return (
+        <Modal
+            {...props}
+            size="sm"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    {props.eventName}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Button className="mr-3" href="/newevent">Edit</Button>
+                <Button className="mr-3" href="#">Delete</Button>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
