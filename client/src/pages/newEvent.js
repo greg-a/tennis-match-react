@@ -10,8 +10,11 @@ class NewEvent extends Component {
         startTimeMinute: "00",
         endTimeHour: "00",
         endTimeMinute: "00",
-        eventTitle: "",
-        navValue: "tab-two"
+        eventTitle: "Casual",
+        eventLocation: "any",
+        navValue: "tab-two",
+        instructions: "Please enter the following information to set your availabilty",
+        courtList: ["any","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
     }
 
     handleInputChange = event => {
@@ -42,12 +45,36 @@ class NewEvent extends Component {
                 title: this.state.eventTitle,
                 start: currentStartDate,
                 end: currentEndDate,
-                eventStatus: "available"
+                eventStatus: "available",
+                location: this.state.eventLocation
             })
         })
             .then(res => res.json())
             .then(res => {
                 console.log(res.statusString);
+                if (res.statusString === "eventCreated") {
+                    this.setState({
+                        newDate: "",
+                        startTimeHour: "00",
+                        startTimeMinute: "00",
+                        endTimeHour: "00",
+                        endTimeMinute: "00",
+                        eventTitle: "Casual",
+                        eventLocation: "any",
+                        instructions: "Your availability has been successfully updated!"
+                    });
+                } else {
+                    this.setState({
+                        newDate: "",
+                        startTimeHour: "00",
+                        startTimeMinute: "00",
+                        endTimeHour: "00",
+                        endTimeMinute: "00",
+                        eventTitle: "Casual",
+                        eventLocation: "any",
+                        instructions: "Oops! Something went wrong. Please try again."
+                    });
+                }
             })
             .catch(err => console.log(err));
     }
@@ -63,12 +90,15 @@ class NewEvent extends Component {
                     <NewEventForm
                         handleInputChange={this.handleInputChange}
                         eventTitle={this.state.eventTitle}
+                        eventLocation={this.state.eventLocation}
                         newDate={this.state.newDate}
                         startTimeHour={this.state.startTimeHour}
                         startTimeMinute={this.state.startTimeMinute}
                         endTimeHour={this.state.endTimeHour}
                         endTimeMinute={this.state.endTimeMinute}
                         handleFormSubmit={this.handleFormSubmit}
+                        courtList={this.state.courtList}
+                        instructions={this.state.instructions}
                     />
                 </div>
             </div>

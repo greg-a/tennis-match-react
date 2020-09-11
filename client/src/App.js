@@ -4,7 +4,7 @@ import Login from "./pages/login";
 import Signup from "./pages/signup";
 import withAuth from "./withAuth";
 import Scheduler from "./pages/scheduler";
-import NewEvent from "./pages/newEvent";
+import Availability from "./pages/newEvent";
 import Profile from "./pages/profile";
 import Messenger from "./pages/messenger";
 import Feed from "./pages/feed";
@@ -22,8 +22,8 @@ function App() {
     <Route exact path="/signup" component={Signup} /> 
     <Route exact path="/scheduler" component={withAuth(Scheduler)} />
     <Route exact path="/messenger" component={withAuth(Messenger)} />
-    <Route exact path="/feed" component={withAuth(Feed)} />
-    <Route exact path="/newevent" component={withAuth(NewEvent)} />
+    <Route exact path="/feed" component={Feed} />
+    <Route exact path="/availability" component={withAuth(Availability)} />
     <Route exact path ="/profile" component={withAuth(Profile)} />
     <Route exact path="/proposematch" component={withAuth(ProposeMatch)} />
     <Route exact path="/requests" component={withAuth(Requests)} />

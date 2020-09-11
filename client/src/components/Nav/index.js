@@ -50,7 +50,7 @@ export default function Nav(props) {
             aria-label="icon tabs example"
           >
             <Tab href="/feed" icon={<Public />} aria-label="public" value="tab-one" />
-            <Tab href="/newevent" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" value="tab-two"/>
+            <Tab href="/availability" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" value="tab-two"/>
             <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" value="tab-three"/>
           </Tabs>
         </Paper>
