@@ -1,6 +1,22 @@
 import React from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    },
+}));
 
 function NewEventForm(props) {
+    const classes = useStyles();
+
     return (
         <div>
             <h2>Availability</h2>
@@ -16,7 +32,7 @@ function NewEventForm(props) {
                 <div className="form-group">
                     <label for="eventLocation">Court Location</label>
                     <select className="form-control" name="eventLocation" id="eventLocation" onChange={props.handleInputChange} value={props.eventLocation}>
-                        {props.courtList.map((event, i)=>(
+                        {props.courtList.map((event, i) => (
                             <option value={event} key={i}>{event}</option>
                         ))}
                     </select>
@@ -28,7 +44,43 @@ function NewEventForm(props) {
                         value={props.newDate}
                     />
                 </div>
-                <div className="form-row">
+                <form className={classes.container} noValidate>
+                    <TextField
+                        id="startTime"
+                        name="startTime"
+                        label="Start Time"
+                        type="time"
+                        // defaultValue="17:00"
+                        value={props.startTime}
+                        onChange={props.handleInputChange} 
+                        className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        inputProps={{
+                            step: 300, // 5 min
+                        }}
+                    />
+                </form>
+                <form className={classes.container} noValidate>
+                    <TextField
+                        id="endTime"
+                        name="endTime"
+                        label="End Time"
+                        type="time"
+                        // defaultValue="18:30"
+                        value={props.endTime}
+                        onChange={props.handleInputChange}
+                        className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        inputProps={{
+                            step: 300, // 5 min
+                        }}
+                    />
+                </form>
+                {/* <div className="form-row">
                     <div className="form-group col">
                         <label for="startTimeHour">Start Hour</label>
                         <select className="form-control" name="startTimeHour" id="startTimeHour" onChange={props.handleInputChange}
@@ -111,7 +163,7 @@ function NewEventForm(props) {
                             <option value="45">:45</option>
                         </select>
                     </div>
-                </div>
+                </div> */}
                 <button type="button" className="btn btn-primary"
                     onClick={props.handleFormSubmit}
                     id="login-button">Submit</button>
