@@ -4,6 +4,7 @@ import ProposeUserSearch from '../components/ProposeUserSearch'
 import ProposeCard from '../components/ProposeCard';
 import moment from 'moment';
 import { ProposeModal } from "../components/Modal";
+import Nav from "../components/Nav";
 
 class ProposeMatch extends Component {
 
@@ -248,7 +249,9 @@ class ProposeMatch extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div>
+                <Nav/>
+                <div className="container">
                 <button type="button" className="btn btn-primary mr-2" onClick={this.setSubShow}value="date">Search By Date</button>
                 <button type="button" className="btn btn-primary" onClick={this.setSubShow} value="player">Propose Match to a Player</button>
                 {this.subsectionRender()}
@@ -308,6 +311,8 @@ class ProposeMatch extends Component {
                 />
                 ))}
             </div>
+            </div>
+            
 
         )
     }

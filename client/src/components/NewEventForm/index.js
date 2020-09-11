@@ -12,12 +12,19 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
         width: 200,
+        marginTop: "10px",
+        marginBottom: "10px"
     },
     availabilityForm: {
         marginTop: "10px"
     },
     availabilityHeader: {
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: "coolvetica"
+    },
+    availabilityInstr: {
+        textAlign: "center",
+        fontWeight: "bold"
     }
 }));
 
@@ -26,10 +33,8 @@ function NewEventForm(props) {
 
     return (
         <div className={classes.availabilityForm}>
-            <div className={classes.availabilityHeader}>
-                <h2>Availability</h2>
-                <div><p>{props.instructions}</p></div>
-            </div>
+            <h2 className={classes.availabilityHeader}>Availability</h2>
+            <div className={classes.availabilityInstr}><p>{props.instructions}</p></div>
             <form>
                 <Container>
                     <Row>
@@ -57,14 +62,29 @@ function NewEventForm(props) {
 
                 <Container>
                     <Row>
-                        <Col size="12 sm-3">
-                            <div className="form-group">
+                        <Col size="12 sm-4">
+                            {/* <div className="form-group">
                                 <label for="newDate">Date</label>
                                 <input type="date" className="form-control" id="newDate" name="newDate"
                                     onChange={props.handleInputChange}
                                     value={props.newDate}
                                 />
-                            </div>
+                            </div> */}
+                            <form className={classes.container} noValidate>
+                                <TextField
+                                    id="newDate"
+                                    name="newDate"
+                                    label="Date"
+                                    type="date"
+                                    // defaultValue="2017-05-24"
+                                    value={props.newDate}
+                                    onChange={props.handleInputChange}
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </form>
                         </Col>
                         <Col size="12 sm-3">
                             <form className={classes.container} noValidate>
@@ -192,8 +212,8 @@ function NewEventForm(props) {
                         </select>
                     </div>
                 </div> */}
-                        <Col size="12 sm-3">
-                            <button type="button" className="btn btn-primary"
+                        <Col size="12 sm-2">
+                            <button type="button" className="btn"
                                 onClick={props.handleFormSubmit}
                                 id="login-button">Submit</button>
                         </Col>
