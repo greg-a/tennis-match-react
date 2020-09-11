@@ -26,68 +26,89 @@ function NewEventForm(props) {
 
     return (
         <div className={classes.availabilityForm}>
-            <h2 className={classes.availabilityHeader}>Availability</h2>
-            <div><p>{props.instructions}</p></div>
+            <div className={classes.availabilityHeader}>
+                <h2>Availability</h2>
+                <div><p>{props.instructions}</p></div>
+            </div>
             <form>
-                <div className="form-group">
-                    <label for="eventTitle">Availability Type</label>
-                    <select className="form-control" name="eventTitle" id="eventTitle" onChange={props.handleInputChange} value={props.eventTitle}>
-                        <option value="casual">Casual</option>
-                        <option value="competitive">Competitive</option>
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label for="eventLocation">Court Location</label>
-                    <select className="form-control" name="eventLocation" id="eventLocation" onChange={props.handleInputChange} value={props.eventLocation}>
-                        {props.courtList.map((event, i) => (
-                            <option value={event} key={i}>{event}</option>
-                        ))}
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label for="newDate">Date</label>
-                    <input type="date" className="form-control" id="newDate" name="newDate"
-                        onChange={props.handleInputChange}
-                        value={props.newDate}
-                    />
-                </div>
-                <form className={classes.container} noValidate>
-                    <TextField
-                        id="startTime"
-                        name="startTime"
-                        label="Start Time"
-                        type="time"
-                        // defaultValue="17:00"
-                        value={props.startTime}
-                        onChange={props.handleInputChange} 
-                        className={classes.textField}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        inputProps={{
-                            step: 300, // 5 min
-                        }}
-                    />
-                </form>
-                <form className={classes.container} noValidate>
-                    <TextField
-                        id="endTime"
-                        name="endTime"
-                        label="End Time"
-                        type="time"
-                        // defaultValue="18:30"
-                        value={props.endTime}
-                        onChange={props.handleInputChange}
-                        className={classes.textField}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        inputProps={{
-                            step: 300, // 5 min
-                        }}
-                    />
-                </form>
-                {/* <div className="form-row">
+                <Container>
+                    <Row>
+                        <Col size="12 sm-3">
+                            <div className="form-group">
+                                <label for="eventTitle">Availability Type</label>
+                                <select className="form-control" name="eventTitle" id="eventTitle" onChange={props.handleInputChange} value={props.eventTitle}>
+                                    <option value="casual">Casual</option>
+                                    <option value="competitive">Competitive</option>
+                                </select>
+                            </div>
+                        </Col>
+                        <Col size="12 sm-9">
+                            <div className="form-group">
+                                <label for="eventLocation">Court Location</label>
+                                <select className="form-control" name="eventLocation" id="eventLocation" onChange={props.handleInputChange} value={props.eventLocation}>
+                                    {props.courtList.map((event, i) => (
+                                        <option value={event} key={i}>{event}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+
+                <Container>
+                    <Row>
+                        <Col size="12 sm-3">
+                            <div className="form-group">
+                                <label for="newDate">Date</label>
+                                <input type="date" className="form-control" id="newDate" name="newDate"
+                                    onChange={props.handleInputChange}
+                                    value={props.newDate}
+                                />
+                            </div>
+                        </Col>
+                        <Col size="12 sm-3">
+                            <form className={classes.container} noValidate>
+                                <TextField
+                                    id="startTime"
+                                    name="startTime"
+                                    label="Start Time"
+                                    type="time"
+                                    // defaultValue="17:00"
+                                    value={props.startTime}
+                                    onChange={props.handleInputChange}
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300, // 5 min
+                                    }}
+                                />
+                            </form>
+                        </Col>
+                        <Col size="12 sm-3">
+                            <form className={classes.container} noValidate>
+                                <TextField
+                                    id="endTime"
+                                    name="endTime"
+                                    label="End Time"
+                                    type="time"
+                                    // defaultValue="18:30"
+                                    value={props.endTime}
+                                    onChange={props.handleInputChange}
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{
+                                        step: 300, // 5 min
+                                    }}
+                                />
+                            </form>
+                        </Col>
+
+
+                        {/* <div className="form-row">
                     <div className="form-group col">
                         <label for="startTimeHour">Start Hour</label>
                         <select className="form-control" name="startTimeHour" id="startTimeHour" onChange={props.handleInputChange}
@@ -171,9 +192,13 @@ function NewEventForm(props) {
                         </select>
                     </div>
                 </div> */}
-                <button type="button" className="btn btn-primary"
-                    onClick={props.handleFormSubmit}
-                    id="login-button">Submit</button>
+                        <Col size="12 sm-3">
+                            <button type="button" className="btn btn-primary"
+                                onClick={props.handleFormSubmit}
+                                id="login-button">Submit</button>
+                        </Col>
+                    </Row>
+                </Container>
             </form>
         </div>
     )
