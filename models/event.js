@@ -1,5 +1,3 @@
-const { BOOLEAN } = require("sequelize/types");
-
 module.exports = function(sequelize, DataTypes) {
     var Event = sequelize.define("Event", {
         title: {
@@ -17,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
         eventStatus: DataTypes.STRING,
         location: DataTypes.STRING,
         read: {
-          type: BOOLEAN,
+          type: DataTypes.BOOLEAN,
           defaultValue: false
         }
     });

@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         read: {
-          type: BOOLEAN,
+          type: DataTypes.BOOLEAN,
           defaultValue: false
         }
     });
