@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { Container, Row, Col } from "../Grid";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -12,14 +13,20 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
+    availabilityForm: {
+        marginTop: "10px"
+    },
+    availabilityHeader: {
+        textAlign: "center"
+    }
 }));
 
 function NewEventForm(props) {
     const classes = useStyles();
 
     return (
-        <div>
-            <h2>Availability</h2>
+        <div className={classes.availabilityForm}>
+            <h2 className={classes.availabilityHeader}>Availability</h2>
             <div><p>{props.instructions}</p></div>
             <form>
                 <div className="form-group">
