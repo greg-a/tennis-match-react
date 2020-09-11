@@ -22,10 +22,10 @@ export function FeedListItem({
         <li className="list-group-item">
             <Container>
                 <Row>
-                    <Col size="xs-4 sm-2">
+                    <Col size="4 sm-2">
                         <Thumbnail src={thumbnail} />
                     </Col>
-                    <Col size="xs-8 sm-9">
+                    <Col size="8 sm-9">
                         <p>{organizer} scheduled a match with {confirmer} on {month}/{day} at {hour}:{minute}.</p>
                     </Col>
                 </Row>
