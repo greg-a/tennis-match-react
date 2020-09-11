@@ -10,6 +10,7 @@ class Scheduler extends Component {
 
   state = {
     savedDates: [],
+    selectedEvent: {},
     dateModalShow: false,
     eventModalShow: false,
     thisDate: "",
@@ -40,6 +41,13 @@ class Scheduler extends Component {
 
   handleEventClick = arg => {
     this.setState({ eventModalShow: true, thisDate: arg.dateStr });
+
+    this.state.savedDates.forEach(date => {
+      if (date.id == arg.event._def.publicId) {
+        this.setState({ selectedEvent: date })
+      }
+    });
+    console.log(this.state.selectedEvent)
   };
 
   render() {
@@ -69,7 +77,7 @@ class Scheduler extends Component {
           <EventDetailsModal
             show={this.state.eventModalShow}
             onHide={() => this.setModalShow("eventModalShow", false)}
-            eventName="Singles"
+            eventName={this.state.selectedEvent.title}
           />
         </div>
       </div>

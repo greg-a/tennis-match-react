@@ -198,6 +198,9 @@ module.exports = function (app) {
                         }
                     ]
 
+                },
+                include: {
+                    model: db.User
                 }
             }).then(function (results) {
                 res.json(results);
