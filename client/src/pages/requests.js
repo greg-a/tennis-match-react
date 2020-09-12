@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RequestDisplay from '../components/RequestDisplay';
 import RequestCard from '../components/RequestCard';
 import moment from 'moment';
+import Nav from "../components/Nav";
 
 class Requests extends Component {
 
@@ -15,13 +16,13 @@ class Requests extends Component {
 
     getRequests = () => {
         fetch("/api/calendar/requests")
-            .then(res=>res.json())
+            .then(res => res.json())
             .then(res => {
                 console.log(res);
-                this.setState({searchResult: res});
+                this.setState({ searchResult: res });
             })
             .catch(err => console.log(err));
-    } 
+    }
 
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -47,29 +48,33 @@ class Requests extends Component {
                 this.getRequests();
             })
             .catch(err => console.log(err));
-        
+
     }
 
 
     render() {
         return (
-            <div className="container">
-                <RequestDisplay />
-                {this.state.searchResult.map((event, i) => (
-                    <RequestCard 
-                    key={i}
-                    title={event.title}
-                    proposeUserid={event.UserId}
-                    starttime={moment(event.start).format("hh:mm a")}
-                    endtime={moment(event.end).format("hh:mm a")}
-                    date={moment(event.start).format("L")}
-                    eventId={event.id}
-                    handleInputChange = {this.handleInputChange}
-                    handleConfirm={this.handleConfirm}
-                    />
-                ))
-                }
+            <div>
+                <Nav />
+                <div className="container requests-container">
+                    <RequestDisplay />
+                    {this.state.searchResult.map((event, i) => (
+                        <RequestCard
+                            key={i}
+                            title={event.title}
+                            proposeUserid={event.UserId}
+                            starttime={moment(event.start).format("hh:mm a")}
+                            endtime={moment(event.end).format("hh:mm a")}
+                            date={moment(event.start).format("L")}
+                            eventId={event.id}
+                            handleInputChange={this.handleInputChange}
+                            handleConfirm={this.handleConfirm}
+                        />
+                    ))
+                    }
+                </div>
             </div>
+
 
         )
     }

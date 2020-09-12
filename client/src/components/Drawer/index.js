@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import {Drawer as MUIDrawer} from '@material-ui/core';
+import { Drawer as MUIDrawer } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -12,8 +12,14 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import SportsTennisIcon from '@material-ui/icons/SportsTennis';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import Public from '@material-ui/icons/Public';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles({
   list: {
@@ -29,7 +35,7 @@ const useStyles = makeStyles({
 });
 
 const Drawer = (props) => {
-    const { history } = props;
+  const { history } = props;
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -48,27 +54,57 @@ const Drawer = (props) => {
 
   const handleLogout = () => {
     fetch("/logout")
-        .then(res => {
-            console.log(res);
-            window.location.href = "/";
-        })
-        .catch(err => console.log(err));
-}
+      .then(res => {
+        console.log(res);
+        window.location.href = "/";
+      })
+      .catch(err => console.log(err));
+  }
 
 
   const itemsList = [
     {
-        text: "Profile",
-        icon: <AccountCircleIcon />,
-        onClick: () => history.push("/profile")
+      text: "Profile",
+      icon: <AccountCircleIcon />,
+      onClick: () => history.push("/profile")
     },
     {
-        text: "Log Out",
-        icon: <ExitToAppIcon />,
-        onClick: handleLogout
+      text: "Availability",
+      icon: <AddCircleOutlineIcon />,
+      onClick: () => history.push("/availability")
+    },
+    {
+      text: "Feed",
+      icon: <Public />,
+      onClick: () => history.push("/feed")
+    },
+    {
+      text: "Messenger",
+      icon: <ChatBubbleOutlineIcon />,
+      onClick: () => history.push("/messenger")
+    },
+    {
+      text: "Propose Match",
+      icon: <ThumbsUpDownIcon />,
+      onClick: () => history.push("/proposematch")
+    },
+    {
+      text: "Requests",
+      icon: <AssignmentTurnedInIcon />,
+      onClick: () => history.push("/requests")
+    },
+    {
+      text: "Scheduler",
+      icon: <EventIcon />,
+      onClick: () => history.push("/scheduler")
+    },
+    {
+      text: "Log Out",
+      icon: <ExitToAppIcon />,
+      onClick: handleLogout
     },
 
-];
+  ];
 
   const list = (anchor) => (
     <div
@@ -80,17 +116,17 @@ const Drawer = (props) => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-                {itemsList.map((item, index) => {
-                    const { text, icon, onClick } = item;
-                    return (
-                        <ListItem button key={text} onClick={onClick}>
-                            {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                            {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    );
-                })}
-            </List>
+        {itemsList.map((item, index) => {
+          const { text, icon, onClick } = item;
+          return (
+            <ListItem button key={text} onClick={onClick}>
+              {icon && <ListItemIcon>{icon}</ListItemIcon>}
+              {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+              <ListItemText primary={text} />
+            </ListItem>
+          );
+        })}
+      </List>
       <Divider />
     </div>
   );
@@ -99,7 +135,7 @@ const Drawer = (props) => {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)} ><SportsTennisIcon className={clsx(classes.tennisButton)}/></Button>
+          <Button onClick={toggleDrawer(anchor, true)} ><SportsTennisIcon className={clsx(classes.tennisButton)} /></Button>
           <MUIDrawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
           </MUIDrawer>

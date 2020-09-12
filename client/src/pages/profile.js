@@ -1,6 +1,7 @@
 import React from "react";
 import ProfileDisplay from "../components/ProfileDisplay";
 import ProfileForm from "../components/ProfileForm";
+import Nav from "../components/Nav";
 
 class Profile extends React.Component {
     state = {
@@ -93,7 +94,9 @@ class Profile extends React.Component {
 
     render() {
         return (
-            <div className="container">
+            <div>
+                <Nav />
+                <div className="container">
                 <ProfileDisplay username={this.state.username}
                     email={this.state.email}
                     firstname={this.state.firstname}
@@ -112,6 +115,8 @@ class Profile extends React.Component {
                 handleInputChange={this.handleInputChange}
                 handleFormSubmit={this.handleFormSubmit} />
             </div>
+            </div>
+            
         );
     }
 }

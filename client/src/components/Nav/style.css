@@ -3,6 +3,11 @@
     justify-content: space-between;
 } */
 
+/* .entire-nav {
+    position: fixed;
+    width: 100%;
+} */
+
 .upper-nav {
     background-color: rgb(145, 230, 48);
 }

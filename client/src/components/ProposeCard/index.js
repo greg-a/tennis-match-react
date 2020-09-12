@@ -64,7 +64,7 @@ function ProposeCard(props) {
                                 </div>
                             </div>
                         </form> */}
-                        <button type="button" className="btn btn-primary" data-userid={props.userid} onClick={props.handleEventClick} data-index={props.eventIndex}>Propose Match</button>
+                        <button type="button" className="btn" data-userid={props.userid} onClick={props.handleEventClick} data-index={props.eventIndex}>Propose Match</button>
                     </div>
                 </div>
         </div>
