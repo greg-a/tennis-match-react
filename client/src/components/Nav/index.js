@@ -27,7 +27,7 @@ export default function Nav(props) {
 
   return (
 
-    <div>
+    <div className="entire-nav">
       <div className="upper-nav row">
         <div className="col-3 col-sm-4">
           <Drawer />
@@ -48,6 +48,7 @@ export default function Nav(props) {
             indicatorColor="primary"
             textColor="primary"
             aria-label="icon tabs example"
+            backgroundColor="white"
           >
             <Tab href="/feed" icon={<Public />} aria-label="public" value="tab-one" />
             <Tab href="/availability" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" value="tab-two"/>
