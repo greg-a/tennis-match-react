@@ -113,7 +113,7 @@ function ProposeUserSearch(props) {
                     </select>
                 </div>
                 </div>
-                <button type="button" className="btn btn-primary" onClick={props.handleProposeSubmit} >Propose Match</button>
+                <button type="button" className="btn" onClick={props.handleProposeSubmit} >Propose Match</button>
             </form>
         </div>
     )

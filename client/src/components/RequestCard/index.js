@@ -13,7 +13,7 @@ function RequestCard(props) {
                         <p className="card-text" >End Time: {props.endtime}</p>
 
                         
-                        <button type="button" className="btn btn-primary" data-eventid={props.eventId} onClick={props.handleConfirm}>Confirm</button>
+                        <button type="button" className="btn" data-eventid={props.eventId} onClick={props.handleConfirm}>Confirm</button>
                     </div>
                 </div>
         </div>
