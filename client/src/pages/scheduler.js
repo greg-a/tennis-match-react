@@ -66,8 +66,8 @@ class Scheduler extends Component {
     }).catch(err => {
       console.log(err)
     })
-    this.getDates();
     this.setState({ eventModalShow: false })
+    this.getDates();
   }
 
   render() {
