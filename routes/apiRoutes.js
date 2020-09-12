@@ -238,6 +238,28 @@ module.exports = function (app) {
         }
     });
 
+    // user's proposed match updates
+    app.get("/api/updates", function (req, res) {
+        if (req.session.loggedin) {
+            db.Event.findAll({
+                where: {
+                    eventStatus: "denied",
+                    UserId: req.session.userID
+                },
+                include: [
+                    { model: db.User },
+                    {
+                        model: db.User,
+                        as: 'secondUser'
+                    }]
+            }).then(function (results) {
+                res.json(results)
+            })
+        } else {
+            res.status(400).end();
+        }
+    });
+
     // searching for players with availibility on chosen day
     app.get("/api/calendar/propose", function (req, res) {
         if (req.session.loggedin) {

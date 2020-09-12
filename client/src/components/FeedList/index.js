@@ -33,3 +33,31 @@ export function FeedListItem({
         </li>
     );
 }
+
+export function FeedListItemDeny({
+    //later replace with hybrid image of both participating players
+    thumbnail = "https://placehold.it/300x300",
+    title,
+    month,
+    day,
+    hour,
+    minute,
+    okayDeny,
+    eventID
+}) {
+    return (
+        <li className="list-group-item">
+            <Container>
+                <Row>
+                    <Col size="4 sm-2">
+                        <Thumbnail src={thumbnail} />
+                    </Col>
+                    <Col size="8 sm-9">
+                        <p>{title}. Proposed for {month}/{day} at {hour}:{minute}.</p>
+                        <button className="btn btn-primary" onClick={okayDeny} data-id={eventID}>Ok</button>
+                    </Col>
+                </Row>
+            </Container>
+        </li>
+    );
+}
