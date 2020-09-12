@@ -48,27 +48,27 @@ class ProposeMatch extends Component {
         const { name, value } = event.target;
         this.setState({
             [name]: value
-        }, ()=>{
+        }, () => {
             let searchURL = "/api/username?username=" + this.state.userSearch;
             fetch(searchURL)
-            .then(res => res.json())
-            .then(res=> {
-                console.log(res)
-                this.setState({
-                    userResults: res
-                },()=>{
-                    for (let i=0;i<(this.state.userResults).length;i++) {
-                        let currentUserResults = this.state.userResults;
-                    if (this.state.userSearch===currentUserResults[i].username) {
-                        let currentUserId = currentUserResults[i].id;
-                        this.setState({
-                            userId: currentUserId
-                        })
-                    }
-                    }
-                });
-            })
-            .catch(err=>console.log(err));
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    this.setState({
+                        userResults: res
+                    }, () => {
+                        for (let i = 0; i < (this.state.userResults).length; i++) {
+                            let currentUserResults = this.state.userResults;
+                            if (this.state.userSearch === currentUserResults[i].username) {
+                                let currentUserId = currentUserResults[i].id;
+                                this.setState({
+                                    userId: currentUserId
+                                })
+                            }
+                        }
+                    });
+                })
+                .catch(err => console.log(err));
         });
     };
 
@@ -106,7 +106,7 @@ class ProposeMatch extends Component {
         } else {
             currentProposeToUserId = this.state.userId
         }
-        
+
 
         console.log("CURRENT PROPOSE USER: " + currentProposeToUserId);
 
@@ -187,23 +187,23 @@ class ProposeMatch extends Component {
     }
 
     subsectionRender = () => {
-        if (this.state.subsectionShow==="player") {
+        if (this.state.subsectionShow === "player") {
             return (
-                <ProposeUserSearch 
-                userSearch={this.state.userSearch}
-                handleUsernameChange={this.handleUsernameChange}
-                handleInputChange={this.handleInputChange}
-                handleProposeSubmit={this.handleProposeSubmit}
-                userResults={this.state.userResults}
-                newDate={this.state.newDate}
-                startTimeHour={this.state.startTimeHour}
-                startTimeMinute={this.state.startTimeMinute}
-                endTimeHour={this.state.endTimeHour}
-                endTimeMinute={this.state.endTimeMinute}
-                instructions={this.state.instructions}
+                <ProposeUserSearch
+                    userSearch={this.state.userSearch}
+                    handleUsernameChange={this.handleUsernameChange}
+                    handleInputChange={this.handleInputChange}
+                    handleProposeSubmit={this.handleProposeSubmit}
+                    userResults={this.state.userResults}
+                    newDate={this.state.newDate}
+                    startTimeHour={this.state.startTimeHour}
+                    startTimeMinute={this.state.startTimeMinute}
+                    endTimeHour={this.state.endTimeHour}
+                    endTimeMinute={this.state.endTimeMinute}
+                    instructions={this.state.instructions}
                 />
             )
-        } else if (this.state.subsectionShow==="date") {
+        } else if (this.state.subsectionShow === "date") {
             return (
                 <ProposeMatchForm
                     handleInputChange={this.handleInputChange}
@@ -225,18 +225,18 @@ class ProposeMatch extends Component {
             endTimeMinute: "",
             searchResult: [],
             clickedResult: [],
-            
+
             userSearch: "",
             userResults: [],
             userId: "",
             modalShow: false,
             subsectionShow: event.target.value
-        }, ()=>{
-            if (this.state.subsectionShow==="player") {
+        }, () => {
+            if (this.state.subsectionShow === "player") {
                 this.setState({
                     instructions: "Type in a player's name and fill out the form below",
                 })
-            } else if (this.state.subsectionShow==="date") {
+            } else if (this.state.subsectionShow === "date") {
                 this.setState({
                     instructions: "Pick a date to search for other players' availability."
                 })
@@ -250,36 +250,45 @@ class ProposeMatch extends Component {
     render() {
         return (
             <div>
-                <Nav/>
-                <div className="container">
-                <button type="button" className="btn btn-primary mr-2" onClick={this.setSubShow}value="date">Search By Date</button>
-                <button type="button" className="btn btn-primary" onClick={this.setSubShow} value="player">Propose Match to a Player</button>
-                {this.subsectionRender()}
-                {/* <ProposeMatchForm
+                <Nav />
+                <div className="container propose-container">
+                    <div className="row">
+                        <div className="col-0 col-sm-3"></div>
+                        <div className="col-sm-3">
+                            <button type="button" className="btn mr-2 propose-button" onClick={this.setSubShow} value="date">Search By Date</button>
+                        </div>
+                        <div className="col-sm-3">
+                            <button type="button" className="btn propose-button" onClick={this.setSubShow} value="player">Propose Match to a Player</button>
+                        </div>
+                    </div>
+
+
+                    {this.subsectionRender()}
+                    {/* <ProposeMatchForm
                     handleInputChange={this.handleInputChange}
                     newDate={this.state.newDate}
                     instructions={this.state.instructions}
                     handleFormSubmit={this.handleFormSubmit}
                 /> */}
-                {this.state.searchResult.map((event, i) => (
-                    <ProposeCard
-                        key={i}
-                        title={event.title}
-                        userid={event.UserId}
-                        starttime={moment(event.start).format("hh:mm a")}
-                        endtime={moment(event.end).format("hh:mm a")}
-                        startIntArr={event.startIntArr}
-                        endIntArr={event.endIntArr}
-                        startTimeHour={this.state.startTimeHour}
-                        startTimeMinute={this.state.startTimeMinute}
-                        handleInputChange={this.handleInputChange}
-                        handleEventClick={this.handleEventClick}
-                        eventIndex={i}
-                    />
-                ))
-                }
+                    {this.state.searchResult.map((event, i) => (
+                        <ProposeCard
+                            key={i}
+                            title={event.title}
+                            userid={event.UserId}
+                            starttime={moment(event.start).format("hh:mm a")}
+                            endtime={moment(event.end).format("hh:mm a")}
+                            startIntArr={event.startIntArr}
+                            endIntArr={event.endIntArr}
+                            startTimeHour={this.state.startTimeHour}
+                            startTimeMinute={this.state.startTimeMinute}
+                            handleInputChange={this.handleInputChange}
+                            handleEventClick={this.handleEventClick}
+                            eventIndex={i}
+                        />
+                    ))
+                    }
 
-                {/* <ProposeUserSearch 
+                    {/* <ProposeUserSearch 
                 userSearch={this.state.userSearch}
                 handleUsernameChange={this.handleUsernameChange}
                 handleInputChange={this.handleInputChange}
@@ -292,27 +301,27 @@ class ProposeMatch extends Component {
                 endTimeMinute={this.state.endTimeMinute}
                 /> */}
 
-                {this.state.clickedResult.map(event => (
-                <ProposeModal
-                show={this.state.modalShow}
-                onHide={() => this.setModalShow(false)} 
-                title={event.title}
-                userid={event.UserId}
-                starttime={moment(event.start).format("hh:mm a")}
-                endtime={moment(event.end).format("hh:mm a")}
-                startIntArr={event.startIntArr}
-                endIntArr={event.endIntArr}
-                startTimeHour={this.state.startTimeHour}
-                startTimeMinute={this.state.startTimeMinute}
-                endTimeHour={this.state.endTimeHour}
-                endTimeMinute={this.state.endTimeMinute}
-                handleInputChange={this.handleInputChange}
-                handleProposeSubmit={this.handleProposeSubmit}
-                />
-                ))}
+                    {this.state.clickedResult.map(event => (
+                        <ProposeModal
+                            show={this.state.modalShow}
+                            onHide={() => this.setModalShow(false)}
+                            title={event.title}
+                            userid={event.UserId}
+                            starttime={moment(event.start).format("hh:mm a")}
+                            endtime={moment(event.end).format("hh:mm a")}
+                            startIntArr={event.startIntArr}
+                            endIntArr={event.endIntArr}
+                            startTimeHour={this.state.startTimeHour}
+                            startTimeMinute={this.state.startTimeMinute}
+                            endTimeHour={this.state.endTimeHour}
+                            endTimeMinute={this.state.endTimeMinute}
+                            handleInputChange={this.handleInputChange}
+                            handleProposeSubmit={this.handleProposeSubmit}
+                        />
+                    ))}
+                </div>
             </div>
-            </div>
-            
+
 
         )
     }

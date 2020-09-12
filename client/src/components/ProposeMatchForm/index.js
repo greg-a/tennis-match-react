@@ -13,7 +13,7 @@ function ProposeMatchForm(props) {
                     />
                 </div>
                 
-                <button type="button" className="btn btn-primary"
+                <button type="button" className="btn"
                     onClick={props.handleFormSubmit}
                     >Search</button>
             </form>
