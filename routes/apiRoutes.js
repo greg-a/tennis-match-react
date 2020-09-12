@@ -236,7 +236,10 @@ module.exports = function (app) {
                         { start: { [Op.like]: req.query.date + "%" } },
                         { UserId: { [Op.not]: req.session.userID } },
                         { eventStatus: "available" }]
-                }
+                },
+                include: [
+                    {model: db.User,
+                        attributes: ["username","firstname","lastname","id"],}]
             }).then(function (results) {
                 res.json(results);
             });
@@ -254,7 +257,10 @@ module.exports = function (app) {
                     [Op.and]: [
                         { confirmedByUser: req.session.userID },
                         { eventStatus: "propose" }]
-                }
+                },
+                include: [
+                    {model: db.User,
+                        attributes: ["username","firstname","lastname","id"],}]
             }).then(function (results) {
                 res.json(results);
             });
@@ -268,7 +274,7 @@ module.exports = function (app) {
         if (req.session.loggedin) {
             db.Event.update(
                 {
-                    title: "confirmed match",
+                    title: req.body.title,
                     eventStatus: "confirmed"
                 },
                 {
