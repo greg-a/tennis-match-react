@@ -55,6 +55,28 @@ class Requests extends Component {
 
     }
 
+    handleDeny = event => {
+        event.preventDefault();
+
+        let updateObj = {
+            id: event.target.dataset.eventid
+        }
+
+        fetch("/api/event/deny", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updateObj)
+        })
+            .then(res => {
+                console.log(res);
+                this.getRequests();
+            })
+            .catch(err => console.log(err));
+
+    }
+
 
     render() {
         return (
@@ -76,6 +98,7 @@ class Requests extends Component {
                     eventId={event.id}
                     handleInputChange = {this.handleInputChange}
                     handleConfirm={this.handleConfirm}
+                    handleDeny={this.handleDeny}
                     />
                 ))
                 : <p>You currently have no requests.</p>

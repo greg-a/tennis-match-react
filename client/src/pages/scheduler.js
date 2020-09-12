@@ -66,8 +66,9 @@ class Scheduler extends Component {
     }).catch(err => {
       console.log(err)
     })
+    this.setState({ eventModalShow: false });
     this.getDates();
-    this.setState({ eventModalShow: false })
+    
   }
 
   render() {
@@ -108,7 +109,7 @@ class Scheduler extends Component {
             endTime={moment(this.state.selectedEvent.end).format("hh:mm a")}
             location={this.state.selectedEvent.location}
             date={moment(this.state.selectedEvent.start).format("MM/DD/YYYY")}
-            onClick={this.deleteEvent}
+            handleDelete={this.deleteEvent}
           />
         </div>
       </div>

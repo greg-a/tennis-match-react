@@ -40,7 +40,7 @@ export function ProposeModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Username: {props.userid}</p>
+            <h6 className="card-subtitle mb-2 text-muted" >{props.userFirstname ? `Username: ${props.username} (${props.userFirstname} ${props.userLastname})` : `Username: ${props.username}`}</h6>
                 {props.eventLocationTwo==="any" ? 
                     <div className="form-group" >
                     <label for="eventLocation" >Court Location</label>
@@ -136,7 +136,7 @@ export function EventDetailsModal(props) {
                 <p>Player Two: {props.playerTwoUsername} ({props.playerTwoFirst} {props.playerTwoLast})</p>
                 <p>Start Time: {props.startTime}</p>
                 <p>End Time: {props.endTime}</p>
-                <Button href="#" onClick={props.onClick}>Delete</Button>
+                <Button onClick={props.handleDelete}>Delete</Button>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>

@@ -84,9 +84,7 @@ class ProposeMatch extends Component {
 
     handleFormSubmit = event => {
         event.preventDefault();
-        this.setState({
-            instructions: "Pick an availability and propose a time."
-        })
+        
         let searchURL = "/api/calendar/propose?date=" + this.state.newDate;
         console.log(searchURL);
         fetch(searchURL)
@@ -217,8 +215,11 @@ class ProposeMatch extends Component {
             searchArr[i].startIntArr = startIntArr;
             searchArr[i].endIntArr = endIntArr;
         }
-
-        this.setState({ searchResult: searchArr });
+        if (searchArr.length===0) {
+            this.setState({ searchResult: searchArr, instructions: "No availibility on this date." });
+        } else {
+            this.setState({ searchResult: searchArr, instructions: "Pick an availability and propose a time." });
+        }
     }
 
     subsectionRender = () => {
@@ -344,6 +345,9 @@ class ProposeMatch extends Component {
                         onHide={() => this.setModalShow(false)} 
                         title={event.title}
                         userid={event.UserId}
+                        username={event.User.username}
+                        userFirstname={event.User.firstname}
+                        userLastname={event.User.lastname}
                         eventLocation={this.state.eventLocation}
                         eventLocationTwo={event.location}
                         starttime={moment(event.start).format("hh:mm a")}

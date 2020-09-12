@@ -418,6 +418,28 @@ module.exports = function (app) {
         }
     })
 
+    // user can deny request from other user
+    app.put("/api/event/deny", function (req, res) {
+        if (req.session.loggedin) {
+            db.Event.update(
+                {
+                    eventStatus: "denied",
+                    title: "Denied by " + req.session.username
+                },
+                {
+                    where: {
+                        id: req.body.id
+                    }
+                }
+            ).then(function (result) {
+                res.send(result);
+            })
+        } else {
+            res.status(400).end();
+        }
+
+    });
+
     app.delete("/api/event/delete/:id", function (req, res) {
         db.Event.destroy({ where: {id: req.params.id }}).then(function(event) {
             res.json(event)
