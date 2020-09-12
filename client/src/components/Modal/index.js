@@ -16,8 +16,8 @@ export function SchedulerModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Button className="mr-3" href="/newevent">Create Event</Button>
-                <Button className="mr-3" href="#">Find Events</Button>
+                <Button className="mr-3" href="/availability">Create Event</Button>
+                <Button className="mr-3" href="/proposematch">Find Events</Button>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
@@ -120,7 +120,6 @@ export function EventDetailsModal(props) {
     return (
         <Modal
             {...props}
-            size="sm"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >

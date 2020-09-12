@@ -409,6 +409,28 @@ module.exports = function (app) {
         }
     });
 
+    // updates unread messages to read
+    app.put("/api/messages/read/:id", function (req, res) {
+        if (req.session.loggedin) {
+            db.Messages.update(
+                {
+                    read: true
+                },
+                {
+                    where: {
+                        UserId: req.params.id,
+                        secondUser: req.session.userID,
+                        read: false 
+                    }
+                }
+            ).then(function (result) {
+                res.send(result);
+            })
+        } else {
+            res.status(400).end();
+        }
+    });
+
     app.get("/api/notifications", function (req, res) {
         if (req.session.loggedin) {
             const messageNotifications = db.Messages.count({
@@ -459,7 +481,6 @@ module.exports = function (app) {
         } else {
             res.status(400).end();
         }
-
     });
 
     app.delete("/api/event/delete/:id", function (req, res) {
