@@ -20,12 +20,21 @@ class ProposeMatch extends Component {
         userSearch: "",
         userResults: [],
         userId: "",
+        eventLocation: "",
+        eventTitle: "",
         modalShow: false,
-        subsectionShow: ""
+        subsectionShow: "",
+        courtList: ["Choose...","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
     };
 
     setModalShow = bVal => {
-        this.setState({ modalShow: bVal });
+        this.setState({ 
+            modalShow: bVal,
+            startTimeHour: "",
+            startTimeMinute: "",
+            endTimeHour: "",
+            endTimeMinute: ""
+        });
     };
 
     handleEventClick = (arg) => {
@@ -34,7 +43,8 @@ class ProposeMatch extends Component {
 
         eventIndexArr.push(this.state.searchResult[eventIndex]);
 
-        this.setState({ modalShow: true, clickedResult: eventIndexArr });
+        console.log("TITLE: " + eventIndexArr[0].title)
+        this.setState({ modalShow: true, clickedResult: eventIndexArr, eventLocation: arg.target.dataset.location, eventTitle: eventIndexArr[0].title });
     };
 
     handleInputChange = event => {
@@ -74,9 +84,7 @@ class ProposeMatch extends Component {
 
     handleFormSubmit = event => {
         event.preventDefault();
-        this.setState({
-            instructions: "Pick an availability and propose a time."
-        })
+        
         let searchURL = "/api/calendar/propose?date=" + this.state.newDate;
         console.log(searchURL);
         fetch(searchURL)
@@ -110,16 +118,37 @@ class ProposeMatch extends Component {
 
         console.log("CURRENT PROPOSE USER: " + currentProposeToUserId);
 
+        if(this.state.startTimeHour==="Choose..." || this.state.startTimeMinute==="Choose..." || this.state.endTimeHour==="Choose..." || this.state.endTimeMinute==="Choose..." || this.state.eventLocation==="Choose..." || this.state.eventLocation==="any" || this.state.eventLocation==="" || this.state.confirmedByUser==="" || this.state.eventTitle==="Choose..." || this.state.eventTitle==="") {
+            this.setState(
+                {
+                    newDate: "",
+                    startTimeHour: "",
+                    startTimeMinute: "",
+                    endTimeHour: "",
+                    endTimeMinute: "",
+                    searchResult: [],
+                    instructions: "Oops! Something went wrong. Please try again.",
+                    modalShow: false,
+                    userSearch: "",
+                    userResults: [],
+                    userId: "",
+                    eventLocation: "",
+                    eventTitle: ""
+                }
+            )
+        } else {
+
         fetch("/api/calendar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                title: "proposed match",
+                title: "Proposed - " + this.state.eventTitle,
                 start: currentStartDate,
                 end: currentEndDate,
                 confirmedByUser: currentProposeToUserId,
+                location: this.state.eventLocation,
                 eventStatus: "propose"
             })
         })
@@ -139,7 +168,9 @@ class ProposeMatch extends Component {
                             modalShow: false,
                             userSearch: "",
                             userResults: [],
-                            userId: ""
+                            userId: "",
+                            eventLocation: "",
+                            eventTitle: ""
                         }
                     )
                 } else {
@@ -156,12 +187,14 @@ class ProposeMatch extends Component {
                             modalShow: false,
                             userSearch: "",
                             userResults: [],
-                            userId: ""
+                            userId: "",
+                            eventLocation: ""
                         }
                     )
                 }
             })
             .catch(err => console.log(err));
+        }
 
     }
 
@@ -182,25 +215,31 @@ class ProposeMatch extends Component {
             searchArr[i].startIntArr = startIntArr;
             searchArr[i].endIntArr = endIntArr;
         }
-
-        this.setState({ searchResult: searchArr });
+        if (searchArr.length===0) {
+            this.setState({ searchResult: searchArr, instructions: "No availibility on this date." });
+        } else {
+            this.setState({ searchResult: searchArr, instructions: "Pick an availability and propose a time." });
+        }
     }
 
     subsectionRender = () => {
         if (this.state.subsectionShow === "player") {
             return (
-                <ProposeUserSearch
-                    userSearch={this.state.userSearch}
-                    handleUsernameChange={this.handleUsernameChange}
-                    handleInputChange={this.handleInputChange}
-                    handleProposeSubmit={this.handleProposeSubmit}
-                    userResults={this.state.userResults}
-                    newDate={this.state.newDate}
-                    startTimeHour={this.state.startTimeHour}
-                    startTimeMinute={this.state.startTimeMinute}
-                    endTimeHour={this.state.endTimeHour}
-                    endTimeMinute={this.state.endTimeMinute}
-                    instructions={this.state.instructions}
+                <ProposeUserSearch 
+                userSearch={this.state.userSearch}
+                handleUsernameChange={this.handleUsernameChange}
+                handleInputChange={this.handleInputChange}
+                handleProposeSubmit={this.handleProposeSubmit}
+                userResults={this.state.userResults}
+                newDate={this.state.newDate}
+                startTimeHour={this.state.startTimeHour}
+                startTimeMinute={this.state.startTimeMinute}
+                endTimeHour={this.state.endTimeHour}
+                endTimeMinute={this.state.endTimeMinute}
+                instructions={this.state.instructions}
+                eventLocation={this.state.eventLocation}
+                courtList={this.state.courtList}
+                eventTitle={this.state.eventTitle}
                 />
             )
         } else if (this.state.subsectionShow === "date") {
@@ -225,7 +264,8 @@ class ProposeMatch extends Component {
             endTimeMinute: "",
             searchResult: [],
             clickedResult: [],
-
+            eventLocation: "",
+            eventTitle: "",
             userSearch: "",
             userResults: [],
             userId: "",
@@ -234,7 +274,7 @@ class ProposeMatch extends Component {
         }, () => {
             if (this.state.subsectionShow === "player") {
                 this.setState({
-                    instructions: "Type in a player's name and fill out the form below",
+                    instructions: "Type in a player's name and fill out the form below."
                 })
             } else if (this.state.subsectionShow === "date") {
                 this.setState({
@@ -269,63 +309,64 @@ class ProposeMatch extends Component {
                     newDate={this.state.newDate}
                     instructions={this.state.instructions}
                     handleFormSubmit={this.handleFormSubmit}
-                /> */}
+                    /> */}
                     {this.state.searchResult.map((event, i) => (
                         <ProposeCard
                             key={i}
                             title={event.title}
                             userid={event.UserId}
+                            username={event.User.username}
+                            userFirstname={event.User.firstname}
+                            userLastname={event.User.lastname}
+                            eventLocation={event.location}
                             starttime={moment(event.start).format("hh:mm a")}
                             endtime={moment(event.end).format("hh:mm a")}
-                            startIntArr={event.startIntArr}
-                            endIntArr={event.endIntArr}
-                            startTimeHour={this.state.startTimeHour}
-                            startTimeMinute={this.state.startTimeMinute}
-                            handleInputChange={this.handleInputChange}
-                            handleEventClick={this.handleEventClick}
                             eventIndex={i}
+                            handleEventClick={this.handleEventClick}       
                         />
-                    ))
-                    }
+                    ))}
 
                     {/* <ProposeUserSearch 
-                userSearch={this.state.userSearch}
-                handleUsernameChange={this.handleUsernameChange}
-                handleInputChange={this.handleInputChange}
-                handleProposeSubmit={this.handleProposeSubmit}
-                userResults={this.state.userResults}
-                newDate={this.state.newDate}
-                startTimeHour={this.state.startTimeHour}
-                startTimeMinute={this.state.startTimeMinute}
-                endTimeHour={this.state.endTimeHour}
-                endTimeMinute={this.state.endTimeMinute}
-                /> */}
+                    userSearch={this.state.userSearch}
+                    handleUsernameChange={this.handleUsernameChange}
+                    handleInputChange={this.handleInputChange}
+                    handleProposeSubmit={this.handleProposeSubmit}
+                    userResults={this.state.userResults}
+                    newDate={this.state.newDate}
+                    startTimeHour={this.state.startTimeHour}
+                    startTimeMinute={this.state.startTimeMinute}
+                    endTimeHour={this.state.endTimeHour}
+                    endTimeMinute={this.state.endTimeMinute}
+                    /> */}
 
                     {this.state.clickedResult.map(event => (
                         <ProposeModal
-                            show={this.state.modalShow}
-                            onHide={() => this.setModalShow(false)}
-                            title={event.title}
-                            userid={event.UserId}
-                            starttime={moment(event.start).format("hh:mm a")}
-                            endtime={moment(event.end).format("hh:mm a")}
-                            startIntArr={event.startIntArr}
-                            endIntArr={event.endIntArr}
-                            startTimeHour={this.state.startTimeHour}
-                            startTimeMinute={this.state.startTimeMinute}
-                            endTimeHour={this.state.endTimeHour}
-                            endTimeMinute={this.state.endTimeMinute}
-                            handleInputChange={this.handleInputChange}
-                            handleProposeSubmit={this.handleProposeSubmit}
+                        show={this.state.modalShow}
+                        onHide={() => this.setModalShow(false)} 
+                        title={event.title}
+                        userid={event.UserId}
+                        username={event.User.username}
+                        userFirstname={event.User.firstname}
+                        userLastname={event.User.lastname}
+                        eventLocation={this.state.eventLocation}
+                        eventLocationTwo={event.location}
+                        starttime={moment(event.start).format("hh:mm a")}
+                        endtime={moment(event.end).format("hh:mm a")}
+                        startIntArr={event.startIntArr}
+                        endIntArr={event.endIntArr}
+                        startTimeHour={this.state.startTimeHour}
+                        startTimeMinute={this.state.startTimeMinute}
+                        endTimeHour={this.state.endTimeHour}
+                        endTimeMinute={this.state.endTimeMinute}
+                        handleInputChange={this.handleInputChange}
+                        handleProposeSubmit={this.handleProposeSubmit}
+                        courtList={this.state.courtList}
                         />
                     ))}
                 </div>
             </div>
-
-
         )
     }
-
 }
 
 export default ProposeMatch;

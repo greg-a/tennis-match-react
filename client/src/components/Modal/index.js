@@ -40,26 +40,39 @@ export function ProposeModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Username: {props.userid}</p>
+            <h6 className="card-subtitle mb-2 text-muted" >{props.userFirstname ? `Username: ${props.username} (${props.userFirstname} ${props.userLastname})` : `Username: ${props.username}`}</h6>
+                {props.eventLocationTwo==="any" ? 
+                    <div className="form-group" >
+                    <label for="eventLocation" >Court Location</label>
+                    <select className="form-control" name="eventLocation" id="eventLocation"
+                        onChange={props.handleInputChange}
+                        value={props.eventLocation} >
+                        {props.courtList.map((event, j) => (
+                            <option value={event} key={j}>{event}</option>
+                        ))}
+                    </select>
+                    </div>
+                : <p>Location: {props.eventLocationTwo}</p>}
+                
                 <form >
                     <div className="form-row">
-                        <div className="form-group mr-1" >
+                        <div className="form-group col" >
                             <label for="startTimeHour" >Start Hour</label>
                             <select className="form-control" name="startTimeHour" id="startTimeHour"
                                 onChange={props.handleInputChange}
                                 value={props.startTimeHour} >
-                                <option value="choose">Choose...</option>
+                                <option value="Choose...">Choose...</option>
                                 {props.startIntArr.map((event, j) => (
                                     <option value={event} key={j}>{event}</option>
                                 ))}
                             </select>
                         </div>
-                        <div className="form-group" >
+                        <div className="form-group col" >
                             <label for="startTimeMinute" >Start Minute</label>
                             <select className="form-control" name="startTimeMinute" id="startTimeMinute"
                                 onChange={props.handleInputChange}
                                 value={props.startTimeMinute} >
-                                <option value="choose">Choose...</option>
+                                <option value="Choose...">Choose...</option>
                                 <option value="00">:00</option>
                                 <option value="15">:15</option>
                                 <option value="30">:30</option>
@@ -69,23 +82,23 @@ export function ProposeModal(props) {
                     </div>
 
                     <div className="form-row">
-                        <div className="form-group mr-1" >
+                        <div className="form-group col" >
                             <label for="endTimeHour" >End Hour</label>
                             <select className="form-control" name="endTimeHour" id="endTimeHour"
                                 onChange={props.handleInputChange}
                                 value={props.endTimeHour} >
-                                <option value="choose">Choose...</option>
+                                <option value="Choose...">Choose...</option>
                                 {props.endIntArr.map((event, j) => (
                                     <option value={event} key={j}>{event}</option>
                                 ))}
                             </select>
                         </div>
-                        <div className="form-group" >
+                        <div className="form-group col" >
                             <label for="endTimeMinute" >End Minute</label>
                             <select className="form-control" name="endTimeMinute" id="endTimeMinute"
                                 onChange={props.handleInputChange}
                                 value={props.endTimeMinute} >
-                                <option value="choose">Choose...</option>
+                                <option value="Choose...">Choose...</option>
                                 <option value="00">:00</option>
                                 <option value="15">:15</option>
                                 <option value="30">:30</option>
@@ -123,7 +136,7 @@ export function EventDetailsModal(props) {
                 <p>Player Two: {props.playerTwoUsername} ({props.playerTwoFirst} {props.playerTwoLast})</p>
                 <p>Start Time: {props.startTime}</p>
                 <p>End Time: {props.endTime}</p>
-                <Button href="#" onClick={props.onClick}>Delete</Button>
+                <Button onClick={props.handleDelete}>Delete</Button>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>

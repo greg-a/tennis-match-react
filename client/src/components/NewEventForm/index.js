@@ -42,8 +42,8 @@ function NewEventForm(props) {
                             <div className="form-group">
                                 <label for="eventTitle">Availability Type</label>
                                 <select className="form-control" name="eventTitle" id="eventTitle" onChange={props.handleInputChange} value={props.eventTitle}>
-                                    <option value="casual">Casual</option>
-                                    <option value="competitive">Competitive</option>
+                                    <option value="Casual">Casual</option>
+                                    <option value="Competitive">Competitive</option>
                                 </select>
                             </div>
                         </Col>

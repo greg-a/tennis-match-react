@@ -19,6 +19,24 @@ function ProposeUserSearch(props) {
                     </datalist>
                 </div>
                 <div className="form-group">
+                    <label for="eventTitle">Play Type</label>
+                    <select className="form-control" name="eventTitle" id="eventTitle" onChange={props.handleInputChange} value={props.eventTitle}>
+                        <option value="Choose...">Choose...</option>
+                        <option value="Casual">Casual</option>
+                        <option value="Competitive">Competitive</option>
+                    </select>
+                </div>
+                <div className="form-group" >
+                    <label for="eventLocation" >Court Location</label>
+                    <select className="form-control" name="eventLocation" id="eventLocation"
+                        onChange={props.handleInputChange}
+                        value={props.eventLocation} >
+                        {props.courtList.map((event, j) => (
+                            <option value={event} key={j}>{event}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="form-group">
                     <label for="newDate">Date</label>
                     <input type="date" className="form-control" id="newDate" name="newDate"
                         onChange={props.handleInputChange}
@@ -30,7 +48,7 @@ function ProposeUserSearch(props) {
                     <label for="startTimeHour">Start Hour</label>
                     <select className="form-control" name="startTimeHour" id="startTimeHour" onChange={props.handleInputChange}
                         value={props.startTimeHour}>
-                        <option value="choose">Choose...</option>
+                        <option value="Choose...">Choose...</option>    
                         <option value="00">12 AM</option>
                         <option value="01">1 AM</option>
                         <option value="02">2 AM</option>
@@ -61,7 +79,7 @@ function ProposeUserSearch(props) {
                     <label for="startTimeMinute">Start Minute</label>
                     <select className="form-control" name="startTimeMinute" id="startTimeMinute" onChange={props.handleInputChange}
                         value={props.startTimeMinute}>
-                        <option value="choose">Choose...</option>
+                        <option value="Choose...">Choose...</option> 
                         <option value="00">:00</option>
                         <option value="15">:15</option>
                         <option value="30">:30</option>
@@ -74,7 +92,7 @@ function ProposeUserSearch(props) {
                     <label for="endTimeHour">End Hour</label>
                     <select className="form-control" name="endTimeHour" id="endTimeHour" onChange={props.handleInputChange}
                         value={props.endTimeHour}>
-                        <option value="choose">Choose...</option>
+                        <option value="Choose...">Choose...</option>
                         <option value="00">12 AM</option>
                         <option value="01">1 AM</option>
                         <option value="02">2 AM</option>
@@ -105,7 +123,7 @@ function ProposeUserSearch(props) {
                     <label for="endTimeMinute">End Minute</label>
                     <select className="form-control" name="endTimeMinute" id="endTimeMinute" onChange={props.handleInputChange}
                         value={props.endTimeMinute}>
-                        <option value="choose">Choose...</option>
+                        <option value="Choose...">Choose...</option>
                         <option value="00">:00</option>
                         <option value="15">:15</option>
                         <option value="30">:30</option>
