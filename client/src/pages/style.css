@@ -1,4 +1,4 @@
-.messenger-page-header-text {
+.messenger-page-header-text, .propose-container, .requests-container {
     margin-top: 10px;
     text-align: center;
 }
@@ -21,9 +21,5 @@
     padding: 20px;
     background-color: #91e631;
     width: 100%;
-}
-
-.propose-container {
-    margin-top: 10px;
 }
 
