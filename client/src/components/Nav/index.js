@@ -1,5 +1,5 @@
 //Nav/index.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import "./style.css";
 import Drawer from "../Drawer";
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,31 +20,17 @@ const useStyles = makeStyles((theme) => ({
 export default function Nav(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(props.value);
-  const [notificationState, setNotificationState] = React.useState({
-    newMessages: 0,
-    newMatchRequests: 0,
-    generalNotifications: false
-  })
 
   const handleChange = (event, newValue) => {
     setValue(event.target.value);
   };
-
-  useEffect(() => {
-    // For demonstration purposes, we mock an API call.
-    fetch("/api/notifications").then(res => res.json())
-    .then((messages) => {
-        console.log(messages)
-        
-    });
-  }, []);
 
   return (
 
     <div className="entire-nav">
       <div className="upper-nav row">
         <div className="col-3 col-sm-4">
-          <Drawer />
+            <Drawer />
         </div>
 
         <div className="title-name col-6 col-sm-4">
@@ -65,8 +51,8 @@ export default function Nav(props) {
             backgroundColor="white"
           >
             <Tab href="/feed" icon={<Public />} aria-label="public" value="tab-one" />
-            <Tab href="/availability" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" value="tab-two"/>
-            <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" value="tab-three"/>
+            <Tab href="/availability" icon={<AddCircleOutlineIcon />} aria-label="add-circle-outline-icon" value="tab-two" />
+            <Tab href="/scheduler" icon={<EventIcon />} aria-label="event-icon" value="tab-three" />
           </Tabs>
         </Paper>
       </div>
