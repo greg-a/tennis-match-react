@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
     availabilityHeader: {
         textAlign: "center",
-        fontFamily: "coolvetica"
+        // fontFamily: "coolvetica"
     },
     availabilityInstr: {
         textAlign: "center",
