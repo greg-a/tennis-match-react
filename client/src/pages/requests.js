@@ -80,35 +80,35 @@ class Requests extends Component {
 
     render() {
         return (
-            <div className="container">
-                <RequestDisplay />
-                {this.state.searchResult.length!==0 ?
-                this.state.searchResult.map((event, i) => (
-                    <RequestCard 
-                    key={i}
-                    title={event.title}
-                    proposeUserid={event.UserId}
-                    proposeUsername={event.User.username}
-                    proposeUserFirstname={event.User.firstname}
-                    proposeUserLastname={event.User.lastname}
-                    eventLocation={event.location}
-                    starttime={moment(event.start).format("hh:mm a")}
-                    endtime={moment(event.end).format("hh:mm a")}
-                    date={moment(event.start).format("L")}
-                    eventId={event.id}
-                    handleInputChange = {this.handleInputChange}
-                    handleConfirm={this.handleConfirm}
-                    handleDeny={this.handleDeny}
-                    />
-                ))
-                : <p>You currently have no requests.</p>
-                }
+            <div>
+                <Nav />
+                <div className="container">
+                    <RequestDisplay />
+                    {this.state.searchResult.length !== 0 ?
+                        this.state.searchResult.map((event, i) => (
+                            <RequestCard
+                                key={i}
+                                title={event.title}
+                                proposeUserid={event.UserId}
+                                proposeUsername={event.User.username}
+                                proposeUserFirstname={event.User.firstname}
+                                proposeUserLastname={event.User.lastname}
+                                eventLocation={event.location}
+                                starttime={moment(event.start).format("hh:mm a")}
+                                endtime={moment(event.end).format("hh:mm a")}
+                                date={moment(event.start).format("L")}
+                                eventId={event.id}
+                                handleInputChange={this.handleInputChange}
+                                handleConfirm={this.handleConfirm}
+                                handleDeny={this.handleDeny}
+                            />
+                        ))
+                        : <p>You currently have no requests.</p>
+                    }
+                </div>
             </div>
-
-
         )
     }
-
 }
 
 export default Requests;

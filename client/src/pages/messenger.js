@@ -92,6 +92,17 @@ class Messenger extends Component {
             const room = this.createRoom(event.target.dataset.friendid, this.state.user.userid);
             const socket = io();
 
+            // updates all unread messages to read for clicked user
+            fetch("/api/messages/read/" + recipientId, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(res => {
+                console.log(res);
+            })
+            .catch(err => console.log(err));
+
             this.setState({ sendTo: { id: recipientId, username: recipientUsername }, room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
 
             //sends server username and name of room
