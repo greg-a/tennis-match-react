@@ -13,7 +13,11 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         eventStatus: DataTypes.STRING,
-        location: DataTypes.STRING
+        location: DataTypes.STRING,
+        read: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false
+        }
     });
 
     Event.associate = function(models) {

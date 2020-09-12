@@ -131,13 +131,13 @@ module.exports = function (app) {
     });
 
     // search for usernames
-    app.get("/api/username", function(req,res) {
+    app.get("/api/username", function (req, res) {
         if (req.session.loggedin) {
-            if ((req.query.username).split(" ").length>1) {
+            if ((req.query.username).split(" ").length > 1) {
                 let userArr = (req.query.username).split(" ");
-                
+
                 db.User.findAll({
-                    attributes: ["username","firstname","lastname","id"],
+                    attributes: ["username", "firstname", "lastname", "id"],
                     where: {
                         [Op.and]: [
                             { firstname: { [Op.substring]: userArr[0] } },
@@ -149,19 +149,19 @@ module.exports = function (app) {
                     res.json(results);
                 });
             } else {
-            db.User.findAll({
-                attributes: ["username","firstname","lastname","id"],
-                where: {
-                    id: { [Op.not]: req.session.userID },
-                    [Op.or]: [
-                        { username: { [Op.substring]: req.query.username } },
-                        { firstname: { [Op.substring]: req.query.username } },
-                        { lastname: { [Op.substring]: req.query.username } }
-                    ]
-                }
-            }).then(function (results) {
-                res.json(results);
-            });
+                db.User.findAll({
+                    attributes: ["username", "firstname", "lastname", "id"],
+                    where: {
+                        id: { [Op.not]: req.session.userID },
+                        [Op.or]: [
+                            { username: { [Op.substring]: req.query.username } },
+                            { firstname: { [Op.substring]: req.query.username } },
+                            { lastname: { [Op.substring]: req.query.username } }
+                        ]
+                    }
+                }).then(function (results) {
+                    res.json(results);
+                });
             }
         } else {
             res.status(400).end();
@@ -198,7 +198,16 @@ module.exports = function (app) {
                         }
                     ]
 
-                }
+                },
+                include: [
+                    { model: db.User,
+                    attributes: ["username", "firstname", "lastname", "id"]
+                    },
+                    {
+                        model: db.User,
+                        as: 'secondUser',
+                        attributes: ["username", "firstname", "lastname", "id"]
+                    }]
             }).then(function (results) {
                 res.json(results);
             });
@@ -216,10 +225,12 @@ module.exports = function (app) {
                     eventStatus: "confirmed"
                 },
                 include: [
-                {model: db.User},
-                {model: db.User,
-                as: 'secondUser'}]
-            }).then(function(results) {
+                    { model: db.User },
+                    {
+                        model: db.User,
+                        as: 'secondUser'
+                    }]
+            }).then(function (results) {
                 res.json(results)
             })
         } else {
@@ -335,9 +346,9 @@ module.exports = function (app) {
         if (req.session.loggedin) {
             db.User.findAll({
                 where: {
-                    username: {[Op.like]: req.params.user + "%"} //would like to make this to include searching by first name and exclude current user
+                    username: { [Op.like]: req.params.user + "%" } //would like to make this to include searching by first name and exclude current user
                 }
-                })
+            })
                 .then(function (results) {
                     res.json(results);
                 })
@@ -354,13 +365,13 @@ module.exports = function (app) {
                     [Op.or]: [
                         { UserId: req.session.userID },
                         { secondUser: req.session.userID }
-                      ],
+                    ],
                 },
                 include: [
-                    {model: db.User},
-                    {model: db.User, as: "recipient"}
+                    { model: db.User },
+                    { model: db.User, as: "recipient" }
                 ]
-                })
+            })
                 .then(function (results) {
                     res.json(results);
                 })
@@ -370,6 +381,42 @@ module.exports = function (app) {
         }
     });
 
+    app.get("/api/notifications", function (req, res) {
+        if (req.session.loggedin) {
+            const messageNotifications = db.Messages.count({
+                where: {
+                    [Op.and]: [
+                        { secondUser: req.session.userID },
+                        { read: false }
+                    ]
+                }
+            });
+
+            const matchNotifications = db.Event.count({
+                where: {
+                    [Op.and]: [
+                        { confirmedByUser: req.session.userID },
+                        { read: false },
+                        { eventStatus: "propose" }
+                    ]
+                }
+            });
+
+            Promise
+                .all([messageNotifications, matchNotifications])
+                .then(responses => {
+                    res.json({ messages: responses[0], matches: responses[1] })
+                    console.log(responses)
+                })
+                .catch(err => console.log(err));
+        }
+    })
+
+    app.delete("/api/event/delete/:id", function (req, res) {
+        db.Event.destroy({ where: {id: req.params.id }}).then(function(event) {
+            res.json(event)
+        })
+    })
     // Delete an example by id
     //   app.delete("/api/examples/:id", function(req, res) {
     //     db.Example.destroy({ where: { id: req.params.id } }).then(function(dbExample) {

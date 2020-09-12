@@ -13,6 +13,7 @@ class Messenger extends Component {
         room: "",
         users: [],
         userSearch: "",
+        navValue: ""
     };
 
 

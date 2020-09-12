@@ -103,3 +103,32 @@ export function ProposeModal(props) {
     );
 }
 
+export function EventDetailsModal(props) {
+    return (
+        <Modal
+            {...props}
+            size="sm"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    {props.eventName}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Date: {props.date}</p>
+                <p>Location: {props.location}</p>
+                <p>Player One: {props.playerOneUsername} ({props.playerOneFirst} {props.playerOneLast})</p>
+                <p>Player Two: {props.playerTwoUsername} ({props.playerTwoFirst} {props.playerTwoLast})</p>
+                <p>Start Time: {props.startTime}</p>
+                <p>End Time: {props.endTime}</p>
+                <Button href="#" onClick={props.onClick}>Delete</Button>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+

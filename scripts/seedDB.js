@@ -63,11 +63,11 @@ const eventSeed = [
     }
 ];
 
-db.User.bulkCreate(userSeed).then(function (results) {
-    console.log(results.length + " users inserted!");
-}).catch(err => {
-    console.log(err);
-});
+// db.User.bulkCreate(userSeed).then(function (results) {
+//     console.log(results.length + " users inserted!");
+// }).catch(err => {
+//     console.log(err);
+// });
 
 db.Event.bulkCreate(eventSeed).then(function(results) {
     console.log(results.length + " events inserted!");

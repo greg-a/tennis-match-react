@@ -3,6 +3,10 @@ module.exports = function(sequelize, DataTypes) {
         message: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        read: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false
         }
     });
 
