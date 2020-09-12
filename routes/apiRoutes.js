@@ -199,9 +199,15 @@ module.exports = function (app) {
                     ]
 
                 },
-                include: {
-                    model: db.User
-                }
+                include: [
+                    { model: db.User,
+                    attributes: ["username", "firstname", "lastname", "id"]
+                    },
+                    {
+                        model: db.User,
+                        as: 'secondUser',
+                        attributes: ["username", "firstname", "lastname", "id"]
+                    }]
             }).then(function (results) {
                 res.json(results);
             });
@@ -400,11 +406,17 @@ module.exports = function (app) {
                 .all([messageNotifications, matchNotifications])
                 .then(responses => {
                     res.json({ messages: responses[0], matches: responses[1] })
+                    console.log(responses)
                 })
                 .catch(err => console.log(err));
         }
     })
 
+    app.delete("/api/event/delete/:id", function (req, res) {
+        db.Event.destroy({ where: {id: req.params.id }}).then(function(event) {
+            res.json(event)
+        })
+    })
     // Delete an example by id
     //   app.delete("/api/examples/:id", function(req, res) {
     //     db.Example.destroy({ where: { id: req.params.id } }).then(function(dbExample) {

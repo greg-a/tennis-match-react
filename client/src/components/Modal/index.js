@@ -117,8 +117,13 @@ export function EventDetailsModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Button className="mr-3" href="/newevent">Edit</Button>
-                <Button className="mr-3" href="#">Delete</Button>
+                <p>Date: {props.date}</p>
+                <p>Location: {props.location}</p>
+                <p>Player One: {props.playerOneUsername} ({props.playerOneFirst} {props.playerOneLast})</p>
+                <p>Player Two: {props.playerTwoUsername} ({props.playerTwoFirst} {props.playerTwoLast})</p>
+                <p>Start Time: {props.startTime}</p>
+                <p>End Time: {props.endTime}</p>
+                <Button href="#" onClick={props.onClick}>Delete</Button>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>

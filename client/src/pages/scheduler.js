@@ -5,12 +5,15 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { SchedulerModal, EventDetailsModal } from "../components/Modal";
 import Nav from "../components/Nav";
+import moment from "moment";
 
 class Scheduler extends Component {
 
   state = {
     savedDates: [],
     selectedEvent: {},
+    selectedFirstUser: {},
+    selectedSecondUser: {},
     dateModalShow: false,
     eventModalShow: false,
     thisDate: "",
@@ -41,14 +44,31 @@ class Scheduler extends Component {
 
   handleEventClick = arg => {
     this.setState({ eventModalShow: true, thisDate: arg.dateStr });
+    let selectedEventArr = {};
 
     this.state.savedDates.forEach(date => {
-      if (date.id == arg.event._def.publicId) {
-        this.setState({ selectedEvent: date })
+      if ((date.id == arg.event._def.publicId) && date.secondUser) {
+        selectedEventArr = ({ selectedEvent: date, selectedFirstUser: date.User, selectedSecondUser: date.secondUser })
+      }
+      else if (date.id == arg.event._def.publicId){
+        selectedEventArr = ({ selectedEvent: date, selectedFirstUser: date.User, selectedSecondUser: {username: 'none', firstname: "", lastname: "" }})
       }
     });
-    console.log(this.state.selectedEvent)
+
+    this.setState(  selectedEventArr )
   };
+
+  deleteEvent = () => {
+    fetch("api/event/delete/" + this.state.selectedEvent.id, {
+      method: "DELETE"
+    }).then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })
+    this.getDates();
+    this.setState({ eventModalShow: false })
+  }
 
   render() {
     return (
@@ -72,12 +92,23 @@ class Scheduler extends Component {
           <SchedulerModal
             show={this.state.dateModalShow}
             onHide={() => this.setModalShow("dateModalShow", false)}
-            thisDate={this.state.thisDate}
+            thisDate={moment(this.state.thisDate).format("MMM DD YYYY")}
           />
           <EventDetailsModal
             show={this.state.eventModalShow}
             onHide={() => this.setModalShow("eventModalShow", false)}
             eventName={this.state.selectedEvent.title}
+            playerOneUsername={this.state.selectedFirstUser.username}
+            playerOneFirst={this.state.selectedFirstUser.firstname}
+            playerOneLast={this.state.selectedFirstUser.lastname}
+            playerTwoUsername={this.state.selectedSecondUser.username}
+            playerTwoFirst={this.state.selectedSecondUser.firstname}
+            playerTwoLast={this.state.selectedSecondUser.lastname}
+            startTime={moment(this.state.selectedEvent.start).format("hh:mm a")}
+            endTime={moment(this.state.selectedEvent.end).format("hh:mm a")}
+            location={this.state.selectedEvent.location}
+            date={moment(this.state.selectedEvent.start).format("MM/DD/YYYY")}
+            onClick={this.deleteEvent}
           />
         </div>
       </div>
