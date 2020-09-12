@@ -27,7 +27,7 @@ function SignupForm(props) {
             value={props.passwordValue}
             placeholder="Password" />
         </div>
-        <button type="button" className="btn btn-primary" 
+        <button type="button" className="btn" 
         onClick={props.handleFormSubmit}
         id="login-button">Submit</button>
     </form>

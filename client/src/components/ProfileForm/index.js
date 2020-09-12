@@ -127,7 +127,7 @@ function ProfileForm(props) {
         <div className="form-group">
             <input type="search" className="form-control" id="court-search" placeholder="Search" />
         </div> */}
-                <button type="submit" className="btn btn-primary" id="update-btn" onClick={props.handleFormSubmit}>Update</button>
+                <button type="submit" className="btn" id="update-btn" onClick={props.handleFormSubmit}>Update</button>
             </form>
         </div>
     )

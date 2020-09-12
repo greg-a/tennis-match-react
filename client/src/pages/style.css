@@ -1,0 +1,25 @@
+.messenger-page-header-text, .propose-container, .requests-container {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.messenger-page-search-bar {
+    /* background-color: #92e63160;
+    border-radius: 10px; */
+}
+
+.message-from-me {
+    background-color: #92e63160;
+    font: white;
+}
+
+.sent-message {
+    margin: 5px;
+}
+
+.send-message-footer {
+    padding: 20px;
+    background-color: #91e631;
+    width: 100%;
+}
+

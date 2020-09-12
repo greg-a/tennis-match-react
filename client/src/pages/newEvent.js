@@ -6,10 +6,12 @@ class NewEvent extends Component {
 
     state = {
         newDate: "",
-        startTimeHour: "00",
-        startTimeMinute: "00",
-        endTimeHour: "00",
-        endTimeMinute: "00",
+        // startTimeHour: "00",
+        // startTimeMinute: "00",
+        // endTimeHour: "00",
+        // endTimeMinute: "00",
+        startTime: "17:00",
+        endTime: "18:00",
         eventTitle: "Casual",
         eventLocation: "any",
         navValue: "tab-two",
@@ -19,6 +21,8 @@ class NewEvent extends Component {
 
     handleInputChange = event => {
         const { name, value } = event.target;
+        console.log("name: " + name);
+        console.log("value: " + value);
         this.setState({
             [name]: value
         });
@@ -33,8 +37,10 @@ class NewEvent extends Component {
 
         let currentDay = this.state.newDate.substring(8, 10);
 
-        let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
-        let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
+        // let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
+        // let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
+        let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTime));
+        let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTime));
         console.log("start date: " + currentStartDate)
         fetch("/api/calendar", {
             method: "POST",
@@ -55,10 +61,12 @@ class NewEvent extends Component {
                 if (res.statusString === "eventCreated") {
                     this.setState({
                         newDate: "",
-                        startTimeHour: "00",
-                        startTimeMinute: "00",
-                        endTimeHour: "00",
-                        endTimeMinute: "00",
+                        // startTimeHour: "00",
+                        // startTimeMinute: "00",
+                        // endTimeHour: "00",
+                        // endTimeMinute: "00",
+                        startTime: this.state.startTime,
+                        endTime: this.state.endTime,
                         eventTitle: "Casual",
                         eventLocation: "any",
                         instructions: "Your availability has been successfully updated!"
@@ -66,10 +74,12 @@ class NewEvent extends Component {
                 } else {
                     this.setState({
                         newDate: "",
-                        startTimeHour: "00",
-                        startTimeMinute: "00",
-                        endTimeHour: "00",
-                        endTimeMinute: "00",
+                        // startTimeHour: "00",
+                        // startTimeMinute: "00",
+                        // endTimeHour: "00",
+                        // endTimeMinute: "00",
+                        startTime: "17:00",
+                        endTime: "18:00",
                         eventTitle: "Casual",
                         eventLocation: "any",
                         instructions: "Oops! Something went wrong. Please try again."
@@ -92,10 +102,12 @@ class NewEvent extends Component {
                         eventTitle={this.state.eventTitle}
                         eventLocation={this.state.eventLocation}
                         newDate={this.state.newDate}
-                        startTimeHour={this.state.startTimeHour}
-                        startTimeMinute={this.state.startTimeMinute}
-                        endTimeHour={this.state.endTimeHour}
-                        endTimeMinute={this.state.endTimeMinute}
+                        // startTimeHour={this.state.startTimeHour}
+                        // startTimeMinute={this.state.startTimeMinute}
+                        // endTimeHour={this.state.endTimeHour}
+                        // endTimeMinute={this.state.endTimeMinute}
+                        startTime={this.state.startTime}
+                        endTime={this.state.endTime}
                         handleFormSubmit={this.handleFormSubmit}
                         courtList={this.state.courtList}
                         instructions={this.state.instructions}

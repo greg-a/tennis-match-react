@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import io from 'socket.io-client';
 import Nav from "../components/Nav";
+import "./style.css";
 
 class Messenger extends Component {
     state = {
@@ -12,7 +13,7 @@ class Messenger extends Component {
         room: "",
         users: [],
         userSearch: "",
-        navValue: "tab-one"
+        navValue: ""
     };
 
 
@@ -157,33 +158,68 @@ class Messenger extends Component {
     render() {
         return (
             <div>
-                <Nav
-                    value={this.state.navValue}
-                />
-                <div className="container">
-                    <h2>{this.state.sendTo.username}</h2>
-                    <ul className="list-group messages-list p-5">
+                <Nav />
+                <div className="container messenger-page">
+                    <h2 className="messenger-page-header-text">Messenger</h2>
+                    <div className="row messenger-page-search-bar">
+                        <div className="input-group-prepend col-sm-3">
+                            <span className="input-group-text">Send to: </span>
+                        </div>
+                        <ul className="list-group messages-list p-5 col-sm-5">
+                            <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" onChange={this.handleUserSearch}></input>
+                            {this.state.users.map(user => (
+                                <li className="list-group-item list-group-item-action" name="room" onClick={this.handleInputChange} data-friendid={user.id} data-recipient={user.username}>
+                                    {user.firstname ? `${user.username} (${user.firstname} ${user.lastname})` : user.username}
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="send-to-name align-self-center col-sm-4">
+                            <h5 className="send-to-name-text">{this.state.sendTo.username}</h5>
+                        </div>
+
+                    </div>
+
+
+                    {/* <ul className="list-group messages-list p-5">
                         {this.state.showMessages.map(data => (
                             <li className="list-group-item">
                                 {data.sender}: {data.message}
                             </li>
                         ))}
+                    </ul> */}
+                    <ul className="list-group messages-list p-5">
+                        {this.state.showMessages.map(data => {
+                            if (data.sender === this.state.user.username) {
+                                return (
+                                    <li className="list-group-item sent-message message-from-me">
+                                        {data.sender}: {data.message}
+                                    </li>
+                                )
+                            }
+
+                            else if (data.sender === this.state.sendTo.username) {
+                                return (
+                                    <li className="list-group-item sent-message message-from-other">
+                                        {data.sender}: {data.message}
+                                    </li>
+                                )
+                            }
+                        })}
                     </ul>
+
+
+
+                </div>
+
+                <div className="send-message-footer">
                     <div className="input-group pr-5">
                         <div className="input-group-prepend">
                             <span className="input-group-text">Message</span>
                         </div>
                         <textarea className="form-control" aria-label="With textarea" placeholder="Send message..." name="sendMessage" onChange={this.handleInputChange} onKeyDown={this.pushSendMessage} value={this.state.sendMessage}></textarea>
                     </div>
-                    <ul className="list-group messages-list p-5">
-                        <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" onChange={this.handleUserSearch}></input>
-                        {this.state.users.map(user => (
-                            <li className="list-group-item list-group-item-action" name="room" onClick={this.handleInputChange} data-friendid={user.id} data-recipient={user.username}>
-                                {user.firstname ? `${user.username} (${user.firstname} ${user.lastname})` : user.username}
-                            </li>
-                        ))}
-                    </ul>
                 </div>
+
             </div>
         )
     }
