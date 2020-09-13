@@ -324,6 +324,37 @@ module.exports = function (app) {
 
     });
 
+    app.delete("/api/overlap/destroy", function(req,res) {
+        if (req.session.loggedin) {
+            db.Event.destroy({
+                where: {
+                    UserId: req.session.userID,
+                    eventStatus: "available",
+                    [Op.or]: [
+                        {
+                            start: {
+                                [Op.gte]: req.body.start,
+                                [Op.lte]: req.body.end
+                            }
+                        },
+                        {
+                            start: {
+                                [Op.lte]: req.body.start
+                            },
+                            end: {
+                                [Op.gte]: req.body.start
+                            }
+                        }
+                    ]
+                }
+            }).then(function(result) {
+                res.json(result);
+            })
+        } else {
+            res.status(400).end();
+        }
+    });
+
     // overlap of schedule between users
     app.get("/api/overlap", function (req, res) {
         // This uses User 1 as the input into the query. All returns are in reference to User 1's events. Change this by changing the createdByUser = values in the query

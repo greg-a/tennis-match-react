@@ -14,7 +14,7 @@ function RequestCard(props) {
                         <p className="card-text" >End Time: {props.endtime}</p>
 
                         
-                        <button type="button" className="btn btn-primary mr-2" data-eventid={props.eventId} data-eventtitle={props.title} onClick={props.handleConfirm}>Confirm</button>
+                        <button type="button" className="btn btn-primary mr-2" data-eventid={props.eventId} data-eventtitle={props.title} data-start={props.fullStarttime} data-end={props.fullEndtime} onClick={props.handleConfirm}>Confirm</button>
                         <button type="button" className="btn btn-danger" data-eventid={props.eventId} onClick={props.handleDeny}>Deny</button>
                     </div>
                 </div>

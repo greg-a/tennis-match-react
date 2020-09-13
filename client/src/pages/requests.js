@@ -33,6 +33,10 @@ class Requests extends Component {
 
     handleConfirm = event => {
         event.preventDefault();
+        let nestedID = event.target.dataset.eventid;
+        let nestedStart = event.target.dataset.start;
+        let nestedEnd = event.target.dataset.end;
+
         let eventTitle = event.target.dataset.eventtitle;
         console.log("EVENT TITLE: " + eventTitle);
         let titleArr = (eventTitle).split("-");
@@ -49,7 +53,25 @@ class Requests extends Component {
         })
             .then(res => {
                 console.log(res);
-                this.getRequests();
+                console.log("NESTED FETCH ID: " + nestedID);
+                let confirmedEventInfo = {
+                    id: nestedID,
+                    start: nestedStart,
+                    end: nestedEnd
+                }
+                fetch("/api/overlap/destroy", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(confirmedEventInfo)
+                })
+                .then(response=> {
+                    console.log(response);
+                    this.getRequests();
+                })
+                .catch(err=>console.log(err))
+                // this.getRequests();
             })
             .catch(err => console.log(err));
 
@@ -94,6 +116,8 @@ class Requests extends Component {
                                 proposeUserFirstname={event.User.firstname}
                                 proposeUserLastname={event.User.lastname}
                                 eventLocation={event.location}
+                                fullStarttime={event.start}
+                                fullEndtime={event.end}
                                 starttime={moment(event.start).format("hh:mm a")}
                                 endtime={moment(event.end).format("hh:mm a")}
                                 date={moment(event.start).format("L")}
