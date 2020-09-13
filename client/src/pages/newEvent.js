@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NewEventForm from '../components/NewEventForm';
 import Nav from "../components/Nav";
+import moment from "moment";
 
 class NewEvent extends Component {
 
@@ -18,6 +19,23 @@ class NewEvent extends Component {
         instructions: "Please enter the following information to set your availabilty",
         courtList: ["any","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
     }
+
+    componentDidMount() {
+        this.getDate();
+    }
+
+    getDate = () => {
+        const currentDate = moment(new Date).format("YYYY-MM-DD");
+        const selectedDate = localStorage.getItem("selectedDate");
+
+        if (selectedDate > currentDate) {
+            this.setState({ newDate: selectedDate })
+        }
+        else {
+            this.setState({ newDate: currentDate })
+        }
+        localStorage.removeItem("selectedDate");
+    };
 
     handleInputChange = event => {
         const { name, value } = event.target;
