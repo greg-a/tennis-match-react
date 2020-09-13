@@ -200,7 +200,24 @@ class ProposeMatch extends Component {
 
     addInputTimes = (res) => {
         let searchArr = res;
+        
         for (let i = 0; i < searchArr.length; i++) {
+            
+            if (searchArr[i].User.skilllevel===1) {
+                searchArr[i].User.skilllevel = "1.0-1.5 - New Player";
+            } else if (searchArr[i].User.skilllevel===2) {
+                searchArr[i].User.skilllevel= "2.0 - Beginner";
+            } else if (searchArr[i].User.skilllevel===3) {
+                searchArr[i].User.skilllevel= "2.5 - Beginner +";
+            } else if (searchArr[i].User.skilllevel===4) {
+                searchArr[i].User.skilllevel= "3.0 - Beginner-Intermediate";
+            } else if (searchArr[i].User.skilllevel===5) {
+                searchArr[i].User.skilllevel= "3.5 - Intermediate";
+            } else if (searchArr[i].User.skilllevel===6) {
+                searchArr[i].User.skilllevel= "4.0 - Intermediate-Advanced";
+            } else if (searchArr[i].User.skilllevel===7) {
+                searchArr[i].User.skilllevel= "4.5 - Advanced";
+            }
             let startIntArr = [];
             let endIntArr = [];
 
@@ -318,6 +335,7 @@ class ProposeMatch extends Component {
                             username={event.User.username}
                             userFirstname={event.User.firstname}
                             userLastname={event.User.lastname}
+                            userSkill={event.User.skilllevel}
                             eventLocation={event.location}
                             starttime={moment(event.start).format("hh:mm a")}
                             endtime={moment(event.end).format("hh:mm a")}
