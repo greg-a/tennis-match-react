@@ -47,6 +47,8 @@ class Signup extends React.Component {
                     this.setState({
                         signupInstructions: "Account successfully created. You may now login."
                     });
+                    // redirects to the login page after creating account
+                    window.location.replace("/");
                 }
             })
             .catch(err => console.log(err));

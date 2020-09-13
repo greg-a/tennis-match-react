@@ -18,7 +18,10 @@ module.exports = function(sequelize, DataTypes) {
       }),
         Messages.belongsTo(models.User, {
           as: 'recipient',
-          foreignKey: "secondUser"
+          foreignKey: {
+            name: "secondUser",
+            allowNull: false
+          }
         });
       };
 
