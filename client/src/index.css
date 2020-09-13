@@ -21,3 +21,7 @@ code {
   font-family: 'coolvetica';
   src: local('coolvetica'), url(./fonts/coolvetica.ttf) format('truetype');
 }
+
+body.login-page body.signup-page {
+  background-color: #91e631;
+}
