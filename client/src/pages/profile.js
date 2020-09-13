@@ -2,6 +2,7 @@ import React from "react";
 import ProfileDisplay from "../components/ProfileDisplay";
 import ProfileForm from "../components/ProfileForm";
 import Nav from "../components/Nav";
+import { Switch, FormControlLabel } from '@material-ui/core';
 
 class Profile extends React.Component {
     state = {
@@ -14,13 +15,14 @@ class Profile extends React.Component {
         zipcode: "",
         skilllevel: "",
         oppskilllevel: "",
-        updateFirstname: "",
-        updateLastname: "",
-        updateCity: "",
-        updateState: "",
-        updateZipcode: "",
-        updateSkilllevel: "",
-        updateOppskilllevel: ""
+        updateFirstname: null,
+        updateLastname: null,
+        updateCity: null,
+        updateState: null,
+        updateZipcode: null,
+        updateSkilllevel: null,
+        updateOppskilllevel: null,
+        editToggle: false
     };
 
     componentDidMount() {
@@ -58,16 +60,12 @@ class Profile extends React.Component {
         event.preventDefault();
 
         let updateObj = {
-            firstname: this.state.updateFirstname,
-            lastname: this.state.updateLastname,
-            city: this.state.updateCity,
-            state: this.state.updateState
-        }
-
-        if (this.state.updateZipcode==="") {
-            updateObj.zipcode = null;
-        } else {
-            updateObj.zipcode = this.state.updateZipcode;
+            firstname: this.state.updateFirstname === null ? this.state.firstname : this.state.updateFirstname,
+            lastname: this.state.updateLastname === null ? this.state.lastname : this.state.updateLastname,
+            city: this.state.updateCity === null ? this.state.city : this.state.updateCity,
+            state: this.state.updateState === null ? this.state.state : this.state.updateState,
+            zipcode: this.state.updateZipcode === null ? this.state.zipcode : this.state.updateZipcode,
+            skilllevel: this.state.updateSkilllevel === null ? this.state.skilllevel : this.state.updateSkilllevel
         }
 
         fetch("/api", {
@@ -81,15 +79,19 @@ class Profile extends React.Component {
                 console.log(res);
                 this.getProfileInfo();
                 this.setState({
-                    updateFirstname:"",
-                    updateLastname:"",
-                    updateCity:"",
-                    updateState:"",
-                    updateZipcode:"",
+                    updateFirstname: null,
+                    updateLastname: null,
+                    updateCity: null,
+                    updateState: null,
+                    updateZipcode: null,
+                    editToggle: false
                 });
             })
             .catch(err => console.log(err));
+    };
 
+    handleToggle = (event) => {
+        this.setState({ editToggle: event.target.checked })
     };
 
     render() {
@@ -97,26 +99,46 @@ class Profile extends React.Component {
             <div>
                 <Nav />
                 <div className="container">
-                <ProfileDisplay username={this.state.username}
-                    email={this.state.email}
-                    firstname={this.state.firstname}
-                    lastname={this.state.lastname}
-                    city={this.state.city}
-                    state={this.state.state}
-                    zipcode={this.state.zipcode} />
-                <ProfileForm 
-                updateFirstname={this.state.updateFirstname}
-                updateLastname={this.state.updateLastname}
-                updateCity={this.state.updateCity}
-                updateState ={this.state.updateState}
-                updateZipcode={this.state.updateZipcode}
-                updateSkilllevel={this.state.updateSkilllevel}
-                updateOppskilllevel={this.state.updateOppskilllevel}
-                handleInputChange={this.handleInputChange}
-                handleFormSubmit={this.handleFormSubmit} />
+                    {/* <ProfileDisplay username={this.state.username}
+                        email={this.state.email}
+                        firstname={this.state.firstname}
+                        lastname={this.state.lastname}
+                        city={this.state.city}
+                        state={this.state.state}
+                        zipcode={this.state.zipcode} /> */}
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={this.state.editToggle}
+                                onChange={this.handleToggle}
+                                color="primary"
+                            />
+                        }
+                        label="Edit Profile"
+                    />
+                    <ProfileForm
+                        username={this.state.username}
+                        email={this.state.email}
+                        defaultFirst={this.state.firstname}
+                        defaultLast={this.state.lastname}
+                        defaultCity={this.state.city}
+                        defaultState={this.state.state}
+                        defaultZip={this.state.zipcode}
+                        defaultSkill={this.state.skilllevel}
+                        updateFirstname={this.state.updateFirstname}
+                        updateLastname={this.state.updateLastname}
+                        updateCity={this.state.updateCity}
+                        updateState={this.state.updateState}
+                        updateZipcode={this.state.updateZipcode}
+                        updateSkilllevel={this.state.updateSkilllevel}
+                        updateOppskilllevel={this.state.updateOppskilllevel}
+                        handleInputChange={this.handleInputChange}
+                        handleFormSubmit={this.handleFormSubmit}
+                        editToggle={this.state.editToggle}
+                    />
+                </div>
             </div>
-            </div>
-            
+
         );
     }
 }
