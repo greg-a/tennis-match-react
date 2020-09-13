@@ -3,9 +3,11 @@
     text-align: center;
 }
 
-.messenger-page-search-bar {
-    /* background-color: #92e63160;
-    border-radius: 10px; */
+.send-message-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .message-from-me {
