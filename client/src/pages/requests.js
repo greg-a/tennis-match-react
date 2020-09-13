@@ -19,9 +19,35 @@ class Requests extends Component {
             .then(res => res.json())
             .then(res => {
                 console.log(res);
-                this.setState({ searchResult: res });
+                // this.setState({ searchResult: res });
+                this.convertSkillLevel(res);
             })
             .catch(err => console.log(err));
+    }
+
+    convertSkillLevel = (res) => {
+        let searchArr = res;
+        
+        for (let i = 0; i < searchArr.length; i++) {
+            
+            if (searchArr[i].User.skilllevel===1) {
+                searchArr[i].User.skilllevel = "1.0-1.5 - New Player";
+            } else if (searchArr[i].User.skilllevel===2) {
+                searchArr[i].User.skilllevel= "2.0 - Beginner";
+            } else if (searchArr[i].User.skilllevel===3) {
+                searchArr[i].User.skilllevel= "2.5 - Beginner +";
+            } else if (searchArr[i].User.skilllevel===4) {
+                searchArr[i].User.skilllevel= "3.0 - Beginner-Intermediate";
+            } else if (searchArr[i].User.skilllevel===5) {
+                searchArr[i].User.skilllevel= "3.5 - Intermediate";
+            } else if (searchArr[i].User.skilllevel===6) {
+                searchArr[i].User.skilllevel= "4.0 - Intermediate-Advanced";
+            } else if (searchArr[i].User.skilllevel===7) {
+                searchArr[i].User.skilllevel= "4.5 - Advanced";
+            }
+        }
+
+        this.setState({searchResult: searchArr});
     }
 
     handleInputChange = event => {
@@ -115,6 +141,7 @@ class Requests extends Component {
                                 proposeUsername={event.User.username}
                                 proposeUserFirstname={event.User.firstname}
                                 proposeUserLastname={event.User.lastname}
+                                proposeUserSkill={event.User.skilllevel}
                                 eventLocation={event.location}
                                 fullStarttime={event.start}
                                 fullEndtime={event.end}

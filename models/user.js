@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         },
         zipcode: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true
         },
         skilllevel: {

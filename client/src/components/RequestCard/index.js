@@ -8,6 +8,7 @@ function RequestCard(props) {
                     <div className="card-body" >
                         <h5 className="card-title" >{props.title}</h5>
                         <h6 className="card-subtitle mb-2 text-muted" >{props.proposeUserFirstname ? `Request by: ${props.proposeUsername} (${props.proposeUserFirstname} ${props.proposeUserLastname})` : `Request by: ${props.proposeUsername}`}</h6>
+                        <p className="card-text">Skill level: {props.proposeUserSkill ? `${props.proposeUserSkill}` : `n/a`}</p>
                         <p className="card-text">Court Location: {props.eventLocation}</p>
                         <p className="card-text" >Date: {props.date}</p>
                         <p className="card-text" >Start Time: {props.starttime}</p>

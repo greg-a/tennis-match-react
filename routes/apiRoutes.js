@@ -272,7 +272,7 @@ module.exports = function (app) {
                 },
                 include: [
                     {model: db.User,
-                        attributes: ["username","firstname","lastname","id"],}]
+                        attributes: ["username","firstname","lastname","id","skilllevel"],}]
             }).then(function (results) {
                 res.json(results);
             });
@@ -293,7 +293,7 @@ module.exports = function (app) {
                 },
                 include: [
                     {model: db.User,
-                        attributes: ["username","firstname","lastname","id"],}]
+                        attributes: ["username","firstname","lastname","id","skilllevel"],}]
             }).then(function (results) {
                 res.json(results);
             });
