@@ -1,5 +1,6 @@
 .login-page {
-    background-color: #91e631; 
+    background: rgb(108,230,49);
+    background: linear-gradient(180deg, rgba(108,230,49,1) 0%, rgba(182,245,112,1) 79%); 
     position: fixed;    
     top: 0;    
     left: 0;    
