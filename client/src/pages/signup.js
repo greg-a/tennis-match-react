@@ -65,6 +65,8 @@ class Signup extends React.Component {
                 handleInputChange={this.handleInputChange}
                 handleFormSubmit={this.handleFormSubmit}/>
             </div>
+
+            
         );
     }
 }

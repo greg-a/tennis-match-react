@@ -16,10 +16,13 @@
 
 .upper-nav {
     background-color: rgb(145, 230, 48);
+    display: flex;
+    align-items: center;
 }
 
 .title-name {
     text-align: center;
+
 }
 
 .app-name {
