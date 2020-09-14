@@ -54,13 +54,29 @@ class Login extends React.Component {
         return (
             <div className="login-page">
                 <div className="container">
-                    <LoginForm usernameValue={this.state.loginUsername}
+                    <div className="row">
+                        <div className="col-12 img-col">
+                            <img src={require("../images/tennismatch.png")} id="login-logo" width="50%"/>
+                        </div>
+                    
+                    </div>
+                
+                    <div className="row">
+                        <div className="col-12">
+                        <LoginForm usernameValue={this.state.loginUsername}
                         passwordValue={this.state.loginPassword}
                         loginInstructions={this.state.loginInstructions}
                         handleInputChange={this.handleInputChange}
                         handleFormSubmit={this.handleFormSubmit} />
+                        </div>
+                    
+                    </div>
+                    
+
                 </div>
+                    
             </div>
+
         );
     }
 }
