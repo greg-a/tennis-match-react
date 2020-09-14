@@ -56,8 +56,8 @@ function LoginForm(props) {
 
 
             <br></br>
-            <div className="first-time">
-            <p>First time here? <a href="/signup">SIGN UP!</a></p>
+            <div className="subtitle-and-instructions">
+            <p>First time here? <Button variant="contained" href="/signup">SIGN UP</Button></p>
             </div>
             
         </div>

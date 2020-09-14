@@ -12,11 +12,11 @@ class Signup extends React.Component {
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
-          [name]: value
+            [name]: value
         });
-      };
+    };
 
-      handleFormSubmit = event => {
+    handleFormSubmit = event => {
         event.preventDefault();
 
         let signupUser = {
@@ -32,18 +32,18 @@ class Signup extends React.Component {
             },
             body: JSON.stringify(signupUser)
         })
-            .then(res=>res.json())
+            .then(res => res.json())
             .then(res => {
                 console.log(res);
-                if(res.statusString==="formNotComplete") {
+                if (res.statusString === "formNotComplete") {
                     this.setState({
                         signupInstructions: "Please complete the registration form"
                     });
-                } else if(res.statusString==="userAlreadyExists") {
+                } else if (res.statusString === "userAlreadyExists") {
                     this.setState({
                         signupInstructions: "Account already exists with that username"
                     });
-                } else if(res.statusString==="userCreateSuccess") {
+                } else if (res.statusString === "userCreateSuccess") {
                     this.setState({
                         signupInstructions: "Account successfully created. You may now login."
                     });
@@ -57,16 +57,36 @@ class Signup extends React.Component {
 
     render() {
         return (
-            <div className="container">
-                <SignupForm usernameValue={this.state.signUsername}
-                passwordValue={this.state.signupPassword}
-                emailValue={this.state.signupEmail}
-                signupInstructions={this.state.signupInstructions}
-                handleInputChange={this.handleInputChange}
-                handleFormSubmit={this.handleFormSubmit}/>
+            <div className="login-page">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12 img-col">
+                            <img src={require("../images/tennismatch.png")} id="login-logo" width="50%" />
+                        </div>
+
+                    </div>
+
+                    {/* <div className="row"> */}
+                    {/* <div className="col-12"> */}
+                    <SignupForm usernameValue={this.state.signUsername}
+                        passwordValue={this.state.signupPassword}
+                        emailValue={this.state.signupEmail}
+                        signupInstructions={this.state.signupInstructions}
+                        handleInputChange={this.handleInputChange}
+                        handleFormSubmit={this.handleFormSubmit} />
+                    {/* </div> */}
+
+                    {/* </div> */}
+
+
+                </div>
+
             </div>
 
-            
+
+
+
+
         );
     }
 }
