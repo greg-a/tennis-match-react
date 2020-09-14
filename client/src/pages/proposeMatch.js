@@ -27,6 +27,19 @@ class ProposeMatch extends Component {
         courtList: ["Choose...","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
     };
 
+    getDate = () => {
+        const currentDate = moment(new Date).format("YYYY-MM-DD");
+        const selectedDate = localStorage.getItem("selectedDate");
+
+        if (selectedDate > currentDate) {
+            this.setState({ newDate: selectedDate })
+        }
+        else {
+            this.setState({ newDate: currentDate })
+        }
+        localStorage.removeItem("selectedDate");
+    };
+
     setModalShow = bVal => {
         this.setState({ 
             modalShow: bVal,
@@ -296,7 +309,8 @@ class ProposeMatch extends Component {
             } else if (this.state.subsectionShow === "date") {
                 this.setState({
                     instructions: "Pick a date to search for other players' availability."
-                })
+                });
+                this.getDate();
             }
         })
     }

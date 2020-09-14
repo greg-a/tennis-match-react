@@ -40,6 +40,9 @@ class Scheduler extends Component {
 
   handleDateClick = arg => {
     this.setState({ dateModalShow: true, thisDate: arg.dateStr });
+
+    const selectedDate = moment(arg.dateStr).format("YYYY-MM-DD");
+    localStorage.setItem('selectedDate', selectedDate);
   };
 
   handleEventClick = arg => {
