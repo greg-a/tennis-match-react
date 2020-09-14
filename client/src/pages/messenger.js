@@ -204,7 +204,8 @@ class Messenger extends Component {
                                 if (data.sender === this.state.user.username) {
                                     return (
                                         <li className="list-group-item sent-message message-from-me">
-                                            {data.sender}: {data.message}
+                                            {/* {data.sender}: {data.message} */}
+                                            You: {data.message}
                                         </li>
                                     )
                                 }

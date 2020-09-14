@@ -34,7 +34,8 @@ export default function Nav(props) {
         </div>
 
         <div className="title-name col-6 col-sm-4">
-          <div className="app-name">TennisMatch</div>
+          {/* <div className="app-name">TennisMatch</div> */}
+          <img src={require("../../images/tennismatch.png")} id="login-logo" width="90%"/>
         </div>
 
       </div>
