@@ -20,7 +20,7 @@ function App() {
     {/* <Route exact path="/" component={withAuth(Messenger)} /> */}
     <Route path="/" component={Feed} />
     <Route path="/login" component={Login} />
-    <Route path="/signup" component={Signup} /> 
+    <Route path="/signup" component={withAuth(Signup)} /> 
     <Route path="/scheduler" component={withAuth(Scheduler)} />
     <Route path="/messenger" component={withAuth(Messenger)} />
     <Route path="/feed" component={withAuth(Feed)} />
