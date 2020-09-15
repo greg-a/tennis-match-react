@@ -41,5 +41,13 @@
     margin: 5px;
 }
 
+.messenger-content {
+    height: 450px;
+}
+
+.messages-list {
+    height: 100%;
+}
+
 
 
