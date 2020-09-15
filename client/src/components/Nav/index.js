@@ -35,7 +35,7 @@ export default function Nav(props) {
             <Drawer />
           </Grid>
 
-          <Grid item xs={6} sm={4} textAlign="center">
+          <Grid item xs={6} sm={4} >
             <Box display="flex" justifyContent="center" alignItems="center">
             <img src={require("../../images/tennismatch.png")} id="login-logo" width="100%" />
             </Box>          

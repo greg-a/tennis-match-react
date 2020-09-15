@@ -70,21 +70,6 @@ class Login extends React.Component {
 
                 </Grid>
             </div>
-            // <div className="login-page">
-            //     <div className="container">
-            //         <div className="row">
-            //             <div className="col-12 img-col">
-            //                 <img src={require("../images/tennismatch.png")} id="login-logo" width="50%"/>
-            //             </div>
-            //         </div>
-            //                 <LoginForm usernameValue={this.state.loginUsername}
-            //             passwordValue={this.state.loginPassword}
-            //             loginInstructions={this.state.loginInstructions}
-            //             handleInputChange={this.handleInputChange}
-            //             handleFormSubmit={this.handleFormSubmit} />  
-            //     </div>    
-            // </div>
-
         );
     }
 }
