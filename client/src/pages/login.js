@@ -1,5 +1,6 @@
 import React from "react";
 import LoginForm from "../components/LoginForm";
+import { Grid, TextField } from '@material-ui/core';
 
 class Login extends React.Component {
     state = {
@@ -52,30 +53,37 @@ class Login extends React.Component {
 
     render() {
         return (
+
             <div className="login-page">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-12 img-col">
-                            <img src={require("../images/tennismatch.png")} id="login-logo" width="50%"/>
-                        </div>
-                    
-                    </div>
-                
-                    {/* <div className="row"> */}
-                        {/* <div className="col-12"> */}
-                            <LoginForm usernameValue={this.state.loginUsername}
+                <Grid container spacing={3} direction="column" alignItems="center" >
+                    <Grid item xs={12} sm={8} >
+                        <img src={require("../images/tennismatch.png")} width="100%" />
+                        
+                    </Grid>
+                    <Grid item xs={12}>
+                    <LoginForm usernameValue={this.state.loginUsername}
                         passwordValue={this.state.loginPassword}
                         loginInstructions={this.state.loginInstructions}
                         handleInputChange={this.handleInputChange}
-                        handleFormSubmit={this.handleFormSubmit} />
-                        {/* </div> */}
-                    
-                    {/* </div> */}
-                    
+                        handleFormSubmit={this.handleFormSubmit} />  
+                    </Grid>
 
-                </div>
-                    
+                </Grid>
             </div>
+            // <div className="login-page">
+            //     <div className="container">
+            //         <div className="row">
+            //             <div className="col-12 img-col">
+            //                 <img src={require("../images/tennismatch.png")} id="login-logo" width="50%"/>
+            //             </div>
+            //         </div>
+            //                 <LoginForm usernameValue={this.state.loginUsername}
+            //             passwordValue={this.state.loginPassword}
+            //             loginInstructions={this.state.loginInstructions}
+            //             handleInputChange={this.handleInputChange}
+            //             handleFormSubmit={this.handleFormSubmit} />  
+            //     </div>    
+            // </div>
 
         );
     }
