@@ -171,13 +171,13 @@ class Messenger extends Component {
             <div>
                 <Nav />
                 <div className="messenger-page">
-                    <div className="container messenger-content-top">
+                    <div className="container messenger-content">
                         <h2 className="messenger-page-header-text">Messenger</h2>
                         <div className="row messenger-page-search-bar">
                             <div className="input-group-prepend col-sm-3">
                                 <span className="input-group-text">Send to: </span>
                             </div>
-                            <ul className="list-group messages-list p-5 col-sm-5">
+                            <ul className="list-group p-5 col-sm-5">
                                 <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" onChange={this.handleUserSearch}></input>
                                 {this.state.users.map(user => (
                                     <li className="list-group-item list-group-item-action" name="room" onClick={this.handleInputChange} data-friendid={user.id} data-recipient={user.username}>

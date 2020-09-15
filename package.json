@@ -13,7 +13,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0",
     "sequelize": "^6.3.4",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "if-env": "^1.0.4"
   },
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
