@@ -18,9 +18,9 @@ function App() {
   <Router>
     {/* <Jumbotron /> */}
     {/* <Route exact path="/" component={withAuth(Messenger)} /> */}
-    <Route exact path="/" component={Feed} />
+    <Route exact path="/" component={withAuth(Feed)} />
     <Route exact path="/login" component={Login} />
-    <Route exact path="/signup" component={withAuth(Signup)} /> 
+    <Route exact path="/signup" component={Signup} /> 
     <Route exact path="/scheduler" component={withAuth(Scheduler)} />
     <Route exact path="/messenger" component={withAuth(Messenger)} />
     <Route exact path="/feed" component={withAuth(Feed)} />
