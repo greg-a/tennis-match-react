@@ -4,6 +4,7 @@ var session = require('express-session');
 var app = express();
 const server = require('http').createServer(app);
 const io = require("socket.io")(server);
+const path = require("path");
 
 var db = require("./models");
 
