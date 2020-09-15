@@ -1,7 +1,8 @@
 import React from "react";
 import Nav from "../components/Nav";
 import { FeedList, FeedListItem, FeedListItemDeny } from "../components/FeedList";
-import { Container, Row, Col } from "../components/Grid";
+// import { Container, Row, Col} from "../components/Grid";
+import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
 
 class Feed extends React.Component {
     state = {
@@ -35,13 +36,13 @@ class Feed extends React.Component {
     handleDeny = event => {
         fetch("api/event/delete/" + event.target.dataset.id, {
             method: "DELETE"
-          }).then(res => {
+        }).then(res => {
             console.log(res)
-          }).catch(err => {
+        }).catch(err => {
             console.log(err)
-          })
-          
-          this.getDates();
+        })
+
+        this.getDates();
     }
 
     render() {
@@ -50,10 +51,11 @@ class Feed extends React.Component {
                 <Nav
                     value={this.state.navValue}
                 />
-                <Container>
+                {/* <Container> */}
                     {/* <FeedListItem /> */}
-                    <Row>
-                        <Col size="12">
+                    {/* <Row> */}
+                    <Grid container spacing={3}>
+                    <Grid item xs={12}>
                             {!this.state.matches.length && !this.state.updatedMatches.length ? (
                                 <h4 className="text-center">No scheduled matches</h4>
                             ) : (
@@ -63,9 +65,9 @@ class Feed extends React.Component {
                                                 <FeedListItemDeny
                                                     title={match.title}
                                                     month={match.start.substring(5, 7)}
-                                                    day={match.start.substring(8,10)}
-                                                    hour={match.start.substring(11,13)}
-                                                    minute={match.start.substring(14,16)}
+                                                    day={match.start.substring(8, 10)}
+                                                    hour={match.start.substring(11, 13)}
+                                                    minute={match.start.substring(14, 16)}
                                                     okayDeny={this.handleDeny}
                                                     eventID={match.id}
                                                 />
@@ -77,17 +79,19 @@ class Feed extends React.Component {
                                                     organizer={match.User.username}
                                                     confirmer={match.secondUser.username}
                                                     month={match.start.substring(5, 7)}
-                                                    day={match.start.substring(8,10)}
-                                                    hour={match.start.substring(11,13)}
-                                                    minute={match.start.substring(14,16)}
+                                                    day={match.start.substring(8, 10)}
+                                                    hour={match.start.substring(11, 13)}
+                                                    minute={match.start.substring(14, 16)}
                                                 />
                                             );
                                         })}
                                     </FeedList>
                                 )}
-                        </Col>
-                    </Row>
-                </Container>
+                        </Grid>
+                    </Grid>
+                        
+                    {/* </Row> */}
+                {/* </Container> */}
 
             </div>
 

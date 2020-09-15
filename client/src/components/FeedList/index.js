@@ -1,6 +1,7 @@
 import React from "react";
 import Thumbnail from "../Thumbnail";
-import { Container, Row, Col } from "../Grid";
+// import { Container, Row, Col } from "../Grid";
+import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
 
 // For entire feed of FeedItem components
 export function FeedList({ children }) {
@@ -19,8 +20,16 @@ export function FeedListItem({
     minute
 }) {
     return (
-        <li className="list-group-item">
-            <Container>
+        <div className="list-group-item">
+            <Grid container spacing={3}>
+                <Grid item xs={4} sm={2}>
+                    <Thumbnail src={thumbnail} />
+                </Grid>
+                <Grid item xs={8} sm={10}>
+                    <p>{organizer} scheduled a match with {confirmer} on {month}/{day} at {hour}:{minute}.</p>                    
+                </Grid>
+            </Grid>
+            {/* <Container>
                 <Row>
                     <Col size="4 sm-2">
                         <Thumbnail src={thumbnail} />
@@ -29,8 +38,8 @@ export function FeedListItem({
                         <p>{organizer} scheduled a match with {confirmer} on {month}/{day} at {hour}:{minute}.</p>
                     </Col>
                 </Row>
-            </Container>
-        </li>
+            </Container> */}
+        </div>
     );
 }
 
@@ -46,8 +55,17 @@ export function FeedListItemDeny({
     eventID
 }) {
     return (
-        <li className="list-group-item">
-            <Container>
+        <div className="list-group-item">
+            <Grid container spacing={3}>
+                <Grid item xs={4} sm={2}>
+                    <Thumbnail src={thumbnail} />
+                </Grid>
+                <Grid item xs={8} sm={10}>
+                <p>{title}. Proposed for {month}/{day} at {hour}:{minute}.</p>
+                        <button className="btn" onClick={okayDeny} data-id={eventID}>Ok</button>
+                </Grid>
+            </Grid>
+            {/* <Container>
                 <Row>
                     <Col size="4 sm-2">
                         <Thumbnail src={thumbnail} />
@@ -57,7 +75,7 @@ export function FeedListItemDeny({
                         <button className="btn btn-primary" onClick={okayDeny} data-id={eventID}>Ok</button>
                     </Col>
                 </Row>
-            </Container>
-        </li>
+            </Container> */}
+        </div>
     );
 }

@@ -9,6 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import Public from '@material-ui/icons/Public';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EventIcon from '@material-ui/icons/Event';
+import { Grid, TextField, Box } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,16 +29,18 @@ export default function Nav(props) {
   return (
 
     <div className="entire-nav">
-      <div className="upper-nav row">
-        <div className="col-3 col-sm-4">
+      <div className="upper-nav row" >
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={3} sm={4}>
             <Drawer />
-        </div>
+          </Grid>
 
-        <div className="title-name col-6 col-sm-4">
-          {/* <div className="app-name">TennisMatch</div> */}
-          <img src={require("../../images/tennismatch.png")} id="login-logo" width="90%"/>
-        </div>
-
+          <Grid item xs={6} sm={4} >
+            <Box display="flex" justifyContent="center" alignItems="center">
+            <img src={require("../../images/tennismatch.png")} id="login-logo" width="100%" />
+            </Box>          
+          </Grid>  
+        </Grid>
       </div>
 
       <div>
