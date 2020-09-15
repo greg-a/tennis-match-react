@@ -1,7 +1,8 @@
 import React from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { Container, Row, Col } from "../Grid";
+// import { makeStyles } from '@material-ui/core/styles';
+// import TextField from '@material-ui/core/TextField';
+// import { Container, Row, Col } from "../Grid";
+import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -15,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "10px",
         marginBottom: "10px"
     },
-    availabilityForm: {
-        marginTop: "10px"
-    },
-    availabilityHeader: {
-        textAlign: "center",
-        // fontFamily: "coolvetica"
-    },
+    // availabilityForm: {
+    //     marginTop: "10px"
+    // },
+    // availabilityHeader: {
+    //     textAlign: "center",
+    //     // fontFamily: "coolvetica"
+    // },
     availabilityInstr: {
         textAlign: "center",
         fontWeight: "bold"
@@ -32,195 +33,109 @@ function NewEventForm(props) {
     const classes = useStyles();
 
     return (
-        <div className={classes.availabilityForm}>
-            <h2 className={classes.availabilityHeader}>Availability</h2>
-            <div className={classes.availabilityInstr}><p>{props.instructions}</p></div>
-            <form>
-                <Container>
-                    <Row>
-                        <Col size="12 sm-3">
-                            <div className="form-group">
-                                <label for="eventTitle">Availability Type</label>
-                                <select className="form-control" name="eventTitle" id="eventTitle" onChange={props.handleInputChange} value={props.eventTitle}>
-                                    <option value="Casual">Casual</option>
-                                    <option value="Competitive">Competitive</option>
-                                </select>
-                            </div>
-                        </Col>
-                        <Col size="12 sm-9">
-                            <div className="form-group">
-                                <label for="eventLocation">Court Location</label>
-                                <select className="form-control" name="eventLocation" id="eventLocation" onChange={props.handleInputChange} value={props.eventLocation}>
-                                    {props.courtList.map((event, i) => (
-                                        <option value={event} key={i}>{event}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
+        <div>
+            <Box marginTop="10px" textAlign="center">
+                <Grid container spacing={3}>
+                    
+                    <Grid item xs={12}>
+                        <h2>Availability</h2>
+                        <div><p>{props.instructions}</p></div>
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                        <div className="form-group">
+                            <label for="eventTitle">Availability Type</label>
+                            <select className="form-control" name="eventTitle" id="eventTitle" onChange={props.handleInputChange} value={props.eventTitle}>
+                                <option value="Casual">Casual</option>
+                                <option value="Competitive">Competitive</option>
+                            </select>
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} sm={9}>
+                        <div className="form-group">
+                            <label for="eventLocation">Court Location</label>
+                            <select className="form-control" name="eventLocation" id="eventLocation" onChange={props.handleInputChange} value={props.eventLocation}>
+                                {props.courtList.map((event, i) => (
+                                    <option value={event} key={i}>{event}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <form className={classes.container} noValidate>
+                            <TextField
+                                id="newDate"
+                                name="newDate"
+                                label="Date"
+                                type="date"
+                                // defaultValue="2017-05-24"
+                                value={props.newDate}
+                                onChange={props.handleInputChange}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </form>
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                        <form className={classes.container} noValidate>
+                            <TextField
+                                id="startTime"
+                                name="startTime"
+                                label="Start Time"
+                                type="time"
+                                // defaultValue="17:00"
+                                value={props.startTime}
+                                onChange={props.handleInputChange}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                inputProps={{
+                                    step: 300, // 5 min
+                                }}
+                            />
+                        </form>
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                        <form className={classes.container} noValidate>
+                            <TextField
+                                id="endTime"
+                                name="endTime"
+                                label="End Time"
+                                type="time"
+                                // defaultValue="18:30"
+                                value={props.endTime}
+                                onChange={props.handleInputChange}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                inputProps={{
+                                    step: 300, // 5 min
+                                }}
+                            />
+                        </form>
+                    </Grid>
+                    <Grid item xs={12}>
+                    <button type="button" className="btn"
+            onClick={props.handleFormSubmit}
+            id="login-button">Submit</button>
+                    </Grid>
+                </Grid>
 
-                <Container>
-                    <Row>
-                        <Col size="12 sm-4">
-                            {/* <div className="form-group">
-                                <label for="newDate">Date</label>
-                                <input type="date" className="form-control" id="newDate" name="newDate"
-                                    onChange={props.handleInputChange}
-                                    value={props.newDate}
-                                />
-                            </div> */}
-                            <form className={classes.container} noValidate>
-                                <TextField
-                                    id="newDate"
-                                    name="newDate"
-                                    label="Date"
-                                    type="date"
-                                    // defaultValue="2017-05-24"
-                                    value={props.newDate}
-                                    onChange={props.handleInputChange}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </form>
-                        </Col>
-                        <Col size="12 sm-3">
-                            <form className={classes.container} noValidate>
-                                <TextField
-                                    id="startTime"
-                                    name="startTime"
-                                    label="Start Time"
-                                    type="time"
-                                    // defaultValue="17:00"
-                                    value={props.startTime}
-                                    onChange={props.handleInputChange}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300, // 5 min
-                                    }}
-                                />
-                            </form>
-                        </Col>
-                        <Col size="12 sm-3">
-                            <form className={classes.container} noValidate>
-                                <TextField
-                                    id="endTime"
-                                    name="endTime"
-                                    label="End Time"
-                                    type="time"
-                                    // defaultValue="18:30"
-                                    value={props.endTime}
-                                    onChange={props.handleInputChange}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300, // 5 min
-                                    }}
-                                />
-                            </form>
-                        </Col>
-
-
-                        {/* <div className="form-row">
-                    <div className="form-group col">
-                        <label for="startTimeHour">Start Hour</label>
-                        <select className="form-control" name="startTimeHour" id="startTimeHour" onChange={props.handleInputChange}
-                            value={props.startTimeHour}>
-                            <option value="00">12 AM</option>
-                            <option value="01">1 AM</option>
-                            <option value="02">2 AM</option>
-                            <option value="03">3 AM</option>
-                            <option value="04">4 AM</option>
-                            <option value="05">5 AM</option>
-                            <option value="06">6 AM</option>
-                            <option value="07">7 AM</option>
-                            <option value="08">8 AM</option>
-                            <option value="09">9 AM</option>
-                            <option value="10">10 AM</option>
-                            <option value="11">11 AM</option>
-                            <option value="12">12 PM</option>
-                            <option value="13">1 PM</option>
-                            <option value="14">2 PM</option>
-                            <option value="15">3 PM</option>
-                            <option value="16">4 PM</option>
-                            <option value="17">5 PM</option>
-                            <option value="18">6 PM</option>
-                            <option value="19">7 PM</option>
-                            <option value="20">8 PM</option>
-                            <option value="21">9 PM</option>
-                            <option value="22">10 PM</option>
-                            <option value="23">11 PM</option>
-                        </select>
-                    </div>
-                    <div className="form-group col">
-                        <label for="startTimeMinute">Start Minute</label>
-                        <select className="form-control" name="startTimeMinute" id="startTimeMinute" onChange={props.handleInputChange}
-                            value={props.startTimeMinute}>
-                            <option value="00">:00</option>
-                            <option value="15">:15</option>
-                            <option value="30">:30</option>
-                            <option value="45">:45</option>
-                        </select>
-                    </div>
-                </div>
-                <div className="form-row">
-                    <div className="form-group col">
-                        <label for="endTimeHour">Start Hour</label>
-                        <select className="form-control" name="endTimeHour" id="endTimeHour" onChange={props.handleInputChange}
-                            value={props.endTimeHour}>
-                            <option value="00">12 AM</option>
-                            <option value="01">1 AM</option>
-                            <option value="02">2 AM</option>
-                            <option value="03">3 AM</option>
-                            <option value="04">4 AM</option>
-                            <option value="05">5 AM</option>
-                            <option value="06">6 AM</option>
-                            <option value="07">7 AM</option>
-                            <option value="08">8 AM</option>
-                            <option value="09">9 AM</option>
-                            <option value="10">10 AM</option>
-                            <option value="11">11 AM</option>
-                            <option value="12">12 PM</option>
-                            <option value="13">1 PM</option>
-                            <option value="14">2 PM</option>
-                            <option value="15">3 PM</option>
-                            <option value="16">4 PM</option>
-                            <option value="17">5 PM</option>
-                            <option value="18">6 PM</option>
-                            <option value="19">7 PM</option>
-                            <option value="20">8 PM</option>
-                            <option value="21">9 PM</option>
-                            <option value="22">10 PM</option>
-                            <option value="23">11 PM</option>
-                        </select>
-                    </div>
-                    <div className="form-group col">
-                        <label for="endTimeMinute">Start Minute</label>
-                        <select className="form-control" name="endTimeMinute" id="endTimeMinute" onChange={props.handleInputChange}
-                            value={props.endTimeMinute}>
-                            <option value="00">:00</option>
-                            <option value="15">:15</option>
-                            <option value="30">:30</option>
-                            <option value="45">:45</option>
-                        </select>
-                    </div>
-                </div> */}
-                        <Col size="12 sm-2">
-                            <button type="button" className="btn"
-                                onClick={props.handleFormSubmit}
-                                id="login-button">Submit</button>
-                        </Col>
-                    </Row>
-                </Container>
-            </form>
+            </Box>
         </div>
+
+
+
+
+
+
+
+
+        
+
     )
 }
 

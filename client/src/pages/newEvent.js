@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NewEventForm from '../components/NewEventForm';
 import Nav from "../components/Nav";
 import moment from "moment";
+import { Grid, TextField } from '@material-ui/core';
 
 class NewEvent extends Component {
 
@@ -114,7 +115,7 @@ class NewEvent extends Component {
                 <Nav
                     value={this.state.navValue}
                 />
-                <div className="container">
+                {/* <Grid container spacing={3} direction="column" alignItems="center" > */}
                     <NewEventForm
                         handleInputChange={this.handleInputChange}
                         eventTitle={this.state.eventTitle}
@@ -130,7 +131,7 @@ class NewEvent extends Component {
                         courtList={this.state.courtList}
                         instructions={this.state.instructions}
                     />
-                </div>
+                {/* </Grid> */}
             </div>
         )
     }
