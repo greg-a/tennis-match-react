@@ -18,16 +18,16 @@ function App() {
   <Router>
     {/* <Jumbotron /> */}
     {/* <Route exact path="/" component={withAuth(Messenger)} /> */}
-    <Route path="/" component={Feed} />
-    <Route path="/login" component={Login} />
-    <Route path="/signup" component={withAuth(Signup)} /> 
-    <Route path="/scheduler" component={withAuth(Scheduler)} />
-    <Route path="/messenger" component={withAuth(Messenger)} />
-    <Route path="/feed" component={withAuth(Feed)} />
-    <Route path="/availability" component={withAuth(Availability)} />
-    <Route path ="/profile" component={withAuth(Profile)} />
-    <Route path="/proposematch" component={withAuth(ProposeMatch)} />
-    <Route path="/requests" component={withAuth(Requests)} />
+    <Route exact path="/" component={Feed} />
+    <Route exact path="/login" component={Login} />
+    <Route exact path="/signup" component={withAuth(Signup)} /> 
+    <Route exact path="/scheduler" component={withAuth(Scheduler)} />
+    <Route exact path="/messenger" component={withAuth(Messenger)} />
+    <Route exact path="/feed" component={withAuth(Feed)} />
+    <Route exact path="/availability" component={withAuth(Availability)} />
+    <Route exact path ="/profile" component={withAuth(Profile)} />
+    <Route exact path="/proposematch" component={withAuth(ProposeMatch)} />
+    <Route exact path="/requests" component={withAuth(Requests)} />
   </Router>
   )
 }
