@@ -2,7 +2,7 @@ import React from "react";
 import ProfileDisplay from "../components/ProfileDisplay";
 import ProfileForm from "../components/ProfileForm";
 import Nav from "../components/Nav";
-import { Switch, FormControlLabel } from '@material-ui/core';
+import { Switch, FormControlLabel, Container, Grid } from '@material-ui/core';
 
 class Profile extends React.Component {
     state = {
@@ -98,7 +98,11 @@ class Profile extends React.Component {
         return (
             <div>
                 <Nav />
-                <div className="container">
+                <Container fixed>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} style={{textAlign: "center"}}>
+                            <h2>Profile</h2>
+                        </Grid>
                     {/* <ProfileDisplay username={this.state.username}
                         email={this.state.email}
                         firstname={this.state.firstname}
@@ -106,16 +110,19 @@ class Profile extends React.Component {
                         city={this.state.city}
                         state={this.state.state}
                         zipcode={this.state.zipcode} /> */}
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={this.state.editToggle}
-                                onChange={this.handleToggle}
-                                color="primary"
+                        <Grid item xs={12}>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.editToggle}
+                                        onChange={this.handleToggle}
+                                        color="primary"
+                                    />
+                                }
+                                label="Edit Profile"
                             />
-                        }
-                        label="Edit Profile"
-                    />
+                        </Grid>
+                    
                     <ProfileForm
                         username={this.state.username}
                         email={this.state.email}
@@ -136,7 +143,8 @@ class Profile extends React.Component {
                         handleFormSubmit={this.handleFormSubmit}
                         editToggle={this.state.editToggle}
                     />
-                </div>
+                    </Grid>
+                </Container>
             </div>
 
         );
