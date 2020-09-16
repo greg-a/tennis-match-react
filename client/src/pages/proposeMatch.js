@@ -5,11 +5,15 @@ import ProposeCard from '../components/ProposeCard';
 import moment from 'moment';
 import { ProposeModal } from "../components/Modal";
 import Nav from "../components/Nav";
+import { Button, Container, Grid } from '@material-ui/core';
+
 
 class ProposeMatch extends Component {
 
     state = {
         newDate: "",
+        startTime: "",
+        endTime: "",
         startTimeHour: "",
         startTimeMinute: "",
         endTimeHour: "",
@@ -24,7 +28,7 @@ class ProposeMatch extends Component {
         eventTitle: "",
         modalShow: false,
         subsectionShow: "",
-        courtList: ["Choose...","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
+        courtList: ["Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
     };
 
     getDate = () => {
@@ -46,18 +50,20 @@ class ProposeMatch extends Component {
             startTimeHour: "",
             startTimeMinute: "",
             endTimeHour: "",
-            endTimeMinute: ""
+            endTimeMinute: "",
+            startTime: "",
+            endTime: ""
         });
     };
 
     handleEventClick = (arg) => {
-        const eventIndex = arg.target.dataset.index;
+        const eventIndex = arg.currentTarget.dataset.index;
         const eventIndexArr = [];
 
         eventIndexArr.push(this.state.searchResult[eventIndex]);
 
         console.log("TITLE: " + eventIndexArr[0].title)
-        this.setState({ modalShow: true, clickedResult: eventIndexArr, eventLocation: arg.target.dataset.location, eventTitle: eventIndexArr[0].title });
+        this.setState({ modalShow: true, clickedResult: eventIndexArr, eventLocation: arg.currentTarget.dataset.location, eventTitle: eventIndexArr[0].title });
     };
 
     handleInputChange = event => {
@@ -119,8 +125,23 @@ class ProposeMatch extends Component {
 
         let currentDay = this.state.newDate.substring(8, 10);
 
-        let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
-        let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
+        let currentStartDate;
+        let currentEndDate;
+
+        if (this.state.startTime) {
+            let currentStartHour = this.state.startTime.substring(0,2);
+            let currentStartMinute = this.state.startTime.substring(3,5);
+            let currentEndHour = this.state.endTime.substring(0,2);
+            let currentEndMinute = this.state.endTime.substring(3,5);
+            currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(currentStartHour), parseInt(currentStartMinute));
+            currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(currentEndHour), parseInt(currentEndMinute));
+        } else {
+            currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
+            currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
+
+        }
+
+        
         let currentProposeToUserId;
         if (event.target.dataset.userid) {
             currentProposeToUserId = event.target.dataset.userid;
@@ -146,7 +167,9 @@ class ProposeMatch extends Component {
                     userResults: [],
                     userId: "",
                     eventLocation: "",
-                    eventTitle: ""
+                    eventTitle: "",
+                    startTime: "",
+                    endTime: ""
                 }
             )
         } else {
@@ -183,7 +206,9 @@ class ProposeMatch extends Component {
                             userResults: [],
                             userId: "",
                             eventLocation: "",
-                            eventTitle: ""
+                            eventTitle: "",
+                            startTime: "",
+                            endTime: ""
                         }
                     )
                 } else {
@@ -201,7 +226,9 @@ class ProposeMatch extends Component {
                             userSearch: "",
                             userResults: [],
                             userId: "",
-                            eventLocation: ""
+                            eventLocation: "",
+                            startTime: "",
+                            endTime: ""
                         }
                     )
                 }
@@ -270,6 +297,8 @@ class ProposeMatch extends Component {
                 eventLocation={this.state.eventLocation}
                 courtList={this.state.courtList}
                 eventTitle={this.state.eventTitle}
+                startTime={this.state.startTime}
+                endTime={this.state.endTime}
                 />
             )
         } else if (this.state.subsectionShow === "date") {
@@ -285,7 +314,7 @@ class ProposeMatch extends Component {
     }
 
     setSubShow = (event) => {
-        console.log(event.target.value);
+        console.log(event.currentTarget.value);
         this.setState({
             newDate: "",
             startTimeHour: "",
@@ -300,7 +329,9 @@ class ProposeMatch extends Component {
             userResults: [],
             userId: "",
             modalShow: false,
-            subsectionShow: event.target.value
+            subsectionShow: event.currentTarget.value,
+            startTime: "",
+            endTime: ""
         }, () => {
             if (this.state.subsectionShow === "player") {
                 this.setState({
@@ -322,25 +353,30 @@ class ProposeMatch extends Component {
         return (
             <div>
                 <Nav />
-                <div className="container propose-container">
-                    <div className="row">
-                        <div className="col-0 col-sm-3"></div>
-                        <div className="col-sm-3">
-                            <button type="button" className="btn mr-2 propose-button" onClick={this.setSubShow} value="date">Search By Date</button>
-                        </div>
-                        <div className="col-sm-3">
-                            <button type="button" className="btn propose-button" onClick={this.setSubShow} value="player">Propose Match to a Player</button>
-                        </div>
-                    </div>
+                <Container fixed>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} style={{textAlign: "center"}}>
+                            <h2>Propose Match</h2>
+                        </Grid>
+                        <Grid item xs={12} sm={6} style={{textAlign: "center"}}>
+                            <Button variant="contained" color="primary" value="date" onClick={this.setSubShow}>
+                                Search By Date
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={6} style={{textAlign: "center"}}>
+                            <Button variant="contained" color="primary" value="player" onClick={this.setSubShow}>
+                                Propose Match to Player
+                            </Button>
+                        </Grid>
+                        
+                        {/* <button type="button" className="btn mr-2 propose-button" onClick={this.setSubShow} value="date">Search By Date</button>
+                        
+                        <button type="button" className="btn propose-button" onClick={this.setSubShow} value="player">Propose Match to a Player</button> */}
+                        
 
 
                     {this.subsectionRender()}
-                    {/* <ProposeMatchForm
-                    handleInputChange={this.handleInputChange}
-                    newDate={this.state.newDate}
-                    instructions={this.state.instructions}
-                    handleFormSubmit={this.handleFormSubmit}
-                    /> */}
+                    
                     {this.state.searchResult.map((event, i) => (
                         <ProposeCard
                             key={i}
@@ -357,19 +393,6 @@ class ProposeMatch extends Component {
                             handleEventClick={this.handleEventClick}       
                         />
                     ))}
-
-                    {/* <ProposeUserSearch 
-                    userSearch={this.state.userSearch}
-                    handleUsernameChange={this.handleUsernameChange}
-                    handleInputChange={this.handleInputChange}
-                    handleProposeSubmit={this.handleProposeSubmit}
-                    userResults={this.state.userResults}
-                    newDate={this.state.newDate}
-                    startTimeHour={this.state.startTimeHour}
-                    startTimeMinute={this.state.startTimeMinute}
-                    endTimeHour={this.state.endTimeHour}
-                    endTimeMinute={this.state.endTimeMinute}
-                    /> */}
 
                     {this.state.clickedResult.map(event => (
                         <ProposeModal
@@ -395,7 +418,8 @@ class ProposeMatch extends Component {
                         courtList={this.state.courtList}
                         />
                     ))}
-                </div>
+                    </Grid>
+                </Container>
             </div>
         )
     }

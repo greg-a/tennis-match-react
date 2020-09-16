@@ -58,8 +58,16 @@ class NewEvent extends Component {
 
         // let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTimeHour), parseInt(this.state.startTimeMinute));
         // let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTimeHour), parseInt(this.state.endTimeMinute));
-        let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTime));
-        let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTime));
+
+        let currentStartHour = this.state.startTime.substring(0,2);
+        let currentStartMinute = this.state.startTime.substring(3,5);
+        let currentEndHour = this.state.endTime.substring(0,2);
+        let currentEndMinute = this.state.endTime.substring(3,5);
+        let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(currentStartHour), parseInt(currentStartMinute));
+        let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(currentEndHour), parseInt(currentEndMinute));
+
+        // let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTime));
+        // let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTime));
         console.log("start date: " + currentStartDate)
         fetch("/api/calendar", {
             method: "POST",
