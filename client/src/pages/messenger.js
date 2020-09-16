@@ -13,7 +13,7 @@ class Messenger extends Component {
         room: "",
         users: [],
         userSearch: "",
-        navValue: ""
+        navValue: "",
     };
 
 
@@ -91,6 +91,7 @@ class Messenger extends Component {
             const recipientId = event.target.dataset.friendid;
             const room = this.createRoom(event.target.dataset.friendid, this.state.user.userid);
             const socket = io();
+            console.log("checking messages: " + this.state.allMessages.filter(message => message.read === false))
 
             // updates all unread messages to read for clicked user
             fetch("/api/messages/read/" + recipientId, {
@@ -129,12 +130,15 @@ class Messenger extends Component {
             //listens for active user
             socket.on("active", data => {
                 const sendToUpdate = this.state.sendTo;
+
                 if(data === 2) {
+                    // sets recipient to active if both users are connected to room
                     sendToUpdate.active = true;
 
                     this.setState({ sendTo: sendToUpdate })
                 }
                 else {
+                    // sets recipient to inactive if other user is not connected
                     sendToUpdate.active = false;
 
                     this.setState({ sendTo: sendToUpdate })
@@ -185,7 +189,7 @@ class Messenger extends Component {
     render() {
         return (
             <div>
-                <Nav />
+                <Nav update={this.state.newNotification}/>
                 <div className="messenger-page">
                     <div className="container messenger-content">
                         <h2 className="messenger-page-header-text">Messenger</h2>

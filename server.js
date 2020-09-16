@@ -23,11 +23,15 @@ io.on('connection', (socket) => {
     console.log(user.username + " has joined " + user.room);
 
     //updates number of users connected to room when someone joins
-    io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
+    if (io.sockets.adapter.rooms[room]) {
+      io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
+    }
 
     //updates number of users connected to room when someone leaves
     socket.on("disconnect", () => {
-      io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
+      if (io.sockets.adapter.rooms[room]) {
+        io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
+      }
     })
   });
 
