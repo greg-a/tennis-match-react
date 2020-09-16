@@ -13,7 +13,7 @@ class Messenger extends Component {
         room: "",
         users: [],
         userSearch: "",
-        navValue: ""
+        navValue: "",
     };
 
 
@@ -86,11 +86,12 @@ class Messenger extends Component {
     handleInputChange = event => {
         if (event.type === "click") {
             //sends request to server to join a room based on click event
-            const username = this.state.user.username;
+            const username = this.state.user.userid;
             const recipientUsername = event.target.dataset.recipient;
             const recipientId = event.target.dataset.friendid;
             const room = this.createRoom(event.target.dataset.friendid, this.state.user.userid);
             const socket = io();
+            console.log("checking messages: " + this.state.allMessages.filter(message => message.read === false))
 
             // updates all unread messages to read for clicked user
             fetch("/api/messages/read/" + recipientId, {
@@ -103,8 +104,8 @@ class Messenger extends Component {
             })
                 .catch(err => console.log(err));
 
-            this.setState({ sendTo: { id: recipientId, username: recipientUsername }, room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
-
+            this.setState({ sendTo: { id: recipientId, username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
+            
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
 
@@ -125,6 +126,24 @@ class Messenger extends Component {
                 return () => {
                     socket.disconnect()
                 };
+            });
+            //listens for active user
+            socket.on("active", data => {
+                const sendToUpdate = this.state.sendTo;
+
+                if(data === 2) {
+                    // sets recipient to active if both users are connected to room
+                    sendToUpdate.active = true;
+
+                    this.setState({ sendTo: sendToUpdate })
+                }
+                else {
+                    // sets recipient to inactive if other user is not connected
+                    sendToUpdate.active = false;
+
+                    this.setState({ sendTo: sendToUpdate })
+                }
+                
             });
             this.setState({ userSearch: "", users: [] })
         }
@@ -153,7 +172,8 @@ class Messenger extends Component {
                 },
                 body: JSON.stringify({
                     message: this.state.sendMessage,
-                    secondUser: this.state.sendTo.id
+                    secondUser: this.state.sendTo.id,
+                    read: this.state.sendTo.active
                 })
             })
                 .then(res => {
@@ -169,7 +189,7 @@ class Messenger extends Component {
     render() {
         return (
             <div>
-                <Nav />
+                <Nav update={this.state.newNotification}/>
                 <div className="messenger-page">
                     <div className="container messenger-content">
                         <h2 className="messenger-page-header-text">Messenger</h2>
