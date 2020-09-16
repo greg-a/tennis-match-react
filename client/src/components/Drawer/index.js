@@ -48,7 +48,8 @@ const Drawer = (props) => {
   const [notificationState, setNotificationState] = useState({
     messages: 0,
     matches: 0,
-    notifications: false
+    notifications: false,
+    update: props.update
   })
 
   const toggleDrawer = (anchor, open) => (event) => {

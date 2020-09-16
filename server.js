@@ -17,10 +17,22 @@ io.on('connection', (socket) => {
   //user joins a room
   socket.on("joinRoom", ({ username, room }) => {
     const user = { socketId: socket.id, username: username, room: room };
-    
+
     socket.join(user.room);
 
     console.log(user.username + " has joined " + user.room);
+
+    //updates number of users connected to room when someone joins
+    if (io.sockets.adapter.rooms[room]) {
+      io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
+    }
+
+    //updates number of users connected to room when someone leaves
+    socket.on("disconnect", () => {
+      if (io.sockets.adapter.rooms[room]) {
+        io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
+      }
+    })
   });
 
   //Receives a new message
@@ -30,10 +42,6 @@ io.on('connection', (socket) => {
     //emits new message to specific room
     io.in(user.room).emit("output", data);
     console.log("New message: " + JSON.stringify(data))
-
-    // Check how many users are in the room
-    // var room = io.sockets.adapter.rooms[user.room];
-    // console.log("Members in this room: " + room.length);
   });
 
   socket.on("disconnect", () => {
