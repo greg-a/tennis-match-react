@@ -3,6 +3,7 @@ import RequestDisplay from '../components/RequestDisplay';
 import RequestCard from '../components/RequestCard';
 import moment from 'moment';
 import Nav from "../components/Nav";
+import { Grid } from '@material-ui/core';
 
 class Requests extends Component {
 
@@ -51,7 +52,7 @@ class Requests extends Component {
     }
 
     handleInputChange = event => {
-        const { name, value } = event.target;
+        const { name, value } = event.currentTarget;
         this.setState({
             [name]: value
         });
@@ -59,15 +60,15 @@ class Requests extends Component {
 
     handleConfirm = event => {
         event.preventDefault();
-        let nestedID = event.target.dataset.eventid;
-        let nestedStart = event.target.dataset.start;
-        let nestedEnd = event.target.dataset.end;
+        let nestedID = event.currentTarget.dataset.eventid;
+        let nestedStart = event.currentTarget.dataset.start;
+        let nestedEnd = event.currentTarget.dataset.end;
 
-        let eventTitle = event.target.dataset.eventtitle;
+        let eventTitle = event.currentTarget.dataset.eventtitle;
         console.log("EVENT TITLE: " + eventTitle);
         let titleArr = (eventTitle).split("-");
         let updateObj = {
-            id: event.target.dataset.eventid,
+            id: event.currentTarget.dataset.eventid,
             title: "Confirmed -" + titleArr[1]
         }
         fetch("/api/calendar/requests", {
@@ -107,7 +108,7 @@ class Requests extends Component {
         event.preventDefault();
 
         let updateObj = {
-            id: event.target.dataset.eventid
+            id: event.currentTarget.dataset.eventid
         }
 
         fetch("/api/event/deny", {
@@ -130,10 +131,13 @@ class Requests extends Component {
         return (
             <div>
                 <Nav />
-                <div className="container">
-                    <RequestDisplay />
+                <Grid container spacing={3} direction="column" alignItems="center" >
+                    <Grid item xs={12} >
+                        <RequestDisplay />
+                    </Grid>
                     {this.state.searchResult.length !== 0 ?
                         this.state.searchResult.map((event, i) => (
+                            <Grid item xs={12}>
                             <RequestCard
                                 key={i}
                                 title={event.title}
@@ -153,10 +157,11 @@ class Requests extends Component {
                                 handleConfirm={this.handleConfirm}
                                 handleDeny={this.handleDeny}
                             />
+                            </Grid>
                         ))
-                        : <p>You currently have no requests.</p>
+                        : <Grid item xs={12}><p>You currently have no requests.</p></Grid>
                     }
-                </div>
+                </Grid>
             </div>
         )
     }

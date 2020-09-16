@@ -1,25 +1,53 @@
 import React from "react";
+import { makeStyles, Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        [theme.breakpoints.down('sm')]: {
+            width: 300
+        },
+        [theme.breakpoints.up('md')]: {
+            width: 400
+        }
+    },
+    title: {
+        fontSize: 14
+    },
+    pos: {
+        marginBottom: 12
+    }
+}));
 
 function RequestCard(props) {
+    const classes = useStyles();
 
     return (
-        <div >
-            <div className="card my-2" >
-                    <div className="card-body" >
-                        <h5 className="card-title" >{props.title}</h5>
-                        <h6 className="card-subtitle mb-2 text-muted" >{props.proposeUserFirstname ? `Request by: ${props.proposeUsername} (${props.proposeUserFirstname} ${props.proposeUserLastname})` : `Request by: ${props.proposeUsername}`}</h6>
-                        <p className="card-text">Skill level: {props.proposeUserSkill ? `${props.proposeUserSkill}` : `n/a`}</p>
-                        <p className="card-text">Court Location: {props.eventLocation}</p>
-                        <p className="card-text" >Date: {props.date}</p>
-                        <p className="card-text" >Start Time: {props.starttime}</p>
-                        <p className="card-text" >End Time: {props.endtime}</p>
-
-                        
-                        <button type="button" className="btn btn-primary mr-2" data-eventid={props.eventId} data-eventtitle={props.title} data-start={props.fullStarttime} data-end={props.fullEndtime} onClick={props.handleConfirm}>Confirm</button>
-                        <button type="button" className="btn btn-danger" data-eventid={props.eventId} onClick={props.handleDeny}>Deny</button>
-                    </div>
-                </div>
-        </div>
+        <Card className={classes.root} variant="outlined">
+            <CardContent>
+                <Typography variant="h5" gutterBottom>
+                    {props.title}
+                </Typography>
+                <Typography >
+                    {props.proposeUserFirstname ? `Request by: ${props.proposeUsername} (${props.proposeUserFirstname} ${props.proposeUserLastname})` : `Request by: ${props.proposeUsername}`}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                    Skill level: {props.proposeUserSkill ? `${props.proposeUserSkill}` : `n/a`}
+                </Typography>
+                <Typography variant="body2" component="p">
+                    Court Location: {props.eventLocation}
+                    <br />
+                    Date: {props.date}
+                    <br />
+                    Start Time: {props.starttime}
+                    <br />
+                    End Time: {props.endtime}
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button size="small" color="primary" data-eventid={props.eventId} data-eventtitle={props.title} data-start={props.fullStarttime} data-end={props.fullEndtime} onClick={props.handleConfirm}>Confirm</Button>
+                <Button size="small" color="secondary" data-eventid={props.eventId} onClick={props.handleDeny}>Deny</Button>
+            </CardActions>
+        </Card>
     );
 }
 
