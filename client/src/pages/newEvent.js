@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import NewEventForm from '../components/NewEventForm';
 import Nav from "../components/Nav";
 import moment from "moment";
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, TextField, makeStyles, Snackbar, Button } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 
 class NewEvent extends Component {
 
@@ -18,7 +19,9 @@ class NewEvent extends Component {
         eventLocation: "any",
         navValue: "tab-two",
         instructions: "Please enter the following information to set your availabilty",
-        courtList: ["any","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
+        courtList: ["any","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"],
+        openSnackbar: false,
+        severity: ""
     }
 
     componentDidMount() {
@@ -47,6 +50,14 @@ class NewEvent extends Component {
         });
     };
 
+    handleSnackbarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        this.setState({openSnackbar: false});
+    }
+
     handleFormSubmit = event => {
         event.preventDefault();
         let currentYear = this.state.newDate.substring(0, 4);
@@ -69,6 +80,7 @@ class NewEvent extends Component {
         // let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTime));
         // let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTime));
         console.log("start date: " + currentStartDate)
+        
         fetch("/api/calendar", {
             method: "POST",
             headers: {
@@ -96,7 +108,9 @@ class NewEvent extends Component {
                         endTime: this.state.endTime,
                         eventTitle: "Casual",
                         eventLocation: "any",
-                        instructions: "Your availability has been successfully updated!"
+                        instructions: "Your availability has been successfully updated!",
+                        openSnackbar: true,
+                        severity: "success"
                     });
                 } else {
                     this.setState({
@@ -109,7 +123,9 @@ class NewEvent extends Component {
                         endTime: "18:00",
                         eventTitle: "Casual",
                         eventLocation: "any",
-                        instructions: "Oops! Something went wrong. Please try again."
+                        instructions: "Oops! Something went wrong. Please try again.",
+                        openSnackbar: true,
+                        severity: "error"
                     });
                 }
             })
@@ -138,6 +154,9 @@ class NewEvent extends Component {
                         handleFormSubmit={this.handleFormSubmit}
                         courtList={this.state.courtList}
                         instructions={this.state.instructions}
+                        openSnackbar={this.state.openSnackbar}
+                        handleSnackbarClose={this.handleSnackbarClose}
+                        severity={this.state.severity}
                     />
                 {/* </Grid> */}
             </div>

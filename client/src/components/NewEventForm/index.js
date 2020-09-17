@@ -2,7 +2,10 @@ import React from "react";
 // import { makeStyles } from '@material-ui/core/styles';
 // import TextField from '@material-ui/core/TextField';
 // import { Container, Row, Col } from "../Grid";
-import { makeStyles, TextField, Button, Grid, Box, MenuItem, FormHelperText, FormControl, Select, InputLabel } from '@material-ui/core';
+import { makeStyles, TextField, Button, Grid, Box, MenuItem, FormHelperText, FormControl, Select, InputLabel, Snackbar } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -20,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
             width: '25ch',
+        },
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
         }
     },
     formControlAvailabilty: {
@@ -36,8 +43,13 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 function NewEventForm(props) {
     const classes = useStyles();
+
 
     return (
         <div>
@@ -84,10 +96,10 @@ function NewEventForm(props) {
                                     onChange={props.handleInputChange}
                                 >
                                     {props.courtList.map((event, i) => (
-                                    <MenuItem key={i} value={event}>
-                                        {event}
-                                    </MenuItem>
-                                ))}
+                                        <MenuItem key={i} value={event}>
+                                            {event}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                                 {/* <FormHelperText>Event Location</FormHelperText> */}
                             </FormControl>
@@ -162,16 +174,14 @@ function NewEventForm(props) {
                 </Grid>
 
             </Box>
+            <div>
+                <Snackbar open={props.openSnackbar} autoHideDuration={6000} onClose={props.handleSnackbarClose}>
+                    <Alert onClose={props.handleSnackbarClose} severity={props.severity}>
+                        {props.instructions}
+                    </Alert>
+                </Snackbar>
+            </div>
         </div>
-
-
-
-
-
-
-
-
-
 
     )
 }
