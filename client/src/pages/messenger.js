@@ -47,13 +47,15 @@ class Messenger extends Component {
                         message: "",
                         sender: "",
                         recipient: "",
-                        timeStamp: ""
+                        timeStamp: "",
+                        read: false
                     };
 
                     newMessage.message += message.message;
                     newMessage.sender += message.User.username;
                     newMessage.recipient += message.recipient.username;
                     newMessage.timeStampe += message.createdAt;
+                    newMessage.read += message.read;
                     messagesArr.push(newMessage);
                 })
                 this.setState({ allMessages: messagesArr });

@@ -32,7 +32,7 @@ export default function Nav(props) {
       <div className="upper-nav row" >
         <Grid container spacing={3} alignItems="center">
           <Grid item xs={3} sm={4}>
-            <Drawer update={props.update}/>
+            <Drawer />
           </Grid>
 
           <Grid item xs={6} sm={4} >
