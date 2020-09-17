@@ -17,11 +17,17 @@ function ProposeUserSearch(props) {
             </Grid>
             <form>
                 <Grid container spacing={3}>
-                    {/* <Grid item xs={12}>
+                    <Grid item xs={12}>
                         <Autocomplete
                             id="userSearch"
                             freesolo
-                            options={testUsernames}
+                            autoSelect
+                            name="userSearch"
+                            value={props.userSearch}
+                            onChange={props.handleNewChange}
+                            inputValue={props.eventValue}
+                            onInputChange={props.handleUsernameChange}
+                            options={props.userResults}
                             getOptionLabel={(option) => option.username}
                             renderOption={(option)=> <span>{option.username} ({option.firstname} {option.lastname})</span>}
                             renderInput={(params)=>(
@@ -33,9 +39,8 @@ function ProposeUserSearch(props) {
                                 ></TextField>
                             )}
                         />
-                    </Grid> */}
-                    <Grid item xs={12}>
-                    <div className="form-group">
+                    </Grid>
+                    {/* <div className="form-group">
                         <label for="userSearch">Username</label>
                         <input type="text" autoComplete="off" className="form-control" id="userSearch" name="userSearch" list="users"
                             onChange={props.handleUsernameChange}
@@ -46,8 +51,7 @@ function ProposeUserSearch(props) {
                                 <option value={event.username} key={i}>{event.username} ({event.firstname} {event.lastname})</option>
                             ))}
                         </datalist>
-                    </div>
-                    </Grid>
+                    </div> */}
                     <Grid item xs={12} md={6}>
                         <TextField
                         select

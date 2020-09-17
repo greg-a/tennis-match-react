@@ -11,6 +11,7 @@ import { Button, Container, Grid } from '@material-ui/core';
 class ProposeMatch extends Component {
 
     state = {
+        eventValue: "",
         newDate: "",
         startTime: "",
         endTime: "",
@@ -52,7 +53,8 @@ class ProposeMatch extends Component {
             endTimeHour: "",
             endTimeMinute: "",
             startTime: "",
-            endTime: ""
+            endTime: "",
+            eventValue: ""
         });
     };
 
@@ -73,12 +75,20 @@ class ProposeMatch extends Component {
         });
     };
 
-    handleUsernameChange = event => {
-        const { name, value } = event.target;
+    handleNewChange = (event, newValue) => {
+        console.log("THIS IS THE EVENT: " + newValue);
         this.setState({
-            [name]: value
+            userSearch: newValue
+        })
+    }
+
+    handleUsernameChange = (event, newValue) => {
+        
+        
+        this.setState({
+            eventValue: newValue
         }, () => {
-            let searchURL = "/api/username?username=" + this.state.userSearch;
+            let searchURL = "/api/username?username=" + this.state.eventValue;
             fetch(searchURL)
                 .then(res => res.json())
                 .then(res => {
@@ -88,7 +98,7 @@ class ProposeMatch extends Component {
                     }, () => {
                         for (let i = 0; i < (this.state.userResults).length; i++) {
                             let currentUserResults = this.state.userResults;
-                            if (this.state.userSearch === currentUserResults[i].username) {
+                            if (this.state.eventValue === currentUserResults[i].username) {
                                 let currentUserId = currentUserResults[i].id;
                                 this.setState({
                                     userId: currentUserId
@@ -143,8 +153,8 @@ class ProposeMatch extends Component {
 
         
         let currentProposeToUserId;
-        if (event.target.dataset.userid) {
-            currentProposeToUserId = event.target.dataset.userid;
+        if (event.currentTarget.dataset.userid) {
+            currentProposeToUserId = event.currentTarget.dataset.userid;
         } else {
             currentProposeToUserId = this.state.userId
         }
@@ -169,7 +179,8 @@ class ProposeMatch extends Component {
                     eventLocation: "",
                     eventTitle: "",
                     startTime: "",
-                    endTime: ""
+                    endTime: "",
+                    eventValue: ""
                 }
             )
         } else {
@@ -208,7 +219,8 @@ class ProposeMatch extends Component {
                             eventLocation: "",
                             eventTitle: "",
                             startTime: "",
-                            endTime: ""
+                            endTime: "",
+                            eventValue: ""
                         }
                     )
                 } else {
@@ -228,7 +240,8 @@ class ProposeMatch extends Component {
                             userId: "",
                             eventLocation: "",
                             startTime: "",
-                            endTime: ""
+                            endTime: "",
+                            eventValue: ""
                         }
                     )
                 }
@@ -284,9 +297,10 @@ class ProposeMatch extends Component {
             return (
                 <ProposeUserSearch 
                 userSearch={this.state.userSearch}
-                handleUsernameChange={this.handleUsernameChange}
+                handleNewChange={this.handleNewChange}
                 handleInputChange={this.handleInputChange}
                 handleProposeSubmit={this.handleProposeSubmit}
+                handleUsernameChange={this.handleUsernameChange}
                 userResults={this.state.userResults}
                 newDate={this.state.newDate}
                 startTimeHour={this.state.startTimeHour}
@@ -299,6 +313,8 @@ class ProposeMatch extends Component {
                 eventTitle={this.state.eventTitle}
                 startTime={this.state.startTime}
                 endTime={this.state.endTime}
+                handleNewInput={this.handleNewInput}
+                eventValue={this.state.eventValue}
                 />
             )
         } else if (this.state.subsectionShow === "date") {
@@ -331,7 +347,8 @@ class ProposeMatch extends Component {
             modalShow: false,
             subsectionShow: event.currentTarget.value,
             startTime: "",
-            endTime: ""
+            endTime: "",
+            eventValue: ""
         }, () => {
             if (this.state.subsectionShow === "player") {
                 this.setState({
