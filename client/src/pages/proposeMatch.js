@@ -394,22 +394,26 @@ class ProposeMatch extends Component {
 
                     {this.subsectionRender()}
                     
+                    <Grid container spacing={3} direction="column" alignItems="center" >
                     {this.state.searchResult.map((event, i) => (
-                        <ProposeCard
-                            key={i}
-                            title={event.title}
-                            userid={event.UserId}
-                            username={event.User.username}
-                            userFirstname={event.User.firstname}
-                            userLastname={event.User.lastname}
-                            userSkill={event.User.skilllevel}
-                            eventLocation={event.location}
-                            starttime={moment(event.start).format("hh:mm a")}
-                            endtime={moment(event.end).format("hh:mm a")}
-                            eventIndex={i}
-                            handleEventClick={this.handleEventClick}       
-                        />
+                        <Grid item xs={12}>
+                            <ProposeCard
+                                key={i}
+                                title={event.title}
+                                userid={event.UserId}
+                                username={event.User.username}
+                                userFirstname={event.User.firstname}
+                                userLastname={event.User.lastname}
+                                userSkill={event.User.skilllevel}
+                                eventLocation={event.location}
+                                starttime={moment(event.start).format("hh:mm a")}
+                                endtime={moment(event.end).format("hh:mm a")}
+                                eventIndex={i}
+                                handleEventClick={this.handleEventClick}       
+                            />
+                        </Grid>
                     ))}
+                    </Grid>
 
                     {this.state.clickedResult.map(event => (
                         <ProposeModal

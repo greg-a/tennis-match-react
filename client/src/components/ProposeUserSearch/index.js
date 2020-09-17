@@ -2,15 +2,9 @@ import React from "react";
 import { TextField, MenuItem, Button, Grid } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-const testUsernames = [
-    {username: "nacho", firstname: "Nacho", lastname: "Kat"},
-    {username: "perry", firstname: "", lastname: ""},
-    {username: "hartke10", firstname: "Connor", lastname: "Dougherty"}
-]
-
 function ProposeUserSearch(props) {
     return (
-        <div>
+        <Grid item xs={12}>
             <Grid item xs={12} style={{textAlign: "center"}}>
                 <h3>Propose Match to a Player</h3>
                 <p>{props.instructions}</p>
@@ -265,7 +259,7 @@ function ProposeUserSearch(props) {
                     </Grid>
                 </Grid>
             </form>
-        </div>
+        </Grid>
     )
 }
 
