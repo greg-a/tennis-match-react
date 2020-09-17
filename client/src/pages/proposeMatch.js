@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ProposeMatchForm from '../components/ProposeMatchForm';
 import ProposeUserSearch from '../components/ProposeUserSearch'
 import ProposeCard from '../components/ProposeCard';
+import ProposeMuiModal from '../components/MUIModal';
 import moment from 'moment';
 import { ProposeModal } from "../components/Modal";
 import Nav from "../components/Nav";
@@ -415,7 +416,12 @@ class ProposeMatch extends Component {
                     ))}
                     </Grid>
 
-                    {this.state.clickedResult.map(event => (
+                    <ProposeMuiModal
+                    show={this.state.modalShow}
+                    onHide={()=> this.setModalShow(false)}
+                    />
+
+                    {/* {this.state.clickedResult.map(event => (
                         <ProposeModal
                         show={this.state.modalShow}
                         onHide={() => this.setModalShow(false)} 
@@ -438,7 +444,7 @@ class ProposeMatch extends Component {
                         handleProposeSubmit={this.handleProposeSubmit}
                         courtList={this.state.courtList}
                         />
-                    ))}
+                    ))} */}
                     </Grid>
                 </Container>
             </div>
