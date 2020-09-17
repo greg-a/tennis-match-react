@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import io from 'socket.io-client';
 import Nav from "../components/Nav";
 import "./style.css";
+import { TextField, Icon, Button, makeStyles } from '@material-ui/core';
 
 class Messenger extends Component {
     state = {
@@ -107,7 +108,7 @@ class Messenger extends Component {
                 .catch(err => console.log(err));
 
             this.setState({ sendTo: { id: recipientId, username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(data => data.recipient === recipientUsername || data.sender === recipientUsername) });
-            
+
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
 
@@ -133,7 +134,7 @@ class Messenger extends Component {
             socket.on("active", data => {
                 const sendToUpdate = this.state.sendTo;
 
-                if(data === 2) {
+                if (data === 2) {
                     // sets recipient to active if both users are connected to room
                     sendToUpdate.active = true;
 
@@ -145,7 +146,7 @@ class Messenger extends Component {
 
                     this.setState({ sendTo: sendToUpdate })
                 }
-                
+
             });
             this.setState({ userSearch: "", users: [] })
         }
@@ -191,7 +192,7 @@ class Messenger extends Component {
     render() {
         return (
             <div>
-                <Nav update={this.state.newNotification}/>
+                <Nav update={this.state.newNotification} />
                 <div className="messenger-page">
                     <div className="container messenger-content">
                         <h2 className="messenger-page-header-text">Messenger</h2>
@@ -247,12 +248,21 @@ class Messenger extends Component {
                     </div>
 
                     <footer className="send-message-footer">
-                        <div className="input-group pr-5">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text">Message</span>
-                            </div>
-                            <textarea className="form-control" aria-label="With textarea" placeholder="Send message..." name="sendMessage" onChange={this.handleInputChange} onKeyDown={this.pushSendMessage} value={this.state.sendMessage}></textarea>
-                        </div>
+                        <TextField
+                            id="standard-basic"
+                            placeholder="Send message..."
+                            multiline
+                            className="message-field"
+                            onChange={this.handleInputChange}
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            endIcon={<Icon>send</Icon>}
+                            onClick={this.pushSendMessage}
+                        >
+                            Send
+                        </Button>
                     </footer>
                 </div>
 
