@@ -32,20 +32,28 @@ class Scheduler extends Component {
       .then(res => res.json())
       .then((dates) => {
         console.log(dates);
+        dates.forEach(date => {
+          if (moment(new Date).format("YYYYMMDD") > moment(date.end).format("YYYYMMDD")) {
+            date.eventStatus = "expired"
+          }
+        })
 
         dates.map(date => {
           switch (date.eventStatus) {
             case "available":
-              date.color = "blue";
+              date.color = "#3c70f2";
               break;
             case "confirmed":
-              date.color = "green";
+              date.color = "#00ff2a";
               break;
             case "proposed":
-              date.color = "blue";
+              date.color = "#f7f704";
               break;
             case "denied":
-              date.color = "red";
+              date.color = "#f73838";
+              break;
+            case "expired":
+              date.color = "#e0e0e0";
               break;
           }
 
