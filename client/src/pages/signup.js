@@ -1,6 +1,6 @@
 import React from "react";
 import SignupForm from "../components/SignupForm";
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, TextField, Box } from '@material-ui/core';
 
 class Signup extends React.Component {
     state = {
@@ -59,21 +59,24 @@ class Signup extends React.Component {
     render() {
         return (
             <div className="login-page">
-                <Grid container spacing={3} direction="column" alignItems="center" >
-                    <Grid item xs={12} sm={8} >
-                        <img src={require("../images/tennismatch.png")} width="100%" />
+                <Box display="flex" justifyContent="center">
+                    <Box maxWidth="800px">
+                        <Grid container spacing={3} direction="column" alignItems="center" >
+                            <Grid item xs={12} sm={8} >
+                                <img src={require("../images/tennismatch.png")} width="100%" />
 
-                    </Grid>
-                    <Grid item xs={12}>
-                        <SignupForm usernameValue={this.state.signUsername}
-                            passwordValue={this.state.signupPassword}
-                            emailValue={this.state.signupEmail}
-                            signupInstructions={this.state.signupInstructions}
-                            handleInputChange={this.handleInputChange}
-                            handleFormSubmit={this.handleFormSubmit} />
-                    </Grid>
-
-                </Grid>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <SignupForm usernameValue={this.state.signUsername}
+                                    passwordValue={this.state.signupPassword}
+                                    emailValue={this.state.signupEmail}
+                                    signupInstructions={this.state.signupInstructions}
+                                    handleInputChange={this.handleInputChange}
+                                    handleFormSubmit={this.handleFormSubmit} />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
             </div>
 
         );
