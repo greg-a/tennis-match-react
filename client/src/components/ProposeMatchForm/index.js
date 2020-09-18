@@ -1,25 +1,40 @@
 import React from "react";
+import { TextField, MenuItem, Button, Grid } from '@material-ui/core';
 
 function ProposeMatchForm(props) {
     return (
-        <div>
-            <h2>Search Date For Players</h2>
+        <Grid item xs={12}>
+            <Grid item xs={12} style={{textAlign: "center"}}>
+            <h3>Search Date For Players</h3>
+            </Grid>
             <form>
-                <div className="form-group">
-                    <label for="newDate">Date</label>
-                    <input type="date" className="form-control" id="newDate" name="newDate"
-                        onChange={props.handleInputChange}
-                        value={props.newDate}
-                    />
-                </div>
-                
-                <button type="button" className="btn"
-                    onClick={props.handleFormSubmit}
-                    >Search</button>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Date"
+                            id="newDate"
+                            name="newDate"
+                            type="date"
+                            value={props.newDate}
+                            onChange={props.handleInputChange}
+                            margin="normal"
+                            variant="outlined"
+                            InputLabelProps={{shrink: true}}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button variant="contained" color="primary" onClick={props.handleFormSubmit}>
+                            Search
+                        </Button>
+                    </Grid>
+                </Grid>
             </form>
-            <br />
-            <p>{props.instructions}</p>
-        </div>
+            <Grid item xs={12} style={{textAlign: "center"}}>
+                <p>{props.instructions}</p>
+            </Grid>
+        </Grid>
+        
     )
 }
 
