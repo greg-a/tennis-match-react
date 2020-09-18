@@ -6,6 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { SchedulerModal, EventDetailsModal } from "../components/Modal";
 import Nav from "../components/Nav";
 import moment from "moment";
+import CalendarEvent from "../utils/CalendarEvent";
 
 class Scheduler extends Component {
 
@@ -17,11 +18,13 @@ class Scheduler extends Component {
     dateModalShow: false,
     eventModalShow: false,
     thisDate: "",
-    navValue: "tab-three"
+    navValue: "tab-three",
+    calendarEvents: []
   }
 
   componentDidMount() {
     this.getDates();
+    
   }
 
   getDates = () => {
@@ -29,7 +32,39 @@ class Scheduler extends Component {
       .then(res => res.json())
       .then((dates) => {
         console.log(dates);
-        this.setState({ savedDates: dates })
+        dates.forEach(date => {
+          if (moment(new Date).format("YYYYMMDD") > moment(date.end).format("YYYYMMDD")) {
+            date.eventStatus = "expired"
+          }
+        })
+
+        dates.map(date => {
+          switch (date.eventStatus) {
+            case "available":
+              date.color = "#3c70f2";
+              break;
+            case "confirmed":
+              date.color = "#00ff2a";
+              break;
+            case "proposed":
+              date.color = "#f7f704";
+              break;
+            case "denied":
+              date.color = "#f73838";
+              break;
+            case "expired":
+              date.color = "#e0e0e0";
+              break;
+          }
+
+        })        
+        let tempArr = [];
+
+        dates.forEach(date => {
+          tempArr.push(new CalendarEvent(date.id, date.title, date.start, date.color))
+        });
+
+        this.setState({ savedDates: dates, calendarEvents: tempArr });
       })
       .catch(err => console.log(err));
   }
@@ -57,12 +92,12 @@ class Scheduler extends Component {
       if ((date.id == arg.event._def.publicId) && date.secondUser) {
         selectedEventArr = ({ selectedEvent: date, selectedFirstUser: date.User, selectedSecondUser: date.secondUser })
       }
-      else if (date.id == arg.event._def.publicId){
-        selectedEventArr = ({ selectedEvent: date, selectedFirstUser: date.User, selectedSecondUser: {username: 'none', firstname: "", lastname: "" }})
+      else if (date.id == arg.event._def.publicId) {
+        selectedEventArr = ({ selectedEvent: date, selectedFirstUser: date.User, selectedSecondUser: { username: 'none', firstname: "", lastname: "" } })
       }
     });
 
-    this.setState(  selectedEventArr )
+    this.setState(selectedEventArr)
   };
 
   deleteEvent = () => {
@@ -75,7 +110,7 @@ class Scheduler extends Component {
     })
     this.setState({ eventModalShow: false });
     this.getDates();
-    
+
   }
 
   render() {
@@ -89,13 +124,15 @@ class Scheduler extends Component {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             dateClick={this.handleDateClick}
             initialView="dayGridMonth"
-            events={this.state.savedDates}
+            events={this.state.calendarEvents}
+            // events={this.state.savedDates}
             headerToolbar={{
               left: 'prev,next today',
               center: 'title',
               right: 'dayGridMonth,timeGridWeek,timeGridDay'
             }}
             eventClick={this.handleEventClick}
+          // eventColor="#fff600"
           />
           <SchedulerModal
             show={this.state.dateModalShow}

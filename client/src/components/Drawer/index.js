@@ -21,6 +21,7 @@ import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { withRouter } from "react-router-dom";
 import Badge from '@material-ui/core/Badge';
+import NotificationUpdate from '../../utils/NotificationUpdate';
 
 const useStyles = makeStyles({
   list: {
@@ -48,8 +49,7 @@ const Drawer = (props) => {
   const [notificationState, setNotificationState] = useState({
     messages: 0,
     matches: 0,
-    notifications: false,
-    update: props.update
+    notifications: false
   })
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -151,6 +151,7 @@ const Drawer = (props) => {
 
   return (
     <div>
+
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)} >

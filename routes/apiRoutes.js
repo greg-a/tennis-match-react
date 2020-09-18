@@ -420,15 +420,18 @@ module.exports = function (app) {
     app.get("/api/messages", function (req, res) {
         if (req.session.loggedin) {
             db.Messages.findAll({
+                attributes: ["id", "message", "read", "createdAt", ["UserId", "senderId"], ["secondUser", "recipientId"]],
                 where: {
                     [Op.or]: [
                         { UserId: req.session.userID },
                         { secondUser: req.session.userID }
                     ],
                 },
+                limit: 100, 
+                order: [["createdAt", "DESC"]],
                 include: [
-                    { model: db.User },
-                    { model: db.User, as: "recipient" }
+                    { model: db.User, attributes: ["username", "firstname", "lastname"] },
+                    { model: db.User, as: "recipient", attributes: ["username", "firstname", "lastname"] }
                 ]
             })
                 .then(function (results) {
