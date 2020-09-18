@@ -5,10 +5,24 @@ import ProposeCard from '../components/ProposeCard';
 import moment from 'moment';
 import { ProposeModal } from "../components/Modal";
 import Nav from "../components/Nav";
-import { Button, Container, Grid } from '@material-ui/core';
+import { Button, Container, Grid, Snackbar, makeStyles } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+}));
 
 class ProposeMatch extends Component {
+    
 
     state = {
         eventValue: "",
@@ -74,6 +88,14 @@ class ProposeMatch extends Component {
             [name]: value
         });
     };
+
+    handleSnackbarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        this.setState({openSnackbar: false});
+    }
 
     handleNewChange = (event, newValue) => {
         console.log("THIS IS THE EVENT: " + newValue);
@@ -180,7 +202,9 @@ class ProposeMatch extends Component {
                     eventTitle: "",
                     startTime: "",
                     endTime: "",
-                    eventValue: ""
+                    eventValue: "",
+                    openSnackbar: true,
+                    severity: "error"
                 }
             )
         } else {
@@ -220,7 +244,9 @@ class ProposeMatch extends Component {
                             eventTitle: "",
                             startTime: "",
                             endTime: "",
-                            eventValue: ""
+                            eventValue: "",
+                            openSnackbar: true,
+                            severity: "success"
                         }
                     )
                 } else {
@@ -241,7 +267,9 @@ class ProposeMatch extends Component {
                             eventLocation: "",
                             startTime: "",
                             endTime: "",
-                            eventValue: ""
+                            eventValue: "",
+                            openSnackbar: true,
+                            severity: "error"
                         }
                     )
                 }
@@ -286,9 +314,11 @@ class ProposeMatch extends Component {
             searchArr[i].endIntArr = endIntArr;
         }
         if (searchArr.length===0) {
-            this.setState({ searchResult: searchArr, instructions: "No availibility on this date." });
+            this.setState({ searchResult: searchArr, instructions: "No availibility on this date.", openSnackbar: true,
+            severity: "info" });
         } else {
-            this.setState({ searchResult: searchArr, instructions: "Pick an availability and propose a time." });
+            this.setState({ searchResult: searchArr, instructions: "Pick an availability and propose a time.", openSnackbar: true,
+            severity: "info" });
         }
     }
 
@@ -315,6 +345,9 @@ class ProposeMatch extends Component {
                 endTime={this.state.endTime}
                 handleNewInput={this.handleNewInput}
                 eventValue={this.state.eventValue}
+                openSnackbar={this.state.openSnackbar}
+                handleSnackbarClose={this.handleSnackbarClose}
+                severity={this.state.severity}
                 />
             )
         } else if (this.state.subsectionShow === "date") {
@@ -324,6 +357,9 @@ class ProposeMatch extends Component {
                     newDate={this.state.newDate}
                     instructions={this.state.instructions}
                     handleFormSubmit={this.handleFormSubmit}
+                    openSnackbar={this.state.openSnackbar}
+                    handleSnackbarClose={this.handleSnackbarClose}
+                    severity={this.state.severity}
                 />
             )
         }
@@ -348,11 +384,13 @@ class ProposeMatch extends Component {
             subsectionShow: event.currentTarget.value,
             startTime: "",
             endTime: "",
-            eventValue: ""
+            eventValue: "",
+            openSnackbar: false,
+            severity: ""    
         }, () => {
             if (this.state.subsectionShow === "player") {
                 this.setState({
-                    instructions: "Type in a player's name and fill out the form below."
+                    instructions: "Type in a player's name and fill out the form below.",
                 })
             } else if (this.state.subsectionShow === "date") {
                 this.setState({
@@ -367,6 +405,7 @@ class ProposeMatch extends Component {
 
 
     render() {
+        
         return (
             <div>
                 <Nav />
@@ -437,6 +476,14 @@ class ProposeMatch extends Component {
                     ))}
                     </Grid>
                 </Container>
+
+                <div>
+                <Snackbar open={this.state.openSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
+                    <Alert onClose={this.handleSnackbarClose} severity={this.state.severity}>
+                        {this.state.instructions}
+                    </Alert>
+                </Snackbar>
+                </div>
             </div>
         )
     }
