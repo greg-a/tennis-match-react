@@ -336,11 +336,11 @@ class Messenger extends Component {
                                         {message.senderId == this.state.user.userid ?
                                             <ListItemText
                                                 primary={`Me: ${message.message}`}
-                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.creadAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date()).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                             /> :
                                             <ListItemText
                                                 primary={`${message.User.username}: ${message.message}`}
-                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.creadAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date()).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                             />
                                         }
                                     </ListItem>
