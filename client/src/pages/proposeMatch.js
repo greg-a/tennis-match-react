@@ -34,8 +34,10 @@ class ProposeMatch extends Component {
     };
 
     getDate = () => {
-        const currentDate = moment(new Date).format("YYYY-MM-DD");
+        const currentDate = moment(new Date()).format("YYYY-MM-DD");
         const selectedDate = localStorage.getItem("selectedDate");
+
+        console.log("THIS IS CURRENT DATE: " + currentDate)
 
         if (selectedDate > currentDate) {
             this.setState({ newDate: selectedDate })
@@ -279,8 +281,18 @@ class ProposeMatch extends Component {
                 j <= (parseInt(moment(searchArr[i].end).format("HH"))
                     - parseInt(moment(searchArr[i].start).format("HH"))); j++
             ) {
-                startIntArr.push(j + parseInt(moment(searchArr[i].start).format("HH")));
-                endIntArr.push(parseInt(moment(searchArr[i].end).format("HH")) - j);
+                startIntArr.push(
+                    {
+                    value: j + parseInt(moment(searchArr[i].start).format("HH")),
+                    display: moment("2020-09-18 "+(j + parseInt(moment(searchArr[i].start).format("HH")))+":00:00").format("h (a)")
+                    }
+                    );
+                endIntArr.push(
+                    {
+                    value: parseInt(moment(searchArr[i].end).format("HH")) - j,
+                    display: moment("2020-09-18 "+(parseInt(moment(searchArr[i].end).format("HH")) - j)+":00:00").format("h (a)")
+                    }
+                    );
 
             }
             searchArr[i].startIntArr = startIntArr;
@@ -349,7 +361,8 @@ class ProposeMatch extends Component {
             subsectionShow: event.currentTarget.value,
             startTime: "",
             endTime: "",
-            eventValue: ""
+            eventValue: "",
+            defaultEventLocation: ""
         }, () => {
             if (this.state.subsectionShow === "player") {
                 this.setState({
@@ -416,10 +429,31 @@ class ProposeMatch extends Component {
                     ))}
                     </Grid>
 
-                    <ProposeMuiModal
-                    show={this.state.modalShow}
-                    onHide={()=> this.setModalShow(false)}
-                    />
+                    {this.state.clickedResult.map(event => (
+                        <ProposeMuiModal
+                            show={this.state.modalShow}
+                            onHide={()=> this.setModalShow(false)}
+                            title={event.title}
+                            userid={event.UserId}
+                            username={event.User.username}
+                            userFirstname={event.User.firstname}
+                            userLastname={event.User.lastname}
+                            eventLocation={this.state.eventLocation}
+                            eventLocationTwo={event.location}
+                            starttime={moment(event.start).format("hh:mm a")}
+                            endtime={moment(event.end).format("hh:mm a")}
+                            startIntArr={event.startIntArr}
+                            endIntArr={event.endIntArr}
+                            startTimeHour={this.state.startTimeHour}
+                            startTimeMinute={this.state.startTimeMinute}
+                            endTimeHour={this.state.endTimeHour}
+                            endTimeMinute={this.state.endTimeMinute}
+                            handleInputChange={this.handleInputChange}
+                            handleProposeSubmit={this.handleProposeSubmit}
+                            courtList={this.state.courtList}
+                            defaultEventLocation={this.state.defaultEventLocation}
+                        />
+                    ))}
 
                     {/* {this.state.clickedResult.map(event => (
                         <ProposeModal
