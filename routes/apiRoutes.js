@@ -427,7 +427,7 @@ module.exports = function (app) {
                         { secondUser: req.session.userID }
                     ],
                 },
-                limit: 20, 
+                limit: 100, 
                 order: [["createdAt", "DESC"]],
                 include: [
                     { model: db.User, attributes: ["username", "firstname", "lastname"] },

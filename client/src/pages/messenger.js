@@ -4,6 +4,7 @@ import Nav from "../components/Nav";
 import "./style.css";
 import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import moment from "moment";
 
 class Messenger extends Component {
     state = {
@@ -109,6 +110,7 @@ class Messenger extends Component {
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {
                 console.log(data);
+                data.createdAt = new Date;
 
                 let allMessages = this.state.allMessages;
                 allMessages.unshift(data);
@@ -157,41 +159,40 @@ class Messenger extends Component {
 
     // sends message to socket server
     pushSendMessage = event => {
-        event.preventDefault();
-        // if (event.key === "Enter") {
-        event.preventDefault();
-        const socket = io();
+        if ((event.keyCode == 13 && !event.shiftKey) || event.type === "click") {
+            event.preventDefault();
+            const socket = io();
 
-        socket.emit("input", {
-            User: {
-                username: this.state.user.username
-            },
-            message: this.state.sendMessage,
-            room: this.state.room,
-            senderId: this.state.user.userid,
-            recipientId: this.state.sendTo.id,
-            recipient: this.state.sendTo
-        });
-
-        fetch("/api/message", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+            socket.emit("input", {
+                User: {
+                    username: this.state.user.username
+                },
                 message: this.state.sendMessage,
-                secondUser: this.state.sendTo.id,
-                read: this.state.sendTo.active
-            })
-        })
-            .then(res => {
-                console.log("Your message was sent!");
-                console.log(res);
-            })
-            .catch(err => console.log(err));
+                room: this.state.room,
+                senderId: this.state.user.userid,
+                recipientId: this.state.sendTo.id,
+                recipient: this.state.sendTo
+            });
 
-        this.setState({ sendMessage: "" });
-        // }
+            fetch("/api/message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: this.state.sendMessage,
+                    secondUser: this.state.sendTo.id,
+                    read: this.state.sendTo.active
+                })
+            })
+                .then(res => {
+                    console.log("Your message was sent!");
+                    console.log(res);
+                })
+                .catch(err => console.log(err));
+
+            this.setState({ sendMessage: "" });
+        }
     };
 
     handleUsernameChange = (event, newValue) => {
@@ -298,7 +299,7 @@ class Messenger extends Component {
                             renderOption={(option) => <span>{option.username} ({option.firstname} {option.lastname})</span>}
                             renderInput={(params) => (
                                 <TextField {...params}
-                                    label="Username"
+                                    label="User Search"
                                     margin="normal"
                                     variant="outlined"
                                 ></TextField>
@@ -307,7 +308,7 @@ class Messenger extends Component {
                     </Grid>
                 </Grid>
                 <Grid container justify="space-evenly">
-                    <Grid xs={3} item={true}>
+                    <Grid xs={2} item={true}>
                         <List>
                             {this.state.conversations.map(conversation => (
                                 <Paper>
@@ -326,7 +327,7 @@ class Messenger extends Component {
                             ))}
                         </List>
                     </Grid>
-                    <Grid xs={6} item={true}>
+                    <Grid xs={7} item={true}>
                         <List>
                             {this.state.showMessages.map(message => (
                                 <Paper>
@@ -335,9 +336,11 @@ class Messenger extends Component {
                                         {message.senderId == this.state.user.userid ?
                                             <ListItemText
                                                 primary={`Me: ${message.message}`}
+                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.creadAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                             /> :
                                             <ListItemText
                                                 primary={`${message.User.username}: ${message.message}`}
+                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.creadAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                             />
                                         }
                                     </ListItem>
@@ -356,6 +359,7 @@ class Messenger extends Component {
                         className="message-field"
                         onChange={this.handleInputChange}
                         value={this.state.sendMessage}
+                        onKeyDown={this.pushSendMessage}
                     />
                     <Button
                         variant="contained"
