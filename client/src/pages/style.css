@@ -31,6 +31,10 @@
     padding: 20px;
     background-color: #91e631;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
 }
 
 .message-from-me {
@@ -50,5 +54,7 @@
     height: 100%;
 }
 
-
+.message-field {
+    width: 20%
+}
 
