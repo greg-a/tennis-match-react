@@ -101,7 +101,7 @@ class Messenger extends Component {
             })
                 .catch(err => console.log(err));
 
-            this.setState({ sendTo: { id: recipientId, username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
+            this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
@@ -109,20 +109,26 @@ class Messenger extends Component {
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {
                 console.log(data);
-                let socketMessage = {
-                    message: data.message,
-                    sender: data.user,
-                    recipient: data.recipient
-                };
 
-                let showMessages = this.state.showMessages;
-                showMessages.push(socketMessage);
+                let allMessages = this.state.allMessages;
+                allMessages.unshift(data);
 
-                this.setState({ showMessages: showMessages })
+                let newArr = [];
+                let existing = [];
+                allMessages.forEach(message => {
+                    if (!(existing.includes(message.senderId) && existing.includes(message.recipientId))) {
+                        newArr.push(message);
+                        existing.push(message.senderId, message.recipientId)
+                    };
+                });
+
+                this.setState({ allMessages: allMessages, showMessages: allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId), conversations: newArr });
+
 
                 return () => {
                     socket.disconnect()
                 };
+
             });
             //listens for active user
             socket.on("active", data => {
@@ -151,15 +157,20 @@ class Messenger extends Component {
 
     // sends message to socket server
     pushSendMessage = event => {
+        event.preventDefault();
         // if (event.key === "Enter") {
         event.preventDefault();
         const socket = io();
 
         socket.emit("input", {
-            user: this.state.user.username,
+            User: {
+                username: this.state.user.username
+            },
             message: this.state.sendMessage,
             room: this.state.room,
-            recipient: this.state.sendTo.username
+            senderId: this.state.user.userid,
+            recipientId: this.state.sendTo.id,
+            recipient: this.state.sendTo
         });
 
         fetch("/api/message", {
@@ -183,7 +194,7 @@ class Messenger extends Component {
         // }
     };
 
-    handleUsernameChange = (event, newValue) => {        
+    handleUsernameChange = (event, newValue) => {
         this.setState({
             userSearch: newValue
         }, () => {
@@ -211,23 +222,92 @@ class Messenger extends Component {
     };
 
     handleNewChange = (event, newValue) => {
-        console.log("THIS IS THE EVENT: " + JSON.stringify(newValue));
-        this.setState({
-            sendTo: newValue
-        })
+        if (newValue.id !== this.state.sendTo.id) {
+            console.log("newValue id: " + newValue.id)
+            const room = this.createRoom(newValue.id, this.state.user.userid);
+            const socket = io();
+            const username = this.state.user.username
+
+            fetch("/api/messages/read/" + newValue.id, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(res => {
+                console.log(res);
+            })
+                .catch(err => console.log(err));
+
+            this.setState({ sendTo: { firstname: newValue.firstname, lastname: newValue.lastname, username: newValue.username, id: newValue.id, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == newValue.id || message.senderId == newValue.id) });
+
+            //sends server username and name of room
+            socket.emit("joinRoom", { username, room });
+
+            //listens for new messages being emitted by the socket server
+            socket.on("output", data => {
+                console.log(data);
+
+                let showMessages = this.state.showMessages;
+                showMessages.push(data);
+
+                this.setState({ showMessages: showMessages })
+
+                return () => {
+                    socket.disconnect()
+                };
+            });
+            //listens for active user
+            socket.on("active", data => {
+                const sendToUpdate = this.state.sendTo;
+
+                if (data === 2) {
+                    // sets recipient to active if both users are connected to room
+                    sendToUpdate.active = true;
+
+                    this.setState({ sendTo: sendToUpdate })
+                }
+                else {
+                    // sets recipient to inactive if other user is not connected
+                    sendToUpdate.active = false;
+
+                    this.setState({ sendTo: sendToUpdate })
+                }
+
+            });
+            this.setState({ userSearch: "", users: [] })
+        }
     }
 
     render() {
         return (
             <div>
                 <Nav update={this.state.newNotification} />
-                {this.state.showMessages.length === 0 ?
-                    <h2 className="messenger-page-header-text">Messenger</h2>
-                    :
-                    <h2 className="messenger-page-header-text">{this.state.sendTo.username}</h2>
-                }
+                <Grid container justify="center">
+                    <Grid xs={10}>
+                        <Autocomplete
+                            id="userSearch"
+                            freesolo
+                            autoSelect
+                            name="userSearch"
+                            value={this.state.sendTo}
+                            onChange={this.handleNewChange}
+                            inputValue={this.state.userSearch}
+                            onInputChange={this.handleUsernameChange}
+                            options={this.state.users}
+                            getOptionLabel={(option) => option.username}
+                            renderOption={(option) => <span>{option.username} ({option.firstname} {option.lastname})</span>}
+                            renderInput={(params) => (
+                                <TextField {...params}
+                                    label="Username"
+                                    margin="normal"
+                                    variant="outlined"
+                                ></TextField>
+                            )}
+                        />
+                    </Grid>
+                </Grid>
                 <Grid container justify="space-evenly">
-                    <Grid xs={2} item={true}>
+                    <Grid xs={3} item={true}>
                         <List>
                             {this.state.conversations.map(conversation => (
                                 <Paper>
@@ -266,28 +346,7 @@ class Messenger extends Component {
                             ))}
                         </List>
                     </Grid>
-                    <Grid xs={2} item={true}>
-                        <Autocomplete
-                            id="userSearch"
-                            freesolo
-                            autoSelect
-                            name="userSearch"
-                            value={this.state.sendTo}
-                            onChange={this.handleNewChange}
-                            inputValue={this.state.userSearch}
-                            onInputChange={this.handleUsernameChange}
-                            options={this.state.users}
-                            getOptionLabel={(option) => option.username}
-                            renderOption={(option) => <span>{option.username} ({option.firstname} {option.lastname})</span>}
-                            renderInput={(params) => (
-                                <TextField {...params}
-                                    label="Username"
-                                    margin="normal"
-                                    variant="outlined"
-                                ></TextField>
-                            )}
-                        />
-                    </Grid>
+
                 </Grid>
                 <footer className="send-message-footer">
                     <TextField
@@ -296,6 +355,7 @@ class Messenger extends Component {
                         multiline
                         className="message-field"
                         onChange={this.handleInputChange}
+                        value={this.state.sendMessage}
                     />
                     <Button
                         variant="contained"
