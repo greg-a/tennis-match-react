@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import FullCalendar, { formatDate } from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import { SchedulerModal, EventDetailsModal } from "../components/Modal";
 import Nav from "../components/Nav";
 import moment from "moment";
 import CalendarEvent from "../utils/CalendarEvent";
+import Container from '@material-ui/core/Container';
 
 class Scheduler extends Component {
 
@@ -119,7 +120,7 @@ class Scheduler extends Component {
         <Nav
           value={this.state.navValue}
         />
-        <div className="container">
+        <Container maxWidth="md">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             dateClick={this.handleDateClick}
@@ -155,8 +156,8 @@ class Scheduler extends Component {
             date={moment(this.state.selectedEvent.start).format("MM/DD/YYYY")}
             handleDelete={this.deleteEvent}
           />
+        </Container>
         </div>
-      </div>
 
     )
   }
