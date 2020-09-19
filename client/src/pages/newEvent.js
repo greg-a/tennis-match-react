@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import NewEventForm from '../components/NewEventForm';
+import { NewEventForm, NewEventSnackbar } from '../components/NewEventForm';
 import Nav from "../components/Nav";
 import moment from "moment";
-import { Grid, TextField, makeStyles, Snackbar, Button } from '@material-ui/core';
+import { Grid, TextField, makeStyles, Snackbar, Button, Container } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
 class NewEvent extends Component {
@@ -15,8 +15,8 @@ class NewEvent extends Component {
         // endTimeMinute: "00",
         startTime: "17:00",
         endTime: "18:00",
-        eventTitle: "Casual",
-        eventLocation: "any",
+        eventTitle: "",
+        eventLocation: "",
         navValue: "tab-two",
         instructions: "Please enter the following information to set your availabilty",
         courtList: ["any","Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"],
@@ -29,7 +29,7 @@ class NewEvent extends Component {
     }
 
     getDate = () => {
-        const currentDate = moment(new Date).format("YYYY-MM-DD");
+        const currentDate = moment(new Date()).format("YYYY-MM-DD");
         const selectedDate = localStorage.getItem("selectedDate");
 
         if (selectedDate > currentDate) {
@@ -81,55 +81,74 @@ class NewEvent extends Component {
         // let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTime));
         console.log("start date: " + currentStartDate)
         
-        fetch("/api/calendar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title: this.state.eventTitle,
-                start: currentStartDate,
-                end: currentEndDate,
-                eventStatus: "available",
-                location: this.state.eventLocation
+        if (this.state.eventTitle==="" || this.state.eventLocation==="") {
+            this.setState({
+                newDate: "",
+                // startTimeHour: "00",
+                // startTimeMinute: "00",
+                // endTimeHour: "00",
+                // endTimeMinute: "00",
+                startTime: "17:00",
+                endTime: "18:00",
+                eventTitle: "",
+                eventLocation: "",
+                instructions: "Oops! Something went wrong. Please try again.",
+                openSnackbar: true,
+                severity: "error"
+            });
+        } else {
+            fetch("/api/calendar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title: this.state.eventTitle,
+                    start: currentStartDate,
+                    end: currentEndDate,
+                    eventStatus: "available",
+                    location: this.state.eventLocation
+                })
             })
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res.statusString);
-                if (res.statusString === "eventCreated") {
-                    this.setState({
-                        newDate: "",
-                        // startTimeHour: "00",
-                        // startTimeMinute: "00",
-                        // endTimeHour: "00",
-                        // endTimeMinute: "00",
-                        startTime: this.state.startTime,
-                        endTime: this.state.endTime,
-                        eventTitle: "Casual",
-                        eventLocation: "any",
-                        instructions: "Your availability has been successfully updated!",
-                        openSnackbar: true,
-                        severity: "success"
-                    });
-                } else {
-                    this.setState({
-                        newDate: "",
-                        // startTimeHour: "00",
-                        // startTimeMinute: "00",
-                        // endTimeHour: "00",
-                        // endTimeMinute: "00",
-                        startTime: "17:00",
-                        endTime: "18:00",
-                        eventTitle: "Casual",
-                        eventLocation: "any",
-                        instructions: "Oops! Something went wrong. Please try again.",
-                        openSnackbar: true,
-                        severity: "error"
-                    });
-                }
-            })
-            .catch(err => console.log(err));
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res.statusString);
+                    if (res.statusString === "eventCreated") {
+                        this.setState({
+                            newDate: "",
+                            // startTimeHour: "00",
+                            // startTimeMinute: "00",
+                            // endTimeHour: "00",
+                            // endTimeMinute: "00",
+                            startTime: this.state.startTime,
+                            endTime: this.state.endTime,
+                            eventTitle: "",
+                            eventLocation: "",
+                            instructions: "Your availability has been successfully updated!",
+                            openSnackbar: true,
+                            severity: "success"
+                        });
+                    } else {
+                        this.setState({
+                            newDate: "",
+                            // startTimeHour: "00",
+                            // startTimeMinute: "00",
+                            // endTimeHour: "00",
+                            // endTimeMinute: "00",
+                            startTime: "17:00",
+                            endTime: "18:00",
+                            eventTitle: "",
+                            eventLocation: "",
+                            instructions: "Oops! Something went wrong. Please try again.",
+                            openSnackbar: true,
+                            severity: "error"
+                        });
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+
+        
     }
 
 
@@ -139,6 +158,8 @@ class NewEvent extends Component {
                 <Nav
                     value={this.state.navValue}
                 />
+                <Container fixed>
+                    <Grid container spacing={3}>
                 {/* <Grid container spacing={3} direction="column" alignItems="center" > */}
                     <NewEventForm
                         handleInputChange={this.handleInputChange}
@@ -158,6 +179,14 @@ class NewEvent extends Component {
                         handleSnackbarClose={this.handleSnackbarClose}
                         severity={this.state.severity}
                     />
+                    </Grid>
+                </Container>
+                <NewEventSnackbar 
+                    instructions={this.state.instructions}
+                    openSnackbar={this.state.openSnackbar}
+                    handleSnackbarClose={this.handleSnackbarClose}
+                    severity={this.state.severity}
+                />
                 {/* </Grid> */}
             </div>
         )

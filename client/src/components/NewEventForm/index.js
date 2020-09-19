@@ -7,183 +7,133 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
 
-const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 200,
-        marginTop: "10px",
-        marginBottom: "10px"
-    },
-    root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: '25ch',
-        },
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        }
-    },
-    formControlAvailabilty: {
-        margin: theme.spacing(1),
-        minWidth: 180,
-    },
-    formControlLocation: {
-        margin: theme.spacing(1),
-        minWidth: 300,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-
-}));
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function NewEventForm(props) {
-    const classes = useStyles();
-
+export function NewEventForm(props) {
 
     return (
-        <div>
-            <Box marginTop="10px" textAlign="center">
-                <Grid container spacing={3}>
-
-                    <Grid item xs={12}>
-                        <h2>Availability</h2>
-                        <div><p>{props.instructions}</p></div>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Box display="flex" justifyContent="center" alignItems="center">
-
-                            <FormControl className={classes.formControlAvailabilty}>
-                                <InputLabel id="availability-type">Availability Type</InputLabel>
-                                <Select
-                                    id="eventTitle"
-                                    select
-                                    value={props.eventTitle}
-                                    name="eventTitle"
-                                    onChange={props.handleInputChange}
-                                >
-                                    <MenuItem key="Casual" value="Casual">
-                                        Casual
-                                    </MenuItem>
-                                    <MenuItem key="Casual" value="Competitive">
-                                        Competitive
-                                    </MenuItem>
-                                </Select>
-                                {/* <FormHelperText>Availability Type</FormHelperText> */}
-                            </FormControl>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={8}>
-                        <Box display="flex" justifyContent="center" alignItems="center">
-
-                            <FormControl className={classes.formControlLocation}>
-                                <InputLabel id="event-location">Event Location</InputLabel>
-                                <Select
-                                    id="eventLocation"
-                                    select
-                                    value={props.eventLocation}
-                                    name="eventLocation"
-                                    onChange={props.handleInputChange}
-                                >
-                                    {props.courtList.map((event, i) => (
-                                        <MenuItem key={i} value={event}>
-                                            {event}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {/* <FormHelperText>Event Location</FormHelperText> */}
-                            </FormControl>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Box display="flex" justifyContent="center" alignItems="center">
-                            <form className={classes.container} noValidate>
-                                <TextField
-                                    id="newDate"
-                                    name="newDate"
-                                    label="Date"
-                                    type="date"
-                                    // defaultValue="2017-05-24"
-                                    value={props.newDate}
-                                    onChange={props.handleInputChange}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </form>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Box display="flex" justifyContent="center" alignItems="center">
-                            <form className={classes.container} noValidate>
-                                <TextField
-                                    id="startTime"
-                                    name="startTime"
-                                    label="Start Time"
-                                    type="time"
-                                    // defaultValue="17:00"
-                                    value={props.startTime}
-                                    onChange={props.handleInputChange}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300, // 5 min
-                                    }}
-                                />
-                            </form>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Box display="flex" justifyContent="center" alignItems="center">
-                            <form className={classes.container} noValidate>
-                                <TextField
-                                    id="endTime"
-                                    name="endTime"
-                                    label="End Time"
-                                    type="time"
-                                    // defaultValue="18:30"
-                                    value={props.endTime}
-                                    onChange={props.handleInputChange}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    inputProps={{
-                                        step: 300, // 5 min
-                                    }}
-                                />
-                            </form>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button variant="contained" id="login-button" onClick={props.handleFormSubmit}>Submit</Button>
-                    </Grid>
+            <Grid item xs={12}>
+                <Grid item xs={12} style={{textAlign: "center"}}>
+                    <h2>Availability</h2>
+                    <div><p>{props.instructions}</p></div>
                 </Grid>
-
-            </Box>
-            <div>
-                <Snackbar open={props.openSnackbar} autoHideDuration={6000} onClose={props.handleSnackbarClose}>
-                    <Alert onClose={props.handleSnackbarClose} severity={props.severity}>
-                        {props.instructions}
-                    </Alert>
-                </Snackbar>
-            </div>
-        </div>
+                <form>
+                <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                    select
+                    label="Play Type"
+                    id="eventTitle"
+                    name="eventTitle"
+                    value={props.eventTitle}
+                    onChange={props.handleInputChange}
+                    margin="normal"
+                    variant="outlined"
+                    placeholder="Play Type"
+                    fullWidth
+                    >
+                        <MenuItem value="Casual">Casual</MenuItem>
+                        <MenuItem value="Competitive">Competitive</MenuItem>
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                    select
+                    label="Court Location"
+                    id="eventLocation"
+                    name="eventLocation"
+                    value={props.eventLocation}
+                    onChange={props.handleInputChange}
+                    margin="normal"
+                    variant="outlined"
+                    placeholder="Court Location"
+                    fullWidth
+                    >
+                        {props.courtList.map((event, i) => (
+                            <MenuItem key={i} value={event}>
+                                {event}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        label="Date"
+                        id="newDate"
+                        name="newDate"
+                        type="date"
+                        value={props.newDate}
+                        onChange={props.handleInputChange}
+                        margin="normal"
+                        variant="outlined"
+                        InputLabelProps={{shrink: true}}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                    <TextField
+                        id="startTime"
+                        name="startTime"
+                        label="Start Time"
+                        type="time"
+                        // defaultValue="17:00"
+                        value={props.startTime}
+                        onChange={props.handleInputChange}
+                        margin="normal"
+                        variant="outlined"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        inputProps={{
+                            step: 300, // 5 min
+                        }}
+                        fullWidth
+                    />
+                </Grid> 
+                <Grid item xs={12} sm={6} md={3}>
+                    <TextField
+                        id="endTime"
+                        name="endTime"
+                        label="End Time"
+                        type="time"
+                        // defaultValue="17:00"
+                        value={props.endTime}
+                        onChange={props.handleInputChange}
+                        margin="normal"
+                        variant="outlined"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        inputProps={{
+                            step: 300, // 5 min
+                        }}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>   
+                    <Button variant="contained" color="primary" onClick={props.handleFormSubmit}>
+                        Submit
+                    </Button>
+                </Grid>
+                </Grid>
+                </form>
+            </Grid>
+                
+            
+                
 
     )
 }
 
-export default NewEventForm;
+export function NewEventSnackbar(props) {
+    return (
+        <Snackbar open={props.openSnackbar} autoHideDuration={6000} onClose={props.handleSnackbarClose}>
+            <Alert onClose={props.handleSnackbarClose} severity={props.severity}>
+                {props.instructions}
+            </Alert>
+        </Snackbar>
+    )
+}

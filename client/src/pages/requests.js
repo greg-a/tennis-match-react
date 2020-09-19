@@ -3,7 +3,7 @@ import RequestDisplay from '../components/RequestDisplay';
 import RequestCard from '../components/RequestCard';
 import moment from 'moment';
 import Nav from "../components/Nav";
-import { Grid } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 
 class Requests extends Component {
 
@@ -131,6 +131,7 @@ class Requests extends Component {
         return (
             <div>
                 <Nav />
+                <Container>
                 <Grid container spacing={3} direction="column" alignItems="center" >
                     <Grid item xs={12} >
                         <RequestDisplay />
@@ -162,6 +163,7 @@ class Requests extends Component {
                         : <Grid item xs={12}><p>You currently have no requests.</p></Grid>
                     }
                 </Grid>
+                </Container>
             </div>
         )
     }

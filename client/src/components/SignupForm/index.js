@@ -39,7 +39,7 @@ function SignupForm(props) {
 
 
             <Box display="flex" justifyContent="center" alignItems="center" paddingTop="15px">
-                <Button variant="contained" onClick={props.handleFormSubmit} id="login-button">Sign In</Button>
+                <Button variant="contained" onClick={props.handleFormSubmit} id="login-button">Create Account</Button>
             </Box>
 
             <Box marginTop="60px">
