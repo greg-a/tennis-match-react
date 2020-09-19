@@ -59,7 +59,7 @@ class ProposeMatch extends Component {
         else {
             this.setState({ newDate: currentDate })
         }
-        localStorage.removeItem("selectedDate");
+        // localStorage.removeItem("selectedDate");
     };
 
     setModalShow = bVal => {

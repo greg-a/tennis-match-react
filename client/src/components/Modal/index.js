@@ -8,8 +8,6 @@ export function SchedulerModal(props) {
             onClose={props.onHide}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            maxWidth="xs"
-            fullWidth={true}
         >
             <DialogTitle id="alert-dialog-title">{props.thisDate}</DialogTitle>
             <DialogContent>

@@ -32,13 +32,14 @@ class NewEvent extends Component {
         const currentDate = moment(new Date()).format("YYYY-MM-DD");
         const selectedDate = localStorage.getItem("selectedDate");
 
-        if (selectedDate > currentDate) {
+        // if (selectedDate > currentDate) {
             this.setState({ newDate: selectedDate })
-        }
-        else {
-            this.setState({ newDate: currentDate })
-        }
-        localStorage.removeItem("selectedDate");
+        // }
+        // else {
+            // this.setState({ newDate: currentDate })
+        // }
+        // localStorage.removeItem("selectedDate");
+        console.log("test test")
     };
 
     handleInputChange = event => {
