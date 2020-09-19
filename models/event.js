@@ -13,7 +13,10 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         eventStatus: DataTypes.STRING,
-        location: DataTypes.STRING,
+        location: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         read: {
           type: DataTypes.BOOLEAN,
           defaultValue: false
