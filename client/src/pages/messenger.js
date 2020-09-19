@@ -18,7 +18,8 @@ class Messenger extends Component {
         users: [],
         userSearch: "",
         navValue: "",
-        userId: ""
+        userId: "",
+        messageDisabled: true
     };
 
 
@@ -102,7 +103,7 @@ class Messenger extends Component {
             })
                 .catch(err => console.log(err));
 
-            this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
+            this.setState({ messageDisabled: false, sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
@@ -336,11 +337,11 @@ class Messenger extends Component {
                                         {message.senderId == this.state.user.userid ?
                                             <ListItemText
                                                 primary={`Me: ${message.message}`}
-                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.creadAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date()).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                             /> :
                                             <ListItemText
                                                 primary={`${message.User.username}: ${message.message}`}
-                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.creadAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date()).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                             />
                                         }
                                     </ListItem>
@@ -366,6 +367,7 @@ class Messenger extends Component {
                         color="primary"
                         endIcon={<Icon>send</Icon>}
                         onClick={this.pushSendMessage}
+                        disabled={this.state.messageDisabled}
                     >
                         Send
                         </Button>
