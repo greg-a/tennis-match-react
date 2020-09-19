@@ -12,7 +12,7 @@ module.exports = function (app) {
         var password = req.body.password;
 
         if (username && password) {
-            var hashed_password = crypto.createHash("sha1").update(req.body.password).digest("hex");
+            var hashed_password = crypto.createHash("sha256").update(req.body.password).digest("hex");
             db.User.findAll({
                 where: {
                     username: username,
@@ -68,7 +68,7 @@ module.exports = function (app) {
             db.User.findAll({ where: accountGetObj }).then(function (results) {
                 // console.log("this works: " + results.length);
                 if (results.length === 0) {
-                    var hashed_password = crypto.createHash("sha1").update(req.body.password).digest("hex");
+                    var hashed_password = crypto.createHash("sha256").update(req.body.password).digest("hex");
                     var postObj = {
                         username: username,
                         password: hashed_password,
