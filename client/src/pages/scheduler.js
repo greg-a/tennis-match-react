@@ -121,6 +121,7 @@ class Scheduler extends Component {
           value={this.state.navValue}
         />
         <Container maxWidth="md">
+          
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             dateClick={this.handleDateClick}

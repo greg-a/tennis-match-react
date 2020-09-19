@@ -27,7 +27,7 @@ function SignupForm(props) {
             </Box>
 
             <Box display="flex" justifyContent="center" alignItems="center">
-                <TextField id="signupEmail" name="signupEmail" label="Email" onChange={props.handleInputChange}
+                <TextField id="signupEmail" name="signupEmail" label="Email" InputProps={{classes: classes}} onChange={props.handleInputChange}
                     value={props.usernameValue} />
             </Box>
 
