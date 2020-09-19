@@ -23,7 +23,7 @@ function ProposeUserSearch(props) {
                             onInputChange={props.handleUsernameChange}
                             options={props.userResults}
                             getOptionLabel={(option) => option.username}
-                            renderOption={(option)=> <span>{option.username} ({option.firstname} {option.lastname})</span>}
+                            renderOption={(option)=> (option.firstname ? <span>{option.username} ({option.firstname} {option.lastname})</span> : <span>{option.username}</span>)}
                             renderInput={(params)=>(
                                 <TextField {...params}
                                     label="Username"
