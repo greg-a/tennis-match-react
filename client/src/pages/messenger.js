@@ -361,13 +361,13 @@ class Messenger extends Component {
                         onChange={this.handleInputChange}
                         value={this.state.sendMessage}
                         onKeyDown={this.pushSendMessage}
-                        disabled={this.state.messageDisabled}
                     />
                     <Button
                         variant="contained"
                         color="primary"
                         endIcon={<Icon>send</Icon>}
                         onClick={this.pushSendMessage}
+                        disabled={this.state.messageDisabled}
                     >
                         Send
                         </Button>
