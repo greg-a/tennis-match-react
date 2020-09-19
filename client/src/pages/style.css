@@ -58,3 +58,15 @@
     width: 300px;
 }
 
+@media (max-width: 650px){
+    .fc-toolbar-title {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+    .fc-toolbar {
+        flex-direction: column;
+
+    }
+    
+}
+

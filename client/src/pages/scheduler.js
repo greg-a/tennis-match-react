@@ -7,7 +7,8 @@ import { SchedulerModal, EventDetailsModal } from "../components/Modal";
 import Nav from "../components/Nav";
 import moment from "moment";
 import CalendarEvent from "../utils/CalendarEvent";
-import Container from '@material-ui/core/Container';
+import {Container, Box} from '@material-ui/core';
+import "./style.css";
 
 class Scheduler extends Component {
 
@@ -121,20 +122,23 @@ class Scheduler extends Component {
           value={this.state.navValue}
         />
         <Container maxWidth="md">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            dateClick={this.handleDateClick}
-            initialView="dayGridMonth"
-            events={this.state.calendarEvents}
-            // events={this.state.savedDates}
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            }}
-            eventClick={this.handleEventClick}
-          // eventColor="#fff600"
-          />
+          <Box paddingTop="20px" >
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              dateClick={this.handleDateClick}
+              initialView="dayGridMonth"
+              height="auto"
+              events={this.state.calendarEvents}
+              // events={this.state.savedDates}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+              }}
+              eventClick={this.handleEventClick}
+            // eventColor="#fff600"
+            />
+          </Box>
           <SchedulerModal
             show={this.state.dateModalShow}
             onHide={() => this.setModalShow("dateModalShow", false)}
