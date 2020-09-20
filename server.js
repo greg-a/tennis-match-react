@@ -51,6 +51,13 @@ io.on('connection', (socket) => {
     console.log("New message: " + JSON.stringify(data))
   });
 
+  socket.on("newMatchNotification", userid => {
+
+    //emits new message to specific room
+    socket.to(userid).emit("output", "update");
+    console.log("new match notification!", userid)
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected")
   })
