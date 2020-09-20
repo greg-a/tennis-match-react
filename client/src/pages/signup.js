@@ -1,13 +1,20 @@
 import React from "react";
 import SignupForm from "../components/SignupForm";
-import { Grid, TextField, Box } from '@material-ui/core';
+import { Grid, TextField, Box, Snackbar } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 class Signup extends React.Component {
     state = {
         signupUsername: "",
         signupPassword: "",
         signupEmail: "",
-        signupInstructions: "Please enter your details"
+        signupInstructions: "Please enter your details",
+        openSnackbar: false,
+        severity: ""
     };
 
     handleInputChange = event => {
@@ -16,6 +23,14 @@ class Signup extends React.Component {
             [name]: value
         });
     };
+
+    handleSnackbarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        this.setState({ openSnackbar: false });
+    }
 
     handleFormSubmit = event => {
         event.preventDefault();
@@ -38,18 +53,28 @@ class Signup extends React.Component {
                 console.log(res);
                 if (res.statusString === "formNotComplete") {
                     this.setState({
-                        signupInstructions: "Please complete the registration form"
+                        signupInstructions: "Please complete the registration form",
+                        openSnackbar: true,
+                        severity: "warning"
                     });
                 } else if (res.statusString === "userAlreadyExists") {
                     this.setState({
-                        signupInstructions: "Account already exists with that username"
+                        signupInstructions: "Account already exists with that username",
+                        openSnackbar: true,
+                        severity: "error"
                     });
                 } else if (res.statusString === "userCreateSuccess") {
                     this.setState({
-                        signupInstructions: "Account successfully created. You may now login."
+                        signupInstructions: "Account successfully created. You will now be directed to the login page",
+                        openSnackbar: true,
+                        severity: "success"
                     });
                     // redirects to the login page after creating account
-                    window.location.replace("/");
+                    var loginRedirect = setTimeout(function() {
+                        window.location.replace("/");
+                      }, 3000);
+
+                    loginRedirect();
                 }
             })
             .catch(err => console.log(err));
@@ -76,7 +101,13 @@ class Signup extends React.Component {
                             </Grid>
                         </Grid>
                     </Box>
+                    <Snackbar open={this.state.openSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
+                        <Alert onClose={this.handleSnackbarClose} severity={this.state.severity}>
+                            {this.state.signupInstructions}
+                        </Alert>
+                    </Snackbar>
                 </Box>
+
             </div>
 
         );
