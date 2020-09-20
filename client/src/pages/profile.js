@@ -1,5 +1,4 @@
 import React from "react";
-import ProfileDisplay from "../components/ProfileDisplay";
 import ProfileForm from "../components/ProfileForm";
 import Nav from "../components/Nav";
 import { Switch, FormControlLabel, Container, Grid } from '@material-ui/core';
@@ -33,7 +32,6 @@ class Profile extends React.Component {
         fetch("/api/profile")
             .then(res => res.json())
             .then((profileInfo) => {
-                console.log(profileInfo);
                 this.setState({
                     username: profileInfo.username,
                     email: profileInfo.email,
@@ -76,7 +74,6 @@ class Profile extends React.Component {
             body: JSON.stringify(updateObj)
         })
             .then(res => {
-                console.log(res);
                 this.getProfileInfo();
                 this.setState({
                     updateFirstname: null,
@@ -103,13 +100,6 @@ class Profile extends React.Component {
                         <Grid item xs={12} style={{textAlign: "center"}}>
                             <h2>Profile</h2>
                         </Grid>
-                    {/* <ProfileDisplay username={this.state.username}
-                        email={this.state.email}
-                        firstname={this.state.firstname}
-                        lastname={this.state.lastname}
-                        city={this.state.city}
-                        state={this.state.state}
-                        zipcode={this.state.zipcode} /> */}
                         <Grid item xs={12}>
                             <FormControlLabel
                                 control={
@@ -123,26 +113,26 @@ class Profile extends React.Component {
                             />
                         </Grid>
                     
-                    <ProfileForm
-                        username={this.state.username}
-                        email={this.state.email}
-                        defaultFirst={this.state.firstname}
-                        defaultLast={this.state.lastname}
-                        defaultCity={this.state.city}
-                        defaultState={this.state.state}
-                        defaultZip={this.state.zipcode}
-                        defaultSkill={this.state.skilllevel}
-                        updateFirstname={this.state.updateFirstname}
-                        updateLastname={this.state.updateLastname}
-                        updateCity={this.state.updateCity}
-                        updateState={this.state.updateState}
-                        updateZipcode={this.state.updateZipcode}
-                        updateSkilllevel={this.state.updateSkilllevel}
-                        updateOppskilllevel={this.state.updateOppskilllevel}
-                        handleInputChange={this.handleInputChange}
-                        handleFormSubmit={this.handleFormSubmit}
-                        editToggle={this.state.editToggle}
-                    />
+                        <ProfileForm
+                            username={this.state.username}
+                            email={this.state.email}
+                            defaultFirst={this.state.firstname}
+                            defaultLast={this.state.lastname}
+                            defaultCity={this.state.city}
+                            defaultState={this.state.state}
+                            defaultZip={this.state.zipcode}
+                            defaultSkill={this.state.skilllevel}
+                            updateFirstname={this.state.updateFirstname}
+                            updateLastname={this.state.updateLastname}
+                            updateCity={this.state.updateCity}
+                            updateState={this.state.updateState}
+                            updateZipcode={this.state.updateZipcode}
+                            updateSkilllevel={this.state.updateSkilllevel}
+                            updateOppskilllevel={this.state.updateOppskilllevel}
+                            handleInputChange={this.handleInputChange}
+                            handleFormSubmit={this.handleFormSubmit}
+                            editToggle={this.state.editToggle}
+                        />
                     </Grid>
                 </Container>
             </div>
