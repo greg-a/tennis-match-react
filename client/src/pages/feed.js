@@ -2,6 +2,7 @@ import React from "react";
 import Nav from "../components/Nav";
 import { FeedList, FeedListItem, FeedListItemDeny } from "../components/FeedList";
 import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
+import moment from "moment";
 
 class Feed extends React.Component {
     state = {
@@ -79,8 +80,7 @@ class Feed extends React.Component {
                                                 title={match.title}
                                                 month={match.start.substring(5, 7)}
                                                 day={match.start.substring(8, 10)}
-                                                hour={match.start.substring(11, 13)}
-                                                minute={match.start.substring(14, 16)}
+                                                hour={moment(match.start).format("h:mm a")}
                                                 okayDeny={this.handleDeny}
                                                 eventID={match.id}
                                                 confirmer={match.secondUser.username}
@@ -94,8 +94,7 @@ class Feed extends React.Component {
                                                 confirmer={match.secondUser.username}
                                                 month={match.start.substring(5, 7)}
                                                 day={match.start.substring(8, 10)}
-                                                hour={match.start.substring(11, 13)}
-                                                minute={match.start.substring(14, 16)}
+                                                hour={moment(match.start).format("h:mm a")}
                                             />
                                         );
                                     })}
