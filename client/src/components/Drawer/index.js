@@ -70,7 +70,7 @@ const Drawer = (props) => {
 
   useEffect(() => {
     getNotifications();
-    
+
   }, []);
 
   const getNotifications = () => {
@@ -82,9 +82,24 @@ const Drawer = (props) => {
         }
         else {
           setNotificationState({ ...notificationState, userid: notifications.userid })
-          console.log("socket id: " + notificationState.userid)
         }
-        // socketConnect()
+        const socket = io();
+        const userid = notifications.userid
+
+        socket.emit("notifyMe", userid);
+        socket.on("output", data => {
+
+          fetch("/api/notifications").then(res => res.json())
+            .then((notifications) => {
+              console.log(notifications)
+              if (notifications.messages > 0 || notifications.matches > 0) {
+                setNotificationState({ userid: notifications.userid, messages: notifications.messages, matches: notifications.matches, notifications: true });
+              }
+              else {
+                setNotificationState({ ...notificationState, userid: notifications.userid })
+              }
+            })
+        })
       });
   };
 
@@ -92,7 +107,7 @@ const Drawer = (props) => {
     // start socket connection to listen for new notifications
     const socket = io();
     const userid = notificationState.userid
-    
+
     socket.emit("notifyMe", userid);
     socket.on("notification", data => {
       console.log(data);

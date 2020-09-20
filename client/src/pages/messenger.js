@@ -119,7 +119,6 @@ class Messenger extends Component {
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room, userId });
-
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {
                 console.log(data);

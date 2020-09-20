@@ -5,7 +5,6 @@ var app = express();
 const server = require('http').createServer(app);
 const io = require("socket.io")(server);
 const path = require("path");
-
 var db = require("./models");
 
 
@@ -15,10 +14,10 @@ var PORT = process.env.PORT || 3001;
 io.on('connection', (socket) => {
 
   //user joins a room
-  socket.on("joinRoom", ({ username, room, userid }) => {
-    const user = { socketId: socket.id, username: username, room: room, userid: userid };
+  socket.on("joinRoom", ({ username, room, userId }) => {
+    const user = { socketId: socket.id, username: username, room: room, userid: userId };
 
-    io.in(user.userid).emit("notification", "update")
+    io.in(parseInt(userId)).emit("output", "update");
     socket.join(user.room);
 
     console.log(user.username + " has joined " + user.room);
@@ -45,10 +44,10 @@ io.on('connection', (socket) => {
 
   //Receives a new message
   socket.on("input", data => {
-    const user = { socketId: socket.id, username: data.user, room: data.room };
+    const user = { socketId: socket.id, username: data.user, room: data.room, recipientid: data.recipientId };
 
     //emits new message to specific room
-    io.in(user.room).emit("output", data);
+    io.in(user.room).in(user.recipientid).emit("output", data);
     console.log("New message: " + JSON.stringify(data))
   });
 
