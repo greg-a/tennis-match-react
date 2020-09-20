@@ -28,8 +28,8 @@ class ProposeMatch extends Component {
     state = {
         eventValue: "",
         newDate: "",
-        startTime: "",
-        endTime: "",
+        startTime: "17:00",
+        endTime: "18:00",
         startTimeHour: "",
         startTimeMinute: "",
         endTimeHour: "",
@@ -45,6 +45,10 @@ class ProposeMatch extends Component {
         modalShow: false,
         subsectionShow: "",
         courtList: ["Fairmount Park","Temple","FDR Park","Chaminoux","Allens Lane Park","Seger Park"]
+    };
+
+    componentDidMount() {
+        this.getDate();
     };
 
     getDate = () => {
@@ -69,8 +73,8 @@ class ProposeMatch extends Component {
             startTimeMinute: "",
             endTimeHour: "",
             endTimeMinute: "",
-            startTime: "",
-            endTime: "",
+            startTime: "17:00",
+            endTime: "18:00",
             eventValue: ""
         });
     };
@@ -203,8 +207,8 @@ class ProposeMatch extends Component {
                     userId: "",
                     eventLocation: "",
                     eventTitle: "",
-                    startTime: "",
-                    endTime: "",
+                    startTime: "17:00",
+                    endTime: "18:00",
                     eventValue: "",
                     openSnackbar: true,
                     severity: "error"
@@ -245,8 +249,8 @@ class ProposeMatch extends Component {
                             userId: "",
                             eventLocation: "",
                             eventTitle: "",
-                            startTime: "",
-                            endTime: "",
+                            startTime: "17:00",
+                            endTime: "18:00",
                             eventValue: "",
                             openSnackbar: true,
                             severity: "success"
@@ -268,8 +272,8 @@ class ProposeMatch extends Component {
                             userResults: [],
                             userId: "",
                             eventLocation: "",
-                            startTime: "",
-                            endTime: "",
+                            startTime: "17:00",
+                            endTime: "18:00",
                             eventValue: "",
                             openSnackbar: true,
                             severity: "error"
@@ -381,7 +385,6 @@ class ProposeMatch extends Component {
     setSubShow = (event) => {
         console.log(event.currentTarget.value);
         this.setState({
-            newDate: "",
             startTimeHour: "",
             startTimeMinute: "",
             endTimeHour: "",
@@ -395,8 +398,8 @@ class ProposeMatch extends Component {
             userId: "",
             modalShow: false,
             subsectionShow: event.currentTarget.value,
-            startTime: "",
-            endTime: "",
+            startTime: "17:00",
+            endTime: "18:00",
             eventValue: "",
             defaultEventLocation: "",
             openSnackbar: false,
