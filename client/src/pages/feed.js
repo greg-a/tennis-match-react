@@ -1,7 +1,6 @@
 import React from "react";
 import Nav from "../components/Nav";
 import { FeedList, FeedListItem, FeedListItemDeny } from "../components/FeedList";
-// import { Container, Row, Col} from "../components/Grid";
 import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
 
 class Feed extends React.Component {
@@ -11,11 +10,12 @@ class Feed extends React.Component {
         updatedMatches: [],
         messageNotifications: 0,
         matchNotifications: 0,
-        generalNotification: false
+        noNotifications: true
     }
 
     componentDidMount() {
         this.getDates();
+        this.getNotifications();
         localStorage.removeItem("selectedDate")
     }
 
@@ -42,7 +42,7 @@ class Feed extends React.Component {
             .then((notifications) => {
                 console.log(notifications)
                 if (notifications.messages > 0 || notifications.matches > 0) {
-                    this.setState({ messageNotifications: notifications.messages, matchNotifications: notifications.matches, generalNotification: true });
+                    this.setState({ messageNotifications: notifications.messages, matchNotifications: notifications.matches, noNotifications: false });
                 }
             });
     };
@@ -65,8 +65,6 @@ class Feed extends React.Component {
                 <Nav
                     value={this.state.navValue}
                 />
-                {/* <FeedListItem /> */}
-                {/* <Row> */}
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         {!this.state.matches.length && !this.state.updatedMatches.length ? (
@@ -105,9 +103,6 @@ class Feed extends React.Component {
                             )}
                     </Grid>
                 </Grid>
-                {/* </Row> */}
-                {/* </Container> */}
-
             </div>
 
         );

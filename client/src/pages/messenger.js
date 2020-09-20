@@ -107,7 +107,7 @@ class Messenger extends Component {
             this.setState({ messageDisabled: false, sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
 
             //sends server username and name of room
-            socket.emit("joinRoom", { username, room });
+            socket.emit("joinRoom", { username, room, userId });
 
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {

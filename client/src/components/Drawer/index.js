@@ -19,6 +19,7 @@ import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { withRouter } from "react-router-dom";
 import Badge from '@material-ui/core/Badge';
+import io from 'socket.io-client';
 
 const useStyles = makeStyles({
   list: {
@@ -43,11 +44,12 @@ const Drawer = (props) => {
     right: false,
   });
 
-  // const [notificationState, setNotificationState] = useState({
-  //   messages: 0,
-  //   matches: 0,
-  //   notifications: false
-  // })
+  const [notificationState, setNotificationState] = useState({
+    messages: 0,
+    matches: 0,
+    notifications: false,
+    userid: null
+  })
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -66,15 +68,36 @@ const Drawer = (props) => {
       .catch(err => console.log(err));
   }
 
-  // useEffect(() => {
-  //   fetch("/api/notifications").then(res => res.json())
-  //     .then((notifications) => {
-  //       console.log(notifications)
-  //       if (notifications.messages > 0 || notifications.matches > 0) {
-  //         setNotificationState({ messages: notifications.messages, matches: notifications.matches, notifications: true });
-  //       }
-  //     });
-  // }, []);
+  useEffect(() => {
+    getNotifications();
+    
+  }, []);
+
+  const getNotifications = () => {
+    fetch("/api/notifications").then(res => res.json())
+      .then((notifications) => {
+        console.log(notifications)
+        if (notifications.messages > 0 || notifications.matches > 0) {
+          setNotificationState({ userid: notifications.userid, messages: notifications.messages, matches: notifications.matches, notifications: true });
+        }
+        else {
+          setNotificationState({ ...notificationState, userid: notifications.userid })
+          console.log("socket id: " + notificationState.userid)
+        }
+        // socketConnect()
+      });
+  };
+
+  const socketConnect = () => {
+    // start socket connection to listen for new notifications
+    const socket = io();
+    const userid = notificationState.userid
+    
+    socket.emit("notifyMe", userid);
+    socket.on("notification", data => {
+      console.log(data);
+    })
+  }
 
 
   const itemsList = [
@@ -95,7 +118,7 @@ const Drawer = (props) => {
     },
     {
       text: "Messenger",
-      icon: <Badge badgeContent={props.messageNotifications} color="secondary"><ChatBubbleOutlineIcon /></Badge>,
+      icon: <Badge badgeContent={notificationState.messages} color="secondary"><ChatBubbleOutlineIcon /></Badge>,
       onClick: () => history.push("/messenger")
     },
     {
@@ -105,7 +128,7 @@ const Drawer = (props) => {
     },
     {
       text: "Requests",
-      icon: <Badge badgeContent={props.matchNotifications} color="secondary"><AssignmentTurnedInIcon /></Badge>,
+      icon: <Badge badgeContent={notificationState.matches} color="secondary"><AssignmentTurnedInIcon /></Badge>,
       onClick: () => history.push("/requests")
     },
     {
@@ -151,7 +174,7 @@ const Drawer = (props) => {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)} >
-            <Badge color="primary" variant="dot" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} invisible={props.generalNotification}>
+            <Badge color="primary" variant="dot" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} invisible={!notificationState.notifications}>
               <SportsTennisIcon className={clsx(classes.tennisButton)} />
             </Badge>
           </Button>
