@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import io from 'socket.io-client';
 import Nav from "../components/Nav";
 import "./style.css";
-import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper, Box, withStyles } from '@material-ui/core';
+import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper, Box, withStyles, Select } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import moment from "moment";
+import BottomNav from "../components/BottomNav";
 
 const useStyles = {
     listItemThem: {
@@ -12,7 +13,7 @@ const useStyles = {
         //   boxShadow: 'none',
         //   paddingTop: '25px',
         //   color: '#FFFFFF'
-    }
+    },
 };
 
 class Messenger extends Component {
@@ -28,7 +29,7 @@ class Messenger extends Component {
         userSearch: "",
         navValue: "",
         userId: "",
-        searchNodes: ""
+        subsectionShow: "messages"
     };
 
 
@@ -289,130 +290,164 @@ class Messenger extends Component {
         }
     }
 
+    // setSubShow = (event) => {
+    //     console.log(event.currentTarget.value);
+    //     this.setState({
+    //         subsectionShow: event.currentTarget.value,
+    //     }, () => {
+    //         if (this.state.subsectionShow === "messages") {
+    //             this.setState({
+    //                 subsectionShow: "messages"
+    //             })
+    //         } else if (this.state.subsectionShow === "chat") {
+    //             this.setState({
+    //                 subsectionShow: "chat"
+    //             });
+    //         }
+    //     })
+    // }
+
+    setMessagesPage = () => {
+        this.setState({subsectionShow: "messages", bottomNavValue: "messages-tab"});
+        this.subsectionRender();
+    }
+
+    setChatPage = () => {
+        this.setState({subsectionShow: "chat", bottomNavValue: "chat-tab"});
+        this.subsectionRender();
+    }
+
+    subsectionRender = () => {
+        if (this.state.subsectionShow === "messages") {
+            return (
+                <div>
+                    <Box paddingBottom="30px">
+                        <Grid container justify="center">
+                            <Grid xs={12} sm={4}>
+                                <Box display="flex" justifyContent="center">
+                                    <h2>Messages</h2>
+                                </Box>
+
+                            </Grid>
+                            <Grid xs={12} sm={4}>
+                                <Autocomplete
+                                    id="userSearch"
+                                    freesolo
+                                    autoSelect
+                                    name="userSearch"
+                                    value={this.state.sendTo}
+                                    onChange={this.handleNewChange}
+                                    inputValue={this.state.userSearch}
+                                    onInputChange={this.handleUsernameChange}
+                                    options={this.state.users}
+                                    getOptionLabel={(option) => option.username}
+                                    renderOption={(option) => <span>{option.username} ({option.firstname} {option.lastname})</span>}
+                                    renderInput={(params) => (
+                                        <TextField {...params}
+                                            label="User Search"
+                                            margin="normal"
+                                            variant="outlined"
+                                        ></TextField>
+                                    )}
+                                />
+                            </Grid>
+                            <Grid xs={0} sm={4}></Grid>
+                        </Grid>
+                        <Grid container justify="space-evenly">
+                            <Grid xs={2} item={true}>
+                                <List>
+                                    {/* <Box overflow="auto"> */}
+                                    {this.state.conversations.map(conversation => (
+                                        <Paper>
+                                            <ListItem
+                                                onClick={this.handleInputChange}
+                                                button>
+                                                <ListItemText
+                                                    primary={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
+                                                    secondary={conversation.message}
+                                                    data-id={conversation.senderId === this.state.user.userid ? conversation.recipientId : conversation.senderId}
+                                                    data-username={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
+                                                />
+                                            </ListItem>
+                                            <Divider component="li" />
+                                        </Paper>
+                                    ))}
+                                    {/* </Box> */}
+                                </List>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </div>
+            )
+        } else if (this.state.subsectionShow === "chat") {
+            return (
+                <div>
+                    <Box paddingBottom="30px">
+                        <Grid container justify="center">
+                            <Grid xs={7} item={true}>
+                                <List>
+                                    {this.state.showMessages.map(message => (
+                                        <Paper>
+                                            {message.senderId == this.state.user.userid ?
+                                                <ListItem
+                                                    button>
+                                                    <ListItemText
+                                                        primary={`Me: ${message.message}`}
+                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                    />
+                                                </ListItem> :
+                                                <ListItem
+                                                    // className={classes.listItemThem}
+                                                    button>
+                                                    <ListItemText
+                                                        primary={`${message.User.username}: ${message.message}`}
+                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                    />
+                                                </ListItem>
+                                            }
+
+                                            <Divider component="li" />
+                                        </Paper>
+                                    ))}
+                                </List>
+                            </Grid>
+                            <Box component="span">
+                                <footer className="send-message-footer">
+                                    <TextField
+                                        id="standard-basic"
+                                        placeholder="Send message..."
+                                        multiline
+                                        className="message-field"
+                                        onChange={this.handleInputChange}
+                                        value={this.state.sendMessage}
+                                        onKeyDown={this.pushSendMessage}
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<Icon>send</Icon>}
+                                        onClick={this.pushSendMessage}
+                                    >
+                                    </Button>
+                                </footer>
+                            </Box>
+                        </Grid >
+                    </Box>
+                </div >
+            )
+        }
+    }
+
     render() {
         const { classes } = this.props;
 
         return (
             <div>
                 <Nav update={this.state.newNotification} />
-                <Box component="span" display="inline">
-                    <Grid container justify="center">
-                        <Grid xs={4}>
-                            <Box display="flex" justifyContent="center">
-                                <h2>Messages</h2>
-                            </Box>
-
-                        </Grid>
-                        <Grid xs={4}>
-                            <Autocomplete
-                                id="userSearch"
-                                freesolo
-                                autoSelect
-                                name="userSearch"
-                                value={this.state.sendTo}
-                                onChange={this.handleNewChange}
-                                inputValue={this.state.userSearch}
-                                onInputChange={this.handleUsernameChange}
-                                options={this.state.users}
-                                getOptionLabel={(option) => option.username}
-                                renderOption={(option) => <span>{option.username} ({option.firstname} {option.lastname})</span>}
-                                renderInput={(params) => (
-                                    <TextField {...params}
-                                        label="User Search"
-                                        margin="normal"
-                                        variant="outlined"
-                                    ></TextField>
-                                )}
-                            />
-                        </Grid>
-                        <Grid xs={0} sm={4}></Grid>
-                    </Grid>
-                    <Grid container justify="space-evenly">
-                        <Grid xs={2} item={true}>
-                            <List>
-                                {/* <Box overflow="auto"> */}
-                                {this.state.conversations.map(conversation => (
-                                    <Paper>
-                                        <ListItem
-                                            onClick={this.handleInputChange}
-                                            button>
-                                            <ListItemText
-                                                primary={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
-                                                secondary={conversation.message}
-                                                data-id={conversation.senderId === this.state.user.userid ? conversation.recipientId : conversation.senderId}
-                                                data-username={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
-                                            />
-                                        </ListItem>
-                                        <Divider component="li" />
-                                    </Paper>
-                                ))}
-                                {/* </Box> */}
-                            </List>
-                        </Grid>
-                        <Grid xs={7} item={true}>
-                            <List>
-                                {this.state.showMessages.map(message => (
-                                    <Paper>
-                                        {/* <ListItem
-                                            button>
-                                            {message.senderId == this.state.user.userid ?
-                                                <ListItemText 
-                                                    primary={`Me: ${message.message}`}
-                                                    secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                /> :
-                                                <ListItemText
-                                                    primary={`${message.User.username}: ${message.message}`}
-                                                    secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                />
-                                            }
-                                        </ListItem> */}
-                                        {message.senderId == this.state.user.userid ?
-                                            <ListItem
-                                                button>
-                                                <ListItemText
-                                                    primary={`Me: ${message.message}`}
-                                                    secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                />
-                                            </ListItem> :
-                                            <ListItem
-                                            className={classes.listItemThem}
-                                                button>
-                                                <ListItemText
-                                                    primary={`${message.User.username}: ${message.message}`}
-                                                    secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                />
-                                            </ListItem>
-                                        }
-
-                                        <Divider component="li" />
-                                    </Paper>
-                                ))}
-                            </List>
-                        </Grid>
-
-                    </Grid>
-                </Box>
-                <Box component="span">
-                <footer className="send-message-footer">
-                    <TextField
-                        id="standard-basic"
-                        placeholder="Send message..."
-                        multiline
-                        className="message-field"
-                        onChange={this.handleInputChange}
-                        value={this.state.sendMessage}
-                        onKeyDown={this.pushSendMessage}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        endIcon={<Icon>send</Icon>}
-                        onClick={this.pushSendMessage}
-                    >
-                        Send
-                        </Button>
-                </footer>
-                </Box>
+                {this.subsectionRender()}
+                <BottomNav 
+                setMessagesPage={this.setMessagesPage}
+                setChatPage={this.setChatPage}
+                />
             </div>
         )
     }
