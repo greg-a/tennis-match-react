@@ -49,7 +49,7 @@ class Feed extends React.Component {
     };
 
     handleDeny = event => {
-        fetch("api/event/delete/" + event.target.dataset.id, {
+        fetch("api/event/delete/" + event.currentTarget.dataset.id, {
             method: "DELETE"
         }).then(res => {
             console.log(res)
