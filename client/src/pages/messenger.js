@@ -29,7 +29,8 @@ class Messenger extends Component {
         userSearch: "",
         navValue: "",
         userId: "",
-        subsectionShow: "messages"
+        subsectionShow: "inbox",
+        bottomNavValue: "inbox-tab"
     };
 
 
@@ -100,6 +101,8 @@ class Messenger extends Component {
             const recipientId = event.target.parentElement.dataset.id;
             const room = this.createRoom(recipientId, userId);
             const socket = io();
+            this.setChatPage();
+            console.log("redirecting to chat tab; messenger.js:... handleInputChange -> this.setChatPage()")
             console.log("checking messages: " + this.state.allMessages.filter(message => message.read === false))
 
             // updates all unread messages to read for clicked user
@@ -290,42 +293,26 @@ class Messenger extends Component {
         }
     }
 
-    // setSubShow = (event) => {
-    //     console.log(event.currentTarget.value);
-    //     this.setState({
-    //         subsectionShow: event.currentTarget.value,
-    //     }, () => {
-    //         if (this.state.subsectionShow === "messages") {
-    //             this.setState({
-    //                 subsectionShow: "messages"
-    //             })
-    //         } else if (this.state.subsectionShow === "chat") {
-    //             this.setState({
-    //                 subsectionShow: "chat"
-    //             });
-    //         }
-    //     })
-    // }
-
-    setMessagesPage = () => {
-        this.setState({subsectionShow: "messages", bottomNavValue: "messages-tab"});
+    setInboxPage = () => {
+        this.setState({ subsectionShow: "inbox", bottomNavValue: "inbox-tab" });
         this.subsectionRender();
     }
 
     setChatPage = () => {
-        this.setState({subsectionShow: "chat", bottomNavValue: "chat-tab"});
+        this.setState({ subsectionShow: "chat", bottomNavValue: "chat-tab" });
         this.subsectionRender();
     }
 
     subsectionRender = () => {
-        if (this.state.subsectionShow === "messages") {
+        if (this.state.subsectionShow === "inbox") {
+            const { classes } = this.props;
             return (
                 <div>
                     <Box paddingBottom="30px">
                         <Grid container justify="center">
                             <Grid xs={12} sm={4}>
                                 <Box display="flex" justifyContent="center">
-                                    <h2>Messages</h2>
+                                    <h2>Inbox</h2>
                                 </Box>
 
                             </Grid>
@@ -354,7 +341,7 @@ class Messenger extends Component {
                             <Grid xs={0} sm={4}></Grid>
                         </Grid>
                         <Grid container justify="space-evenly">
-                            <Grid xs={2} item={true}>
+                            <Grid xs={11} sm={9} item={true}>
                                 <List>
                                     {/* <Box overflow="auto"> */}
                                     {this.state.conversations.map(conversation => (
@@ -380,39 +367,13 @@ class Messenger extends Component {
                 </div>
             )
         } else if (this.state.subsectionShow === "chat") {
+            const { classes } = this.props;
             return (
                 <div>
                     <Box paddingBottom="30px">
                         <Grid container justify="center">
-                            <Grid xs={7} item={true}>
-                                <List>
-                                    {this.state.showMessages.map(message => (
-                                        <Paper>
-                                            {message.senderId == this.state.user.userid ?
-                                                <ListItem
-                                                    button>
-                                                    <ListItemText
-                                                        primary={`Me: ${message.message}`}
-                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                    />
-                                                </ListItem> :
-                                                <ListItem
-                                                    // className={classes.listItemThem}
-                                                    button>
-                                                    <ListItemText
-                                                        primary={`${message.User.username}: ${message.message}`}
-                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                    />
-                                                </ListItem>
-                                            }
-
-                                            <Divider component="li" />
-                                        </Paper>
-                                    ))}
-                                </List>
-                            </Grid>
-                            <Box component="span">
-                                <footer className="send-message-footer">
+                            <Box>
+                                <div className="send-message">
                                     <TextField
                                         id="standard-basic"
                                         placeholder="Send message..."
@@ -428,8 +389,35 @@ class Messenger extends Component {
                                         onClick={this.pushSendMessage}
                                     >
                                     </Button>
-                                </footer>
+                                </div>
                             </Box>
+                            <Grid item xs={10} item={true}>
+                                <List>
+                                    {this.state.showMessages.map(message => (
+                                        <Paper>
+                                            {message.senderId == this.state.user.userid ?
+                                                <ListItem
+                                                    button>
+                                                    <ListItemText
+                                                        primary={`Me: ${message.message}`}
+                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                    />
+                                                </ListItem> :
+                                                <ListItem
+                                                    className={classes.listItemThem}
+                                                    button>
+                                                    <ListItemText
+                                                        primary={`${message.User.username}: ${message.message}`}
+                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                    />
+                                                </ListItem>
+                                            }
+
+                                            <Divider component="li" />
+                                        </Paper>
+                                    ))}
+                                </List>
+                            </Grid>
                         </Grid >
                     </Box>
                 </div >
@@ -444,9 +432,10 @@ class Messenger extends Component {
             <div>
                 <Nav update={this.state.newNotification} />
                 {this.subsectionRender()}
-                <BottomNav 
-                setMessagesPage={this.setMessagesPage}
-                setChatPage={this.setChatPage}
+                <BottomNav
+                    value={this.state.bottomNavValue}
+                    setInboxPage={this.setInboxPage}
+                    setChatPage={this.setChatPage}
                 />
             </div>
         )

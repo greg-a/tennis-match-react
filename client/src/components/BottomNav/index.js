@@ -2,10 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import FolderIcon from '@material-ui/icons/Folder';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+import PeopleIcon from '@material-ui/icons/People';
+import ChatIcon from '@material-ui/icons/Chat';
 
 const useStyles = makeStyles({
   root: {
@@ -19,7 +17,7 @@ const useStyles = makeStyles({
 
 export default function BottomNav(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState('recents');
+  const [value, setValue] = React.useState(props.value);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -27,8 +25,8 @@ export default function BottomNav(props) {
 
   return (
     <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
-      <BottomNavigationAction label="Messages" value="messages-tab" icon={<RestoreIcon />} onClick={props.setMessagesPage}/>
-      <BottomNavigationAction label="Chat" value="chat-tab" icon={<FavoriteIcon />} onClick={props.setChatPage}/>
+      <BottomNavigationAction label="Inbox" value="inbox-tab" icon={<PeopleIcon />} onClick={props.setInboxPage}/>
+      <BottomNavigationAction label="Chat" value="chat-tab" icon={<ChatIcon />} onClick={props.setChatPage}/>
     </BottomNavigation>
   );
 }
