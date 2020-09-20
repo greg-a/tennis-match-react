@@ -8,10 +8,13 @@ import { ProposeModal } from "../components/Modal";
 import Nav from "../components/Nav";
 import { Button, Container, Grid, Snackbar, makeStyles } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import io from 'socket.io-client';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const socket = io();
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -87,6 +90,7 @@ class ProposeMatch extends Component {
 
         console.log("TITLE: " + eventIndexArr[0].title)
         this.setState({ modalShow: true, clickedResult: eventIndexArr, eventLocation: arg.currentTarget.dataset.location, eventTitle: eventIndexArr[0].title });
+        
     };
 
     handleInputChange = event => {
@@ -232,6 +236,8 @@ class ProposeMatch extends Component {
         })
             .then(res => res.json())
             .then(res => {
+                
+                socket.emit("newMatchNotification", currentProposeToUserId);
                 console.log(res.statusString);
                 if (res.statusString === "eventCreated") {
                     this.setState(

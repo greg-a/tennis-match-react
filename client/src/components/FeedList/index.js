@@ -28,7 +28,7 @@ export function FeedListItem({
                     <Avatar alt={organizer} src={thumbnail} />
                 </ListItemAvatar>
                 <ListItemText
-                    primary={`${organizer} scheduled a match with ${confirmer} on ${month}/${day} at ${hour}:${minute}`}
+                    primary={`${organizer} scheduled a match with ${confirmer} on ${month}/${day} at ${hour}`}
                 />
                 <ListItemAvatar>
                     <Avatar alt={organizer} src={thumbnail} />
@@ -58,7 +58,7 @@ export function FeedListItemDeny({
                     <Avatar alt={confirmer} src={thumbnail} />
                 </ListItemAvatar>
                 <ListItemText
-                    primary={`${title}. Proposed for ${month}/${day} at ${hour}:${minute}`}
+                    primary={`${title}. Proposed for ${month}/${day} at ${hour}`}
                 />
                 <Button onClick={okayDeny} data-id={eventID}>Ok</Button>
             </ListItem>

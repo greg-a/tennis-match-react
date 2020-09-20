@@ -4,11 +4,14 @@ import RequestCard from '../components/RequestCard';
 import moment from 'moment';
 import Nav from "../components/Nav";
 import { Grid, Container } from '@material-ui/core';
+import io from 'socket.io-client';
+const socket = io();
 
 class Requests extends Component {
 
     state = {
-        searchResult: []
+        searchResult: [],
+        userid: ""
     }
 
     componentDidMount() {
@@ -20,35 +23,35 @@ class Requests extends Component {
             .then(res => res.json())
             .then(res => {
                 console.log(res);
-                // this.setState({ searchResult: res });
-                this.convertSkillLevel(res);
+                this.setState({ userid: res.userid });
+                this.convertSkillLevel(res.results);
             })
             .catch(err => console.log(err));
     }
 
     convertSkillLevel = (res) => {
         let searchArr = res;
-        
+
         for (let i = 0; i < searchArr.length; i++) {
-            
-            if (searchArr[i].User.skilllevel===1) {
+
+            if (searchArr[i].User.skilllevel === 1) {
                 searchArr[i].User.skilllevel = "1.0-1.5 - New Player";
-            } else if (searchArr[i].User.skilllevel===2) {
-                searchArr[i].User.skilllevel= "2.0 - Beginner";
-            } else if (searchArr[i].User.skilllevel===3) {
-                searchArr[i].User.skilllevel= "2.5 - Beginner +";
-            } else if (searchArr[i].User.skilllevel===4) {
-                searchArr[i].User.skilllevel= "3.0 - Beginner-Intermediate";
-            } else if (searchArr[i].User.skilllevel===5) {
-                searchArr[i].User.skilllevel= "3.5 - Intermediate";
-            } else if (searchArr[i].User.skilllevel===6) {
-                searchArr[i].User.skilllevel= "4.0 - Intermediate-Advanced";
-            } else if (searchArr[i].User.skilllevel===7) {
-                searchArr[i].User.skilllevel= "4.5 - Advanced";
+            } else if (searchArr[i].User.skilllevel === 2) {
+                searchArr[i].User.skilllevel = "2.0 - Beginner";
+            } else if (searchArr[i].User.skilllevel === 3) {
+                searchArr[i].User.skilllevel = "2.5 - Beginner +";
+            } else if (searchArr[i].User.skilllevel === 4) {
+                searchArr[i].User.skilllevel = "3.0 - Beginner-Intermediate";
+            } else if (searchArr[i].User.skilllevel === 5) {
+                searchArr[i].User.skilllevel = "3.5 - Intermediate";
+            } else if (searchArr[i].User.skilllevel === 6) {
+                searchArr[i].User.skilllevel = "4.0 - Intermediate-Advanced";
+            } else if (searchArr[i].User.skilllevel === 7) {
+                searchArr[i].User.skilllevel = "4.5 - Advanced";
             }
         }
 
-        this.setState({searchResult: searchArr});
+        this.setState({ searchResult: searchArr });
     }
 
     handleInputChange = event => {
@@ -93,11 +96,12 @@ class Requests extends Component {
                     },
                     body: JSON.stringify(confirmedEventInfo)
                 })
-                .then(response=> {
-                    console.log(response);
-                    this.getRequests();
-                })
-                .catch(err=>console.log(err))
+                    .then(response => {
+                        console.log(response);
+                        socket.emit("newMatchNotification", this.state.userid);
+                        this.getRequests();
+                    })
+                    .catch(err => console.log(err))
                 // this.getRequests();
             })
             .catch(err => console.log(err));
@@ -120,6 +124,7 @@ class Requests extends Component {
         })
             .then(res => {
                 console.log(res);
+                socket.emit("newMatchNotification", this.state.userid);
                 this.getRequests();
             })
             .catch(err => console.log(err));
@@ -132,37 +137,37 @@ class Requests extends Component {
             <div>
                 <Nav />
                 <Container>
-                <Grid container spacing={3} direction="column" alignItems="center" >
-                    <Grid item xs={12} >
-                        <RequestDisplay />
+                    <Grid container spacing={3} direction="column" alignItems="center" >
+                        <Grid item xs={12} >
+                            <RequestDisplay />
+                        </Grid>
+                        {this.state.searchResult.length !== 0 ?
+                            this.state.searchResult.map((event, i) => (
+                                <Grid item xs={12}>
+                                    <RequestCard
+                                        key={i}
+                                        title={event.title}
+                                        proposeUserid={event.UserId}
+                                        proposeUsername={event.User.username}
+                                        proposeUserFirstname={event.User.firstname}
+                                        proposeUserLastname={event.User.lastname}
+                                        proposeUserSkill={event.User.skilllevel}
+                                        eventLocation={event.location}
+                                        fullStarttime={event.start}
+                                        fullEndtime={event.end}
+                                        starttime={moment(event.start).format("hh:mm a")}
+                                        endtime={moment(event.end).format("hh:mm a")}
+                                        date={moment(event.start).format("L")}
+                                        eventId={event.id}
+                                        handleInputChange={this.handleInputChange}
+                                        handleConfirm={this.handleConfirm}
+                                        handleDeny={this.handleDeny}
+                                    />
+                                </Grid>
+                            ))
+                            : <Grid item xs={12}><p>You currently have no requests.</p></Grid>
+                        }
                     </Grid>
-                    {this.state.searchResult.length !== 0 ?
-                        this.state.searchResult.map((event, i) => (
-                            <Grid item xs={12}>
-                            <RequestCard
-                                key={i}
-                                title={event.title}
-                                proposeUserid={event.UserId}
-                                proposeUsername={event.User.username}
-                                proposeUserFirstname={event.User.firstname}
-                                proposeUserLastname={event.User.lastname}
-                                proposeUserSkill={event.User.skilllevel}
-                                eventLocation={event.location}
-                                fullStarttime={event.start}
-                                fullEndtime={event.end}
-                                starttime={moment(event.start).format("hh:mm a")}
-                                endtime={moment(event.end).format("hh:mm a")}
-                                date={moment(event.start).format("L")}
-                                eventId={event.id}
-                                handleInputChange={this.handleInputChange}
-                                handleConfirm={this.handleConfirm}
-                                handleDeny={this.handleDeny}
-                            />
-                            </Grid>
-                        ))
-                        : <Grid item xs={12}><p>You currently have no requests.</p></Grid>
-                    }
-                </Grid>
                 </Container>
             </div>
         )

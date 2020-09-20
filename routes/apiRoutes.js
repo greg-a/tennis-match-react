@@ -233,7 +233,8 @@ module.exports = function (app) {
                     {
                         model: db.User,
                         as: 'secondUser'
-                    }]
+                    }],
+                    order: [["createdAt", "DESC"]]
             }).then(function (results) {
                 res.json(results)
             })
@@ -255,7 +256,8 @@ module.exports = function (app) {
                     {
                         model: db.User,
                         as: 'secondUser'
-                    }]
+                    }],
+                    order: [["createdAt", "DESC"]]
             }).then(function (results) {
                 res.json(results)
             })
@@ -299,6 +301,7 @@ module.exports = function (app) {
                     {model: db.User,
                         attributes: ["username","firstname","lastname","id","skilllevel"],}]
             }).then(function (results) {
+                results = {results: results, userid: req.session.userID}
                 res.json(results);
             });
         } else {
