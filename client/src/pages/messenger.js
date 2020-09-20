@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import io from 'socket.io-client';
 import Nav from "../components/Nav";
 import "./style.css";
-import { Autocomplete, Alert } from '@material-ui/lab';
-import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper, Box, withStyles, Snackbar } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
+import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper, Box, withStyles } from '@material-ui/core';
 import moment from "moment";
 import BottomNav from "../components/BottomNav";
 
@@ -29,8 +29,6 @@ class Messenger extends Component {
         userSearch: "",
         navValue: "",
         userId: "",
-        messageDisabled: true,
-        alertOpen: false,
         subsectionShow: "inbox",
         bottomNavValue: "inbox-tab"
     };
@@ -38,7 +36,6 @@ class Messenger extends Component {
 
     componentDidMount() {
         this.getProfileInfo();
-        console.log("this is a new day: " + new Date);
     };
 
 
@@ -118,7 +115,7 @@ class Messenger extends Component {
             })
                 .catch(err => console.log(err));
 
-            this.setState({ messageDisabled: false, sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
+            this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room, userId });
@@ -175,7 +172,7 @@ class Messenger extends Component {
 
     // sends message to socket server
     pushSendMessage = event => {
-        if (((event.keyCode == 13 && !event.shiftKey) || event.type === "click") && !this.state.messageDisabled) {
+        if ((event.keyCode == 13 && !event.shiftKey) || event.type === "click") {
             event.preventDefault();
             const socket = io();
 
@@ -208,10 +205,6 @@ class Messenger extends Component {
                 .catch(err => console.log(err));
 
             this.setState({ sendMessage: "" });
-        }
-        else if (((event.keyCode == 13 && !event.shiftKey) || event.type === "click") && this.state.messageDisabled) {
-            event.preventDefault();
-            this.setState({ alertOpen: true });
         }
     };
 
@@ -247,7 +240,8 @@ class Messenger extends Component {
             console.log("newValue id: " + newValue.id)
             const room = this.createRoom(newValue.id, this.state.user.userid);
             const socket = io();
-            const username = this.state.user.username
+            const username = this.state.user.username;
+            this.setChatPage();
 
             fetch("/api/messages/read/" + newValue.id, {
                 method: "PUT",
@@ -259,7 +253,7 @@ class Messenger extends Component {
             })
                 .catch(err => console.log(err));
 
-            this.setState({ messageDisabled: false, sendTo: { firstname: newValue.firstname, lastname: newValue.lastname, username: newValue.username, id: newValue.id, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == newValue.id || message.senderId == newValue.id) });
+            this.setState({ sendTo: { firstname: newValue.firstname, lastname: newValue.lastname, username: newValue.username, id: newValue.id, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == newValue.id || message.senderId == newValue.id) });
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
@@ -298,14 +292,6 @@ class Messenger extends Component {
             this.setState({ userSearch: "", users: [] })
         }
     }
-    
-    handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-        return;
-    }
-
-    this.setState({ alertOpen: false });
-    };
 
     setInboxPage = () => {
         this.setState({ subsectionShow: "inbox", bottomNavValue: "inbox-tab" });
@@ -401,7 +387,6 @@ class Messenger extends Component {
                                         variant="contained"
                                         endIcon={<Icon>send</Icon>}
                                         onClick={this.pushSendMessage}
-                                        disabled={this.state.messageDisabled}
                                     >
                                     </Button>
                                 </div>
@@ -451,12 +436,8 @@ class Messenger extends Component {
                     value={this.state.bottomNavValue}
                     setInboxPage={this.setInboxPage}
                     setChatPage={this.setChatPage}
+                    sendTo={this.state.sendTo.username}
                 />
-                <Snackbar open={this.state.alertOpen} autoHideDuration={3000} onClose={this.handleClose}>
-                <   Alert onClose={this.handleClose} severity="info">
-                    Choose a user to message.
-                    </Alert>
-                 </Snackbar>
             </div>
         )
     }

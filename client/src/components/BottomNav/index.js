@@ -17,16 +17,14 @@ const useStyles = makeStyles({
 
 export default function BottomNav(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(props.value);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
-    <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
+    <BottomNavigation value={props.value} className={classes.root}>
       <BottomNavigationAction label="Inbox" value="inbox-tab" icon={<PeopleIcon />} onClick={props.setInboxPage}/>
-      <BottomNavigationAction label="Chat" value="chat-tab" icon={<ChatIcon />} onClick={props.setChatPage}/>
+      {props.sendTo ?
+        <BottomNavigationAction label={props.sendTo} value="chat-tab" icon={<ChatIcon />} onClick={props.setChatPage}/>
+        : null
+      }
     </BottomNavigation>
   );
 }
