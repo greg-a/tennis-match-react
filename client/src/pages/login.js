@@ -1,12 +1,19 @@
 import React from "react";
 import LoginForm from "../components/LoginForm";
-import { Grid, TextField, Box } from '@material-ui/core';
+import { Grid, TextField, Box, Snackbar } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 class Login extends React.Component {
     state = {
         loginUsername: "",
         loginPassword: "",
-        loginInstructions: "Please enter your details"
+        loginInstructions: "Please enter your details",
+        openSnackbar: false,
+        severity: ""
     };
 
     handleInputChange = event => {
@@ -15,6 +22,14 @@ class Login extends React.Component {
             [name]: value
         });
     };
+
+    handleSnackbarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        this.setState({ openSnackbar: false });
+    }
 
     handleFormSubmit = event => {
         event.preventDefault();
@@ -36,14 +51,18 @@ class Login extends React.Component {
                 console.log(res);
                 if (res.statusString === "noPassOrUser") {
                     this.setState({
-                        loginInstructions: "Must enter Username and Password"
+                        loginInstructions: "Must enter Username and Password",
+                        openSnackbar: true,
+                        severity: "error"
                     });
                 } else if (res.statusString === "wrongPassOrUser") {
                     this.setState({
-                        loginInstructions: "Incorrect Username and/or Password"
+                        loginInstructions: "Incorrect Username and/or Password",
+                        openSnackbar: true,
+                        severity: "error"
                     });
                 } else if (res.statusString === "loggedin") {
-                    console.log("wow it worked");
+                    // console.log("wow it worked");
                     window.location.href = "/";
                 }
             })
@@ -72,6 +91,11 @@ class Login extends React.Component {
 
                         </Grid>
                     </Box>
+                    <Snackbar open={this.state.openSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
+                        <Alert onClose={this.handleSnackbarClose} severity={this.state.severity}>
+                            {this.state.loginInstructions}
+                        </Alert>
+                    </Snackbar>
                 </Box>
             </div>
         );
