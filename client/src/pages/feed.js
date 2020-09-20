@@ -8,11 +8,15 @@ class Feed extends React.Component {
     state = {
         navValue: "tab-one",
         matches: [],
-        updatedMatches: []
+        updatedMatches: [],
+        messageNotifications: 0,
+        matchNotifications: 0,
+        generalNotification: false
     }
 
     componentDidMount() {
         this.getDates();
+        localStorage.removeItem("selectedDate")
     }
 
     getDates = () => {
@@ -31,7 +35,17 @@ class Feed extends React.Component {
                 this.setState({ updatedMatches: dates })
             })
             .catch(err => console.log(err));
-    }
+    };
+
+    getNotifications = () => {
+        fetch("/api/notifications").then(res => res.json())
+            .then((notifications) => {
+                console.log(notifications)
+                if (notifications.messages > 0 || notifications.matches > 0) {
+                    this.setState({ messageNotifications: notifications.messages, matchNotifications: notifications.matches, generalNotification: true });
+                }
+            });
+    };
 
     handleDeny = event => {
         fetch("api/event/delete/" + event.target.dataset.id, {
@@ -56,7 +70,7 @@ class Feed extends React.Component {
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         {!this.state.matches.length && !this.state.updatedMatches.length ? (
-                            <Grid item xs={12} style={{textAlign: "center"}}>
+                            <Grid item xs={12} style={{ textAlign: "center" }}>
                                 <h4 className="text-center">No scheduled matches</h4>
                             </Grid>
                         ) : (

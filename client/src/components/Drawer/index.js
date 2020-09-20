@@ -8,8 +8,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import SportsTennisIcon from '@material-ui/icons/SportsTennis';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
@@ -21,7 +19,6 @@ import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { withRouter } from "react-router-dom";
 import Badge from '@material-ui/core/Badge';
-import NotificationUpdate from '../../utils/NotificationUpdate';
 
 const useStyles = makeStyles({
   list: {
@@ -46,11 +43,11 @@ const Drawer = (props) => {
     right: false,
   });
 
-  const [notificationState, setNotificationState] = useState({
-    messages: 0,
-    matches: 0,
-    notifications: false
-  })
+  // const [notificationState, setNotificationState] = useState({
+  //   messages: 0,
+  //   matches: 0,
+  //   notifications: false
+  // })
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -69,15 +66,15 @@ const Drawer = (props) => {
       .catch(err => console.log(err));
   }
 
-  useEffect(() => {
-    fetch("/api/notifications").then(res => res.json())
-      .then((notifications) => {
-        console.log(notifications)
-        if (notifications.messages > 0 || notifications.matches > 0) {
-          setNotificationState({ messages: notifications.messages, matches: notifications.matches, notifications: true });
-        }
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("/api/notifications").then(res => res.json())
+  //     .then((notifications) => {
+  //       console.log(notifications)
+  //       if (notifications.messages > 0 || notifications.matches > 0) {
+  //         setNotificationState({ messages: notifications.messages, matches: notifications.matches, notifications: true });
+  //       }
+  //     });
+  // }, []);
 
 
   const itemsList = [
@@ -98,7 +95,7 @@ const Drawer = (props) => {
     },
     {
       text: "Messenger",
-      icon: <Badge badgeContent={notificationState.messages} color="secondary"><ChatBubbleOutlineIcon /></Badge>,
+      icon: <Badge badgeContent={props.messageNotifications} color="secondary"><ChatBubbleOutlineIcon /></Badge>,
       onClick: () => history.push("/messenger")
     },
     {
@@ -108,7 +105,7 @@ const Drawer = (props) => {
     },
     {
       text: "Requests",
-      icon: <Badge badgeContent={notificationState.matches} color="secondary"><AssignmentTurnedInIcon /></Badge>,
+      icon: <Badge badgeContent={props.matchNotifications} color="secondary"><AssignmentTurnedInIcon /></Badge>,
       onClick: () => history.push("/requests")
     },
     {
@@ -139,7 +136,6 @@ const Drawer = (props) => {
           return (
             <ListItem button key={text} onClick={onClick}>
               {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
               <ListItemText primary={text} />
             </ListItem>
           );
@@ -155,7 +151,7 @@ const Drawer = (props) => {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)} >
-            <Badge color="primary" variant="dot" badgeContent=" " anchorOrigin={{ vertical: 'top', horizontal: 'right' }} invisible={!notificationState.notifications}>
+            <Badge color="primary" variant="dot" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} invisible={props.generalNotification}>
               <SportsTennisIcon className={clsx(classes.tennisButton)} />
             </Badge>
           </Button>
