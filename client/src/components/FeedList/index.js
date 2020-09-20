@@ -1,7 +1,5 @@
 import React from "react";
-import Thumbnail from "../Thumbnail";
-// import { Container, Row, Col } from "../Grid";
-import { makeStyles, TextField, Button, Grid, Box, Paper, ListItem, ListItemText, List, ListItemAvatar, Avatar, Divider, Container } from '@material-ui/core';
+import { Button, Paper, ListItem, ListItemText, List, ListItemAvatar, Avatar, Divider, Container } from '@material-ui/core';
 
 // For entire feed of FeedItem components
 export function FeedList({ children }) {
@@ -25,16 +23,6 @@ export function FeedListItem({
 }) {
     return (
         <Paper>
-            {/* <Grid container spacing={3}>
-                <Grid item xs={4} sm={2}>
-                    <Thumbnail src={thumbnail} />
-                </Grid>
-                <Grid item xs={8} sm={10}>
-                    <p>{organizer} scheduled a match with {confirmer} on {month}/{day} at {hour}:{minute}.</p>
-                </Grid>
-            </Grid> */}
-
-
             <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                     <Avatar alt={organizer} src={thumbnail} />
@@ -64,17 +52,6 @@ export function FeedListItemDeny({
     confirmer
 }) {
     return (
-        // <div className="list-group-item">
-        //     <Grid container spacing={3}>
-        //         <Grid item xs={4} sm={2}>
-        //             <Thumbnail src={thumbnail} />
-        //         </Grid>
-        //         <Grid item xs={8} sm={10}>
-        //             <p>{title}. Proposed for {month}/{day} at {hour}:{minute}.</p>
-        //             <button className="btn" onClick={okayDeny} data-id={eventID}>Ok</button>
-        //         </Grid>
-        //     </Grid>
-        // </div>
         <Paper>
             <ListItem alignItems="flex-start">
                 <ListItemAvatar>

@@ -8,8 +8,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import SportsTennisIcon from '@material-ui/icons/SportsTennis';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
@@ -21,7 +19,7 @@ import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { withRouter } from "react-router-dom";
 import Badge from '@material-ui/core/Badge';
-import NotificationUpdate from '../../utils/NotificationUpdate';
+import io from 'socket.io-client';
 
 const useStyles = makeStyles({
   list: {
@@ -49,7 +47,8 @@ const Drawer = (props) => {
   const [notificationState, setNotificationState] = useState({
     messages: 0,
     matches: 0,
-    notifications: false
+    notifications: false,
+    userid: null
   })
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -70,14 +69,35 @@ const Drawer = (props) => {
   }
 
   useEffect(() => {
+    getNotifications();
+    
+  }, []);
+
+  const getNotifications = () => {
     fetch("/api/notifications").then(res => res.json())
       .then((notifications) => {
         console.log(notifications)
         if (notifications.messages > 0 || notifications.matches > 0) {
-          setNotificationState({ messages: notifications.messages, matches: notifications.matches, notifications: true });
+          setNotificationState({ userid: notifications.userid, messages: notifications.messages, matches: notifications.matches, notifications: true });
         }
+        else {
+          setNotificationState({ ...notificationState, userid: notifications.userid })
+          console.log("socket id: " + notificationState.userid)
+        }
+        // socketConnect()
       });
-  }, []);
+  };
+
+  const socketConnect = () => {
+    // start socket connection to listen for new notifications
+    const socket = io();
+    const userid = notificationState.userid
+    
+    socket.emit("notifyMe", userid);
+    socket.on("notification", data => {
+      console.log(data);
+    })
+  }
 
 
   const itemsList = [
@@ -139,7 +159,6 @@ const Drawer = (props) => {
           return (
             <ListItem button key={text} onClick={onClick}>
               {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
               <ListItemText primary={text} />
             </ListItem>
           );
@@ -155,7 +174,7 @@ const Drawer = (props) => {
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)} >
-            <Badge color="primary" variant="dot" badgeContent=" " anchorOrigin={{ vertical: 'top', horizontal: 'right' }} invisible={!notificationState.notifications}>
+            <Badge color="primary" variant="dot" anchorOrigin={{ vertical: 'top', horizontal: 'right' }} invisible={!notificationState.notifications}>
               <SportsTennisIcon className={clsx(classes.tennisButton)} />
             </Badge>
           </Button>

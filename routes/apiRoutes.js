@@ -493,7 +493,7 @@ module.exports = function (app) {
             Promise
                 .all([messageNotifications, matchNotifications])
                 .then(responses => {
-                    res.json({ messages: responses[0], matches: responses[1] })
+                    res.json({ messages: responses[0], matches: responses[1], userid: req.session.userID })
                     console.log(responses)
                 })
                 .catch(err => console.log(err));

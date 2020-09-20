@@ -15,9 +15,10 @@ var PORT = process.env.PORT || 3001;
 io.on('connection', (socket) => {
 
   //user joins a room
-  socket.on("joinRoom", ({ username, room }) => {
-    const user = { socketId: socket.id, username: username, room: room };
+  socket.on("joinRoom", ({ username, room, userid }) => {
+    const user = { socketId: socket.id, username: username, room: room, userid: userid };
 
+    io.in(user.userid).emit("notification", "update")
     socket.join(user.room);
 
     console.log(user.username + " has joined " + user.room);
@@ -34,6 +35,13 @@ io.on('connection', (socket) => {
       }
     })
   });
+
+  socket.on("notifyMe", userid => {
+    console.log(userid)
+    const user = { socketId: socket.id, room: userid, userid: userid };
+    socket.join(user.room);
+    console.log(user.userid + " is listening for notifications.")
+  })
 
   //Receives a new message
   socket.on("input", data => {

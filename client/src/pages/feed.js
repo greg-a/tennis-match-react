@@ -1,18 +1,22 @@
 import React from "react";
 import Nav from "../components/Nav";
 import { FeedList, FeedListItem, FeedListItemDeny } from "../components/FeedList";
-// import { Container, Row, Col} from "../components/Grid";
 import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
 
 class Feed extends React.Component {
     state = {
         navValue: "tab-one",
         matches: [],
-        updatedMatches: []
+        updatedMatches: [],
+        messageNotifications: 0,
+        matchNotifications: 0,
+        noNotifications: true
     }
 
     componentDidMount() {
         this.getDates();
+        this.getNotifications();
+        localStorage.removeItem("selectedDate")
     }
 
     getDates = () => {
@@ -31,7 +35,17 @@ class Feed extends React.Component {
                 this.setState({ updatedMatches: dates })
             })
             .catch(err => console.log(err));
-    }
+    };
+
+    getNotifications = () => {
+        fetch("/api/notifications").then(res => res.json())
+            .then((notifications) => {
+                console.log(notifications)
+                if (notifications.messages > 0 || notifications.matches > 0) {
+                    this.setState({ messageNotifications: notifications.messages, matchNotifications: notifications.matches, noNotifications: false });
+                }
+            });
+    };
 
     handleDeny = event => {
         fetch("api/event/delete/" + event.target.dataset.id, {
@@ -51,12 +65,10 @@ class Feed extends React.Component {
                 <Nav
                     value={this.state.navValue}
                 />
-                {/* <FeedListItem /> */}
-                {/* <Row> */}
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         {!this.state.matches.length && !this.state.updatedMatches.length ? (
-                            <Grid item xs={12} style={{textAlign: "center"}}>
+                            <Grid item xs={12} style={{ textAlign: "center" }}>
                                 <h4 className="text-center">No scheduled matches</h4>
                             </Grid>
                         ) : (
@@ -91,9 +103,6 @@ class Feed extends React.Component {
                             )}
                     </Grid>
                 </Grid>
-                {/* </Row> */}
-                {/* </Container> */}
-
             </div>
 
         );

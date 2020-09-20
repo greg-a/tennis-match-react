@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import io from 'socket.io-client';
 import Nav from "../components/Nav";
 import "./style.css";
-import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper, Box, withStyles, Select } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Autocomplete } from '@material-ui/lab';
+import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper, Box, withStyles } from '@material-ui/core';
 import moment from "moment";
 import BottomNav from "../components/BottomNav";
 
@@ -31,13 +31,11 @@ class Messenger extends Component {
         userId: "",
         subsectionShow: "inbox",
         bottomNavValue: "inbox-tab"
-        messageDisabled: true
     };
 
 
     componentDidMount() {
         this.getProfileInfo();
-        console.log("this is a new day: " + new Date);
     };
 
 
@@ -117,10 +115,10 @@ class Messenger extends Component {
             })
                 .catch(err => console.log(err));
 
-            this.setState({ messageDisabled: false, sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
+            this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
 
             //sends server username and name of room
-            socket.emit("joinRoom", { username, room });
+            socket.emit("joinRoom", { username, room, userId });
 
             //listens for new messages being emitted by the socket server
             socket.on("output", data => {
@@ -242,7 +240,8 @@ class Messenger extends Component {
             console.log("newValue id: " + newValue.id)
             const room = this.createRoom(newValue.id, this.state.user.userid);
             const socket = io();
-            const username = this.state.user.username
+            const username = this.state.user.username;
+            this.setChatPage();
 
             fetch("/api/messages/read/" + newValue.id, {
                 method: "PUT",
@@ -388,7 +387,6 @@ class Messenger extends Component {
                                         variant="contained"
                                         endIcon={<Icon>send</Icon>}
                                         onClick={this.pushSendMessage}
-                                        disabled={this.state.messageDisabled}
                                     >
                                     </Button>
                                 </div>
@@ -438,6 +436,7 @@ class Messenger extends Component {
                     value={this.state.bottomNavValue}
                     setInboxPage={this.setInboxPage}
                     setChatPage={this.setChatPage}
+                    sendTo={this.state.sendTo.username}
                 />
             </div>
         )
