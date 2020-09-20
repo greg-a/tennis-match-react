@@ -72,9 +72,10 @@ class Scheduler extends Component {
   }
 
   setModalShow = (mName, bVal) => {
-    if (this.state.dateModalShow) {
-      localStorage.removeItem("selectedDate");
-    };
+    //deletes local storage when clicking create event
+    // if (this.state.dateModalShow) {
+    //   localStorage.removeItem("selectedDate");
+    // };
 
     this.setState({ [mName]: bVal });
   };
