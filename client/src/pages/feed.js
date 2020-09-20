@@ -51,46 +51,47 @@ class Feed extends React.Component {
                 <Nav
                     value={this.state.navValue}
                 />
-                {/* <Container> */}
-                    {/* <FeedListItem /> */}
-                    {/* <Row> */}
-                    <Grid container spacing={3}>
+                {/* <FeedListItem /> */}
+                {/* <Row> */}
+                <Grid container spacing={3}>
                     <Grid item xs={12}>
-                            {!this.state.matches.length && !this.state.updatedMatches.length ? (
+                        {!this.state.matches.length && !this.state.updatedMatches.length ? (
+                            <Grid item xs={12} style={{textAlign: "center"}}>
                                 <h4 className="text-center">No scheduled matches</h4>
-                            ) : (
-                                    <FeedList>
-                                        {this.state.updatedMatches.map(match => {
-                                            return (
-                                                <FeedListItemDeny
-                                                    title={match.title}
-                                                    month={match.start.substring(5, 7)}
-                                                    day={match.start.substring(8, 10)}
-                                                    hour={match.start.substring(11, 13)}
-                                                    minute={match.start.substring(14, 16)}
-                                                    okayDeny={this.handleDeny}
-                                                    eventID={match.id}
-                                                />
-                                            );
-                                        })}
-                                        {this.state.matches.map(match => {
-                                            return (
-                                                <FeedListItem
-                                                    organizer={match.User.username}
-                                                    confirmer={match.secondUser.username}
-                                                    month={match.start.substring(5, 7)}
-                                                    day={match.start.substring(8, 10)}
-                                                    hour={match.start.substring(11, 13)}
-                                                    minute={match.start.substring(14, 16)}
-                                                />
-                                            );
-                                        })}
-                                    </FeedList>
-                                )}
-                        </Grid>
+                            </Grid>
+                        ) : (
+                                <FeedList>
+                                    {this.state.updatedMatches.map(match => {
+                                        return (
+                                            <FeedListItemDeny
+                                                title={match.title}
+                                                month={match.start.substring(5, 7)}
+                                                day={match.start.substring(8, 10)}
+                                                hour={match.start.substring(11, 13)}
+                                                minute={match.start.substring(14, 16)}
+                                                okayDeny={this.handleDeny}
+                                                eventID={match.id}
+                                                confirmer={match.secondUser.username}
+                                            />
+                                        );
+                                    })}
+                                    {this.state.matches.map(match => {
+                                        return (
+                                            <FeedListItem
+                                                organizer={match.User.username}
+                                                confirmer={match.secondUser.username}
+                                                month={match.start.substring(5, 7)}
+                                                day={match.start.substring(8, 10)}
+                                                hour={match.start.substring(11, 13)}
+                                                minute={match.start.substring(14, 16)}
+                                            />
+                                        );
+                                    })}
+                                </FeedList>
+                            )}
                     </Grid>
-                        
-                    {/* </Row> */}
+                </Grid>
+                {/* </Row> */}
                 {/* </Container> */}
 
             </div>

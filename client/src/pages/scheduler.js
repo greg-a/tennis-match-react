@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import FullCalendar, { formatDate } from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import { SchedulerModal, EventDetailsModal } from "../components/Modal";
 import Nav from "../components/Nav";
 import moment from "moment";
 import CalendarEvent from "../utils/CalendarEvent";
+import {Container, Box} from '@material-ui/core';
+import "./style.css";
 
 class Scheduler extends Component {
 
@@ -70,9 +72,10 @@ class Scheduler extends Component {
   }
 
   setModalShow = (mName, bVal) => {
-    if (this.state.dateModalShow) {
-      localStorage.removeItem("selectedDate");
-    };
+    //deletes local storage when clicking create event
+    // if (this.state.dateModalShow) {
+    //   localStorage.removeItem("selectedDate");
+    // };
 
     this.setState({ [mName]: bVal });
   };
@@ -119,21 +122,24 @@ class Scheduler extends Component {
         <Nav
           value={this.state.navValue}
         />
-        <div className="container">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            dateClick={this.handleDateClick}
-            initialView="dayGridMonth"
-            events={this.state.calendarEvents}
-            // events={this.state.savedDates}
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            }}
-            eventClick={this.handleEventClick}
-          // eventColor="#fff600"
-          />
+        <Container maxWidth="md">
+          <Box paddingTop="20px" >
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              dateClick={this.handleDateClick}
+              initialView="dayGridMonth"
+              height="auto"
+              events={this.state.calendarEvents}
+              // events={this.state.savedDates}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+              }}
+              eventClick={this.handleEventClick}
+            // eventColor="#fff600"
+            />
+          </Box>
           <SchedulerModal
             show={this.state.dateModalShow}
             onHide={() => this.setModalShow("dateModalShow", false)}
@@ -155,8 +161,8 @@ class Scheduler extends Component {
             date={moment(this.state.selectedEvent.start).format("MM/DD/YYYY")}
             handleDelete={this.deleteEvent}
           />
+        </Container>
         </div>
-      </div>
 
     )
   }

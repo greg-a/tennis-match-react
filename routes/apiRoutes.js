@@ -12,7 +12,7 @@ module.exports = function (app) {
         var password = req.body.password;
 
         if (username && password) {
-            var hashed_password = crypto.createHash("sha1").update(req.body.password).digest("hex");
+            var hashed_password = crypto.createHash("sha256").update(req.body.password).digest("hex");
             db.User.findAll({
                 where: {
                     username: username,
@@ -68,7 +68,7 @@ module.exports = function (app) {
             db.User.findAll({ where: accountGetObj }).then(function (results) {
                 // console.log("this works: " + results.length);
                 if (results.length === 0) {
-                    var hashed_password = crypto.createHash("sha1").update(req.body.password).digest("hex");
+                    var hashed_password = crypto.createHash("sha256").update(req.body.password).digest("hex");
                     var postObj = {
                         username: username,
                         password: hashed_password,
@@ -133,35 +133,39 @@ module.exports = function (app) {
     // search for usernames
     app.get("/api/username", function (req, res) {
         if (req.session.loggedin) {
-            if ((req.query.username).split(" ").length > 1) {
-                let userArr = (req.query.username).split(" ");
+            if (req.query.username==="") {
 
-                db.User.findAll({
-                    attributes: ["username", "firstname", "lastname", "id"],
-                    where: {
-                        [Op.and]: [
-                            { firstname: { [Op.substring]: userArr[0] } },
-                            { lastname: { [Op.substring]: userArr[1] } },
-                            { id: { [Op.not]: req.session.userID } }
-                        ]
-                    }
-                }).then(function (results) {
-                    res.json(results);
-                });
             } else {
-                db.User.findAll({
-                    attributes: ["username", "firstname", "lastname", "id"],
-                    where: {
-                        id: { [Op.not]: req.session.userID },
-                        [Op.or]: [
-                            { username: { [Op.substring]: req.query.username } },
-                            { firstname: { [Op.substring]: req.query.username } },
-                            { lastname: { [Op.substring]: req.query.username } }
-                        ]
-                    }
-                }).then(function (results) {
-                    res.json(results);
-                });
+                if ((req.query.username).split(" ").length > 1) {
+                    let userArr = (req.query.username).split(" ");
+
+                    db.User.findAll({
+                        attributes: ["username", "firstname", "lastname", "id"],
+                        where: {
+                            [Op.and]: [
+                                { firstname: { [Op.substring]: userArr[0] } },
+                                { lastname: { [Op.substring]: userArr[1] } },
+                                { id: { [Op.not]: req.session.userID } }
+                            ]
+                        }
+                    }).then(function (results) {
+                        res.json(results);
+                    });
+                } else {
+                    db.User.findAll({
+                        attributes: ["username", "firstname", "lastname", "id"],
+                        where: {
+                            id: { [Op.not]: req.session.userID },
+                            [Op.or]: [
+                                { username: { [Op.substring]: req.query.username } },
+                                { firstname: { [Op.substring]: req.query.username } },
+                                { lastname: { [Op.substring]: req.query.username } }
+                            ]
+                        }
+                    }).then(function (results) {
+                        res.json(results);
+                    });
+                }
             }
         } else {
             res.status(400).end();

@@ -58,6 +58,19 @@
     width: 60%;
     background-color: white;
     /* border-radius: 25px; */
+    width: 300px;
+}
+
+@media (max-width: 650px){
+    .fc-toolbar-title {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+    .fc-toolbar {
+        flex-direction: column;
+
+    }
+    
 }
 
 .list-item {
