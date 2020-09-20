@@ -7,6 +7,27 @@ const useStyles = makeStyles((theme) => ({
         "&:-webkit-autofill": {
             WebkitBoxShadow: "0 0 0 1000px rgb(144,238,80) inset"
         }
+    },
+    button: {
+        background: 'linear-gradient(45deg, #269bee 30%, #4eadf0 90%)',
+        borderRadius: 3,
+        border: 0,
+        color: 'white',
+        height: 48,
+        padding: '0 18px',
+        boxShadow: '0 3px 5px 2px rgb(125, 195, 245, .4)',
+    },
+    buttonTwo: {
+        backgroundColor: 'white',
+        "&:hover": {
+            background: 'white'
+        },
+        borderRadius: 3,
+        border: 0,
+        color: '#45d500',
+        height: 42,
+        padding: '0 18px',
+        boxShadow: '0 3px 5px 2px rgb(108, 230, 49, .4)',
     }
 }));
 
@@ -18,7 +39,7 @@ function SignupForm(props) {
         <div>
             <div className="subtitle-and-instructions">
                 <h2 className="login-page-subtitle">Create Account</h2>
-                <div><p>{props.loginInstructions}</p></div>
+                <div><p>{props.signupInstructions}</p></div>
             </div>
 
             <Box display="flex" justifyContent="center" alignItems="center">
@@ -38,13 +59,17 @@ function SignupForm(props) {
 
 
             <Box display="flex" justifyContent="center" alignItems="center" paddingTop="15px">
-                <Button variant="contained" onClick={props.handleFormSubmit} id="login-button">Create Account</Button>
+                <Button variant="contained" onClick={props.handleFormSubmit} id="login-button"
+                classes={{root: classes.button}}
+                >Create Account</Button>
             </Box>
 
             <Box marginTop="60px">
                 <div className="subtitle-and-instructions">
                     <p>Already a member?</p>
-                    <Button variant="contained" href="/">LOG IN</Button>
+                    <Button variant="contained" href="/"
+                    classes={{root: classes.buttonTwo}}
+                    >LOG IN</Button>
                 </div>
             </Box>
         </div>
