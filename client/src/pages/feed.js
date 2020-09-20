@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "../components/Nav";
 import { FeedList, FeedListItem, FeedListItemDeny } from "../components/FeedList";
-import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
+import { makeStyles, TextField, Button, Grid, Box, Container } from '@material-ui/core';
 import moment from "moment";
 
 class Feed extends React.Component {
@@ -66,6 +66,7 @@ class Feed extends React.Component {
                 <Nav
                     value={this.state.navValue}
                 />
+                <Container fixed>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         {!this.state.matches.length && !this.state.updatedMatches.length ? (
@@ -102,6 +103,7 @@ class Feed extends React.Component {
                             )}
                     </Grid>
                 </Grid>
+                </Container>
             </div>
 
         );
