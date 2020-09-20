@@ -33,7 +33,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    position: sticky;
+    /* position: sticky; */
     bottom: 0;
 }
 
