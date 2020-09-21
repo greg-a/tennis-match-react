@@ -190,15 +190,15 @@ class Messenger extends Component {
                 .catch(err => console.log(err));
 
             const allRooms = this.state.rooms
-            allRooms.push(room);
-
-            this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, rooms: allRooms, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
-
             //checks current room connections and joins room
             if (!this.state.rooms.includes(room)) {
                 socket.emit("joinRoom", { username, room, userId });
                 alert("Joined room: " + room)
+                allRooms.push(room);
             };
+            
+            this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
+
 
             this.setState({ userSearch: "", users: [] })
         }
