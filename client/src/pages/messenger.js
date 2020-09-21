@@ -14,6 +14,17 @@ const useStyles = {
         //   paddingTop: '25px',
         //   color: '#FFFFFF'
     },
+    underline: {
+        '&:before': {
+          borderBottomColor: "white",
+        },
+        '&:after': {
+          borderBottomColor: "white",
+        },
+        '&:hover:before': {
+          borderBottomColor: ["white", '!important'],
+        },
+      }
 };
 
 class Messenger extends Component {
@@ -376,22 +387,25 @@ class Messenger extends Component {
                                     <h2>{this.state.sendTo.username}</h2>
                                 </Grid>
                                 <Grid item xs={12} sm={8}>
-                                    <div className="send-message">
-                                        <TextField
-                                            id="standard-basic"
-                                            placeholder="Send message..."
-                                            multiline
-                                            className="message-field"
-                                            onChange={this.handleInputChange}
-                                            value={this.state.sendMessage}
-                                            onKeyDown={this.pushSendMessage}
-                                        />
-                                        <Button
-                                            variant="contained"
-                                            endIcon={<Icon>send</Icon>}
-                                            onClick={this.pushSendMessage}
-                                        >
-                                        </Button>
+                                    <div className="send-message-wrapper">
+                                        <div className="send-message">
+                                            <TextField
+                                                InputProps={{classes: {underline: classes.underline}}}
+                                                id="standard-basic"
+                                                placeholder="Send message..."
+                                                multiline
+                                                className="message-field"
+                                                onChange={this.handleInputChange}
+                                                value={this.state.sendMessage}
+                                                onKeyDown={this.pushSendMessage}
+                                            />
+                                            <Button
+                                                // variant="contained"
+                                                endIcon={<Icon>send</Icon>}
+                                                onClick={this.pushSendMessage}
+                                            >
+                                            </Button>
+                                        </div>
                                     </div>
                                 </Grid>
                             </Grid>

@@ -26,6 +26,11 @@
     left: 0;
     right: 0;
 } */
+.send-message-wrapper {
+    background-color: white;
+    padding: 5px;
+    border-radius: 20px;
+}
 
 .send-message {
     /* padding-bottom: 10px; */
