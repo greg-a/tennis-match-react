@@ -6,6 +6,7 @@ import { Autocomplete } from '@material-ui/lab';
 import { TextField, Icon, Button, List, ListItem, ListItemText, Divider, Grid, Paper, Box, withStyles } from '@material-ui/core';
 import moment from "moment";
 import BottomNav from "../components/BottomNav";
+const socket = io();
 
 const useStyles = {
     listItemThem: {
@@ -35,9 +36,71 @@ class Messenger extends Component {
 
 
     componentDidMount() {
+        
+        this.connectToSocket();
         this.getProfileInfo();
     };
 
+    connectToSocket = () => {
+        socket.on("output", data => {
+            console.log(data);
+            data.createdAt = new Date;
+
+            let allMessages = this.state.allMessages;
+            allMessages.unshift(data);
+
+            let newArr = [];
+            let existing = [];
+
+            allMessages.forEach(message => {
+                if (!(existing.includes(message.senderId) && existing.includes(message.recipientId))) {
+                    newArr.push(message);
+                    existing.push(message.senderId, message.recipientId)
+                };
+            });
+
+            this.setState({ allMessages: allMessages, showMessages: allMessages.filter(message => message.recipientId == this.state.sendTo.id || message.senderId == this.state.sendTo.id), conversations: newArr });
+
+
+            return () => {
+                socket.disconnect()
+            };
+
+        });
+
+        socket.on("active", data => {
+            const sendToUpdate = this.state.sendTo;
+
+            if (data === 2) {
+                // sets recipient to active if both users are connected to room
+                sendToUpdate.active = true;
+
+                this.setState({ sendTo: sendToUpdate })
+            }
+            else {
+                // sets recipient to inactive if other user is not connected
+                sendToUpdate.active = false;
+
+                this.setState({ sendTo: sendToUpdate })
+            }
+            return () => {
+                socket.disconnect()
+            };
+        });
+         //listens for new messages being emitted by the socket server
+         socket.on("output", data => {
+            console.log(data);
+
+            let showMessages = this.state.showMessages;
+            showMessages.push(data);
+
+            this.setState({ showMessages: showMessages })
+
+            return () => {
+                socket.disconnect()
+            };
+        });
+    };
 
     getProfileInfo = () => {
         fetch("/api/profile")
@@ -99,7 +162,6 @@ class Messenger extends Component {
             const recipientUsername = event.target.parentElement.dataset.username;
             const recipientId = event.target.parentElement.dataset.id;
             const room = this.createRoom(recipientId, userId);
-            const socket = io();
             this.setChatPage();
             console.log("redirecting to chat tab; messenger.js:... handleInputChange -> this.setChatPage()")
             console.log("checking messages: " + this.state.allMessages.filter(message => message.read === false))
@@ -119,49 +181,7 @@ class Messenger extends Component {
 
             //sends server username and name of room
             socket.emit("joinRoom", { username, room, userId });
-            //listens for new messages being emitted by the socket server
-            socket.on("output", data => {
-                console.log(data);
-                data.createdAt = new Date;
-
-                let allMessages = this.state.allMessages;
-                allMessages.unshift(data);
-
-                let newArr = [];
-                let existing = [];
-                allMessages.forEach(message => {
-                    if (!(existing.includes(message.senderId) && existing.includes(message.recipientId))) {
-                        newArr.push(message);
-                        existing.push(message.senderId, message.recipientId)
-                    };
-                });
-
-                this.setState({ allMessages: allMessages, showMessages: allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId), conversations: newArr });
-
-
-                return () => {
-                    socket.disconnect()
-                };
-
-            });
-            //listens for active user
-            socket.on("active", data => {
-                const sendToUpdate = this.state.sendTo;
-
-                if (data === 2) {
-                    // sets recipient to active if both users are connected to room
-                    sendToUpdate.active = true;
-
-                    this.setState({ sendTo: sendToUpdate })
-                }
-                else {
-                    // sets recipient to inactive if other user is not connected
-                    sendToUpdate.active = false;
-
-                    this.setState({ sendTo: sendToUpdate })
-                }
-
-            });
+            
             this.setState({ userSearch: "", users: [] })
         }
         else {
@@ -173,7 +193,6 @@ class Messenger extends Component {
     pushSendMessage = event => {
         if ((event.keyCode == 13 && !event.shiftKey) || event.type === "click") {
             event.preventDefault();
-            const socket = io();
 
             socket.emit("input", {
                 User: {
@@ -238,7 +257,6 @@ class Messenger extends Component {
         if (newValue.id !== this.state.sendTo.id) {
             console.log("newValue id: " + newValue.id)
             const room = this.createRoom(newValue.id, this.state.user.userid);
-            const socket = io();
             const username = this.state.user.username;
             this.setChatPage();
 
@@ -257,37 +275,6 @@ class Messenger extends Component {
             //sends server username and name of room
             socket.emit("joinRoom", { username, room });
 
-            //listens for new messages being emitted by the socket server
-            socket.on("output", data => {
-                console.log(data);
-
-                let showMessages = this.state.showMessages;
-                showMessages.push(data);
-
-                this.setState({ showMessages: showMessages })
-
-                return () => {
-                    socket.disconnect()
-                };
-            });
-            //listens for active user
-            socket.on("active", data => {
-                const sendToUpdate = this.state.sendTo;
-
-                if (data === 2) {
-                    // sets recipient to active if both users are connected to room
-                    sendToUpdate.active = true;
-
-                    this.setState({ sendTo: sendToUpdate })
-                }
-                else {
-                    // sets recipient to inactive if other user is not connected
-                    sendToUpdate.active = false;
-
-                    this.setState({ sendTo: sendToUpdate })
-                }
-
-            });
             this.setState({ userSearch: "", users: [] })
         }
     }

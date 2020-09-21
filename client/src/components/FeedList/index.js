@@ -18,8 +18,7 @@ export function FeedListItem({
     confirmer,
     month,
     day,
-    hour,
-    minute
+    hour
 }) {
     return (
         <Paper>
@@ -46,7 +45,6 @@ export function FeedListItemDeny({
     month,
     day,
     hour,
-    minute,
     okayDeny,
     eventID,
     confirmer
