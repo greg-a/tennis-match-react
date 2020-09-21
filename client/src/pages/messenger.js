@@ -193,7 +193,6 @@ class Messenger extends Component {
             //checks current room connections and joins room
             if (!this.state.rooms.includes(room)) {
                 socket.emit("joinRoom", { username, room, userId });
-                alert("Joined room: " + room)
                 allRooms.push(room);
             };
             
