@@ -241,7 +241,7 @@ const skills = [
 
 function ProfileForm(props) {
     return (
-        <div> 
+        <Grid item xs={12}> 
             <form>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={6}>
@@ -369,7 +369,7 @@ function ProfileForm(props) {
                     </Grid>
                 </Grid>
             </form>
-        </div>
+        </Grid>
     )
 }
 

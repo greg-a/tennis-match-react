@@ -1,6 +1,6 @@
 import React from "react";
 import SignupForm from "../components/SignupForm";
-import { Grid, TextField, Box, Snackbar } from '@material-ui/core';
+import { Grid, Snackbar, Container } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
 function Alert(props) {
@@ -50,7 +50,6 @@ class Signup extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 if (res.statusString === "formNotComplete") {
                     this.setState({
                         signupInstructions: "Please complete the registration form",
@@ -84,30 +83,27 @@ class Signup extends React.Component {
     render() {
         return (
             <div className="login-page">
-                <Box display="flex" justifyContent="center">
-                    <Box maxWidth="800px">
-                        <Grid container spacing={3} direction="column" alignItems="center" >
-                            <Grid item xs={12} sm={8} >
-                                <img src={require("../images/tennismatch.png")} width="100%" />
+                <Container maxWidth="md">
+                    <Grid container spacing={3} direction="column" alignItems="center" >
+                        <Grid item xs={12} sm={8} md={7}>
+                            <img src={require("../images/tennismatch.png")} width="100%" alt="Tennis Match Logo"/>
 
-                            </Grid>
-                            <Grid item xs={12}>
-                                <SignupForm usernameValue={this.state.signUsername}
-                                    passwordValue={this.state.signupPassword}
-                                    emailValue={this.state.signupEmail}
-                                    signupInstructions={this.state.signupInstructions}
-                                    handleInputChange={this.handleInputChange}
-                                    handleFormSubmit={this.handleFormSubmit} />
-                            </Grid>
                         </Grid>
-                    </Box>
-                    <Snackbar open={this.state.openSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
-                        <Alert onClose={this.handleSnackbarClose} severity={this.state.severity}>
-                            {this.state.signupInstructions}
-                        </Alert>
-                    </Snackbar>
-                </Box>
-
+                        <Grid item xs={12}>
+                            <SignupForm usernameValue={this.state.signUsername}
+                                passwordValue={this.state.signupPassword}
+                                emailValue={this.state.signupEmail}
+                                signupInstructions={this.state.signupInstructions}
+                                handleInputChange={this.handleInputChange}
+                                handleFormSubmit={this.handleFormSubmit} />
+                        </Grid>
+                    </Grid>
+                </Container>
+                <Snackbar open={this.state.openSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
+                    <Alert onClose={this.handleSnackbarClose} severity={this.state.severity}>
+                        {this.state.signupInstructions}
+                    </Alert>
+                </Snackbar>
             </div>
 
         );
