@@ -72,10 +72,6 @@ class Scheduler extends Component {
   }
 
   setModalShow = (mName, bVal) => {
-    //deletes local storage when clicking create event
-    // if (this.state.dateModalShow) {
-    //   localStorage.removeItem("selectedDate");
-    // };
 
     this.setState({ [mName]: bVal });
   };
@@ -113,7 +109,6 @@ class Scheduler extends Component {
     })
     this.setState({ eventModalShow: false });
     this.getDates();
-
   }
 
   render() {
@@ -130,14 +125,12 @@ class Scheduler extends Component {
               initialView="dayGridMonth"
               height="auto"
               events={this.state.calendarEvents}
-              // events={this.state.savedDates}
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
               }}
               eventClick={this.handleEventClick}
-            // eventColor="#fff600"
             />
           </Box>
           <SchedulerModal

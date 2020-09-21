@@ -10,10 +10,7 @@ const socket = io();
 
 const useStyles = {
     listItemThem: {
-        backgroundColor: "#d5f7ad",
-        //   boxShadow: 'none',
-        //   paddingTop: '25px',
-        //   color: '#FFFFFF'
+        backgroundColor: "#d5f7ad"
     },
     underline: {
         '&:before': {
@@ -56,7 +53,7 @@ class Messenger extends Component {
     connectToSocket = () => {
         socket.on("output", data => {
             console.log(data);
-            data.createdAt = new Date;
+            data.createdAt = new Date();
 
             let allMessages = this.state.allMessages;
             allMessages.unshift(data);
@@ -95,19 +92,6 @@ class Messenger extends Component {
 
                 this.setState({ sendTo: sendToUpdate })
             }
-            return () => {
-                socket.disconnect()
-            };
-        });
-        //listens for new messages being emitted by the socket server
-        socket.on("output", data => {
-            console.log(data);
-
-            let showMessages = this.state.showMessages;
-            showMessages.push(data);
-
-            this.setState({ showMessages: showMessages })
-
             return () => {
                 socket.disconnect()
             };
@@ -414,7 +398,7 @@ class Messenger extends Component {
                                                         button>
                                                         <ListItemText
                                                             primary={`Me: ${message.message}`}
-                                                            secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                            secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date()).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                                         />
                                                     </ListItem> :
                                                     <ListItem
@@ -422,7 +406,7 @@ class Messenger extends Component {
                                                         button>
                                                         <ListItemText
                                                             primary={`${message.User.username}: ${message.message}`}
-                                                            secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                            secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date()).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
                                                         />
                                                     </ListItem>
                                                 }

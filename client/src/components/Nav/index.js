@@ -9,7 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import Public from '@material-ui/icons/Public';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EventIcon from '@material-ui/icons/Event';
-import { Grid, TextField, Box } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +37,7 @@ export default function Nav(props) {
 
           <Grid item xs={6} sm={4} >
             <Box display="flex" justifyContent="center" alignItems="center">
-            <img src={require("../../images/tennismatch.png")} id="login-logo" width="100%" />
+            <img src={require("../../images/tennismatch.png")} id="login-logo" width="100%" alt="tennis-match-logo" />
             </Box>          
           </Grid>  
         </Grid>
