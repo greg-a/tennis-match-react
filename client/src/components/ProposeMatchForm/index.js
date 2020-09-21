@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, MenuItem, Button, Grid } from '@material-ui/core';
+import { TextField, Button, Grid } from '@material-ui/core';
 
 function ProposeMatchForm(props) {
     return (

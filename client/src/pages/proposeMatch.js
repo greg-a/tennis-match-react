@@ -4,9 +4,8 @@ import ProposeUserSearch from '../components/ProposeUserSearch'
 import ProposeCard from '../components/ProposeCard';
 import ProposeMuiModal from '../components/MUIModal';
 import moment from 'moment';
-import { ProposeModal } from "../components/Modal";
 import Nav from "../components/Nav";
-import { Button, Container, Grid, Snackbar, makeStyles } from '@material-ui/core';
+import { Button, Container, Grid, Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import io from 'socket.io-client';
 
@@ -15,15 +14,6 @@ function Alert(props) {
 }
 
 const socket = io();
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-      width: '100%',
-      '& > * + *': {
-        marginTop: theme.spacing(2),
-      },
-    },
-}));
 
 class ProposeMatch extends Component {
     
@@ -58,8 +48,6 @@ class ProposeMatch extends Component {
         const currentDate = moment(new Date()).format("YYYY-MM-DD");
         const selectedDate = localStorage.getItem("selectedDate");
 
-        console.log("THIS IS CURRENT DATE: " + currentDate)
-
         if (selectedDate > currentDate) {
             this.setState({ newDate: selectedDate })
         }
@@ -88,7 +76,6 @@ class ProposeMatch extends Component {
 
         eventIndexArr.push(this.state.searchResult[eventIndex]);
 
-        console.log("TITLE: " + eventIndexArr[0].title)
         this.setState({ modalShow: true, clickedResult: eventIndexArr, eventLocation: arg.currentTarget.dataset.location, eventTitle: eventIndexArr[0].title });
         
     };
@@ -109,7 +96,6 @@ class ProposeMatch extends Component {
     }
 
     handleNewChange = (event, newValue) => {
-        console.log("THIS IS THE EVENT: " + newValue);
         this.setState({
             userSearch: newValue
         })
@@ -125,7 +111,6 @@ class ProposeMatch extends Component {
             fetch(searchURL)
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res)
                     this.setState({
                         userResults: res
                     }, () => {
@@ -148,12 +133,9 @@ class ProposeMatch extends Component {
         event.preventDefault();
         
         let searchURL = "/api/calendar/propose?date=" + this.state.newDate;
-        console.log(searchURL);
         fetch(searchURL)
             .then(res => res.json())
             .then(res => {
-                console.log(res);
-                // this.setState({searchResult: res});
                 this.addInputTimes(res);
             })
             .catch(err => console.log(err));
@@ -191,9 +173,6 @@ class ProposeMatch extends Component {
         } else {
             currentProposeToUserId = this.state.userId
         }
-
-
-        console.log("CURRENT PROPOSE USER: " + currentProposeToUserId);
 
         if(this.state.startTimeHour==="Choose..." || this.state.startTimeMinute==="Choose..." || this.state.endTimeHour==="Choose..." || this.state.endTimeMinute==="Choose..." || this.state.eventLocation==="Choose..." || this.state.eventLocation==="any" || this.state.eventLocation==="" || this.state.confirmedByUser==="" || this.state.eventTitle==="Choose..." || this.state.eventTitle==="") {
             this.setState(
@@ -238,7 +217,7 @@ class ProposeMatch extends Component {
             .then(res => {
                 
                 socket.emit("newMatchNotification", currentProposeToUserId);
-                console.log(res.statusString);
+                
                 if (res.statusString === "eventCreated") {
                     this.setState(
                         {
@@ -263,7 +242,6 @@ class ProposeMatch extends Component {
                         }
                     )
                 } else {
-                    console.log(res);
                     this.setState(
                         {
                             newDate: "",
@@ -389,7 +367,6 @@ class ProposeMatch extends Component {
     }
 
     setSubShow = (event) => {
-        console.log(event.currentTarget.value);
         this.setState({
             startTimeHour: "",
             startTimeMinute: "",

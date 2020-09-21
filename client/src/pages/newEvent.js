@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { NewEventForm, NewEventSnackbar } from '../components/NewEventForm';
 import Nav from "../components/Nav";
 import moment from "moment";
-import { Grid, TextField, makeStyles, Snackbar, Button, Container } from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Grid, Container } from '@material-ui/core';
 
 class NewEvent extends Component {
 
@@ -43,8 +42,6 @@ class NewEvent extends Component {
 
     handleInputChange = event => {
         const { name, value } = event.target;
-        console.log("name: " + name);
-        console.log("value: " + value);
         this.setState({
             [name]: value
         });
@@ -79,7 +76,6 @@ class NewEvent extends Component {
 
         // let currentStartDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.startTime));
         // let currentEndDate = new Date(parseInt(currentYear), currentMonthAdj, parseInt(currentDay), parseInt(this.state.endTime));
-        console.log("start date: " + currentStartDate)
         
         if (this.state.eventTitle==="" || this.state.eventLocation==="") {
             this.setState({
@@ -112,7 +108,6 @@ class NewEvent extends Component {
             })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res.statusString);
                     if (res.statusString === "eventCreated") {
                         this.setState({
                             newDate: "",

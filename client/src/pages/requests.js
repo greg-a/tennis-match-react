@@ -22,7 +22,6 @@ class Requests extends Component {
         fetch("/api/calendar/requests")
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 this.setState({ userid: res.userid });
                 this.convertSkillLevel(res.results);
             })
@@ -68,7 +67,6 @@ class Requests extends Component {
         let nestedEnd = event.currentTarget.dataset.end;
 
         let eventTitle = event.currentTarget.dataset.eventtitle;
-        console.log("EVENT TITLE: " + eventTitle);
         let titleArr = (eventTitle).split("-");
         let updateObj = {
             id: event.currentTarget.dataset.eventid,
@@ -82,8 +80,6 @@ class Requests extends Component {
             body: JSON.stringify(updateObj)
         })
             .then(res => {
-                console.log(res);
-                console.log("NESTED FETCH ID: " + nestedID);
                 let confirmedEventInfo = {
                     id: nestedID,
                     start: nestedStart,
@@ -97,7 +93,6 @@ class Requests extends Component {
                     body: JSON.stringify(confirmedEventInfo)
                 })
                     .then(response => {
-                        console.log(response);
                         socket.emit("newMatchNotification", this.state.userid);
                         this.getRequests();
                     })
@@ -123,7 +118,6 @@ class Requests extends Component {
             body: JSON.stringify(updateObj)
         })
             .then(res => {
-                console.log(res);
                 socket.emit("newMatchNotification", this.state.userid);
                 this.getRequests();
             })

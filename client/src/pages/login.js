@@ -1,6 +1,6 @@
 import React from "react";
 import LoginForm from "../components/LoginForm";
-import { Grid, TextField, Box, Snackbar } from '@material-ui/core';
+import { Grid, Snackbar, Container } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
 function Alert(props) {
@@ -48,7 +48,6 @@ class Login extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 if (res.statusString === "noPassOrUser") {
                     this.setState({
                         loginInstructions: "Must enter Username and Password",
@@ -62,7 +61,6 @@ class Login extends React.Component {
                         severity: "error"
                     });
                 } else if (res.statusString === "loggedin") {
-                    // console.log("wow it worked");
                     window.location.href = "/";
                 }
             })
@@ -73,30 +71,28 @@ class Login extends React.Component {
     render() {
         return (
             <div className="login-page">
-                <Box display="flex" justifyContent="center">
-                    <Box maxWidth="800px">
-                        <Grid container spacing={3} direction="column" alignItems="center" >
-                            <Grid item xs={12} sm={8} >
-                                <img src={require("../images/tennismatch.png")} width="100%" />
-
-                            </Grid>
-                            <Grid item xs={12}>
-                                <LoginForm
-                                    usernameValue={this.state.loginUsername}
-                                    passwordValue={this.state.loginPassword}
-                                    loginInstructions={this.state.loginInstructions}
-                                    handleInputChange={this.handleInputChange}
-                                    handleFormSubmit={this.handleFormSubmit} />
-                            </Grid>
+                <Container maxWidth="md">
+                    <Grid container spacing={3} direction="column" alignItems="center" >
+                        <Grid item xs={12} sm={8} md={7} >
+                            <img src={require("../images/tennismatch.png")} width="100%" alt="Tennis Match Logo"/>
 
                         </Grid>
-                    </Box>
-                    <Snackbar open={this.state.openSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
-                        <Alert onClose={this.handleSnackbarClose} severity={this.state.severity}>
-                            {this.state.loginInstructions}
-                        </Alert>
-                    </Snackbar>
-                </Box>
+                        <Grid item xs={12}>
+                            <LoginForm
+                                usernameValue={this.state.loginUsername}
+                                passwordValue={this.state.loginPassword}
+                                loginInstructions={this.state.loginInstructions}
+                                handleInputChange={this.handleInputChange}
+                                handleFormSubmit={this.handleFormSubmit}
+                            />
+                        </Grid>
+                    </Grid>
+                </Container>
+                <Snackbar open={this.state.openSnackbar} autoHideDuration={6000} onClose={this.handleSnackbarClose}>
+                    <Alert onClose={this.handleSnackbarClose} severity={this.state.severity}>
+                        {this.state.loginInstructions}
+                    </Alert>
+                </Snackbar>  
             </div>
         );
     }
