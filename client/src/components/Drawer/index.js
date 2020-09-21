@@ -20,6 +20,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { withRouter } from "react-router-dom";
 import Badge from '@material-ui/core/Badge';
 import io from 'socket.io-client';
+const socket = io();
 
 const useStyles = makeStyles({
   list: {
@@ -70,8 +71,28 @@ const Drawer = (props) => {
 
   useEffect(() => {
     getNotifications();
-
+    connectToSocket();
   }, []);
+
+  const connectToSocket = () => {
+    socket.on("output", data => {
+
+      fetch("/api/notifications").then(res => res.json())
+        .then((notifications) => {
+          console.log(notifications)
+          if (notifications.messages > 0 || notifications.matches > 0) {
+            setNotificationState({ userid: notifications.userid, messages: notifications.messages, matches: notifications.matches, notifications: true });
+          }
+          else {
+            setNotificationState({ ...notificationState, userid: notifications.userid })
+          }
+        })
+
+        return () => {
+          socket.disconnect()
+      };
+    });
+  };
 
   const getNotifications = () => {
     fetch("/api/notifications").then(res => res.json())
@@ -83,37 +104,11 @@ const Drawer = (props) => {
         else {
           setNotificationState({ ...notificationState, userid: notifications.userid })
         }
-        const socket = io();
         const userid = notifications.userid
 
         socket.emit("notifyMe", userid);
-        socket.on("output", data => {
-
-          fetch("/api/notifications").then(res => res.json())
-            .then((notifications) => {
-              console.log(notifications)
-              if (notifications.messages > 0 || notifications.matches > 0) {
-                setNotificationState({ userid: notifications.userid, messages: notifications.messages, matches: notifications.matches, notifications: true });
-              }
-              else {
-                setNotificationState({ ...notificationState, userid: notifications.userid })
-              }
-            })
-        })
       });
   };
-
-  const socketConnect = () => {
-    // start socket connection to listen for new notifications
-    const socket = io();
-    const userid = notificationState.userid
-
-    socket.emit("notifyMe", userid);
-    socket.on("notification", data => {
-      console.log(data);
-    })
-  }
-
 
   const itemsList = [
     {

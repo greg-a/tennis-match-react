@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "../components/Nav";
 import { FeedList, FeedListItem, FeedListItemDeny } from "../components/FeedList";
-import { makeStyles, TextField, Button, Grid, Box } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import moment from "moment";
 
 class Feed extends React.Component {
