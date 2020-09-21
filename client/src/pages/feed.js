@@ -24,7 +24,6 @@ class Feed extends React.Component {
         fetch("/api/confirmed")
             .then(res => res.json())
             .then((dates) => {
-                console.log(dates);
                 this.setState({ matches: dates })
             })
             .catch(err => console.log(err));
@@ -32,7 +31,6 @@ class Feed extends React.Component {
         fetch("/api/updates")
             .then(res => res.json())
             .then((dates) => {
-                console.log(dates);
                 this.setState({ updatedMatches: dates })
             })
             .catch(err => console.log(err));
@@ -41,7 +39,6 @@ class Feed extends React.Component {
     getNotifications = () => {
         fetch("/api/notifications").then(res => res.json())
             .then((notifications) => {
-                console.log(notifications)
                 if (notifications.messages > 0 || notifications.matches > 0) {
                     this.setState({ messageNotifications: notifications.messages, matchNotifications: notifications.matches, noNotifications: false });
                 }

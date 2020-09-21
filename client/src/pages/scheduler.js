@@ -33,7 +33,6 @@ class Scheduler extends Component {
     fetch("/api/calendar")
       .then(res => res.json())
       .then((dates) => {
-        console.log(dates);
         dates.forEach(date => {
           if (moment(new Date).format("YYYYMMDD") > moment(date.end).format("YYYYMMDD")) {
             date.eventStatus = "expired"
@@ -103,12 +102,12 @@ class Scheduler extends Component {
     fetch("api/event/delete/" + this.state.selectedEvent.id, {
       method: "DELETE"
     }).then(res => {
-      console.log(res)
+      this.getDates();
     }).catch(err => {
       console.log(err)
     })
     this.setState({ eventModalShow: false });
-    this.getDates();
+    
   }
 
   render() {
