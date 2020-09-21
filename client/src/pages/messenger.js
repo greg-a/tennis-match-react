@@ -369,53 +369,62 @@ class Messenger extends Component {
             const { classes } = this.props;
             return (
                 <div>
-                    <Box paddingBottom="30px">
+                    <Box>
                         <Grid container justify="center">
-                            <Box>
-                                <div className="send-message">
-                                    <TextField
-                                        id="standard-basic"
-                                        placeholder="Send message..."
-                                        multiline
-                                        className="message-field"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.sendMessage}
-                                        onKeyDown={this.pushSendMessage}
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<Icon>send</Icon>}
-                                        onClick={this.pushSendMessage}
-                                    >
-                                    </Button>
-                                </div>
-                            </Box>
-                            <Grid item xs={10} item={true}>
-                                <List>
-                                    {this.state.showMessages.map(message => (
-                                        <Paper>
-                                            {message.senderId == this.state.user.userid ?
-                                                <ListItem
-                                                    button>
-                                                    <ListItemText
-                                                        primary={`Me: ${message.message}`}
-                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                    />
-                                                </ListItem> :
-                                                <ListItem
-                                                    className={classes.listItemThem}
-                                                    button>
-                                                    <ListItemText
-                                                        primary={`${message.User.username}: ${message.message}`}
-                                                        secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
-                                                    />
-                                                </ListItem>
-                                            }
+                            <Grid container className="chat-banner" alignItems="center">
+                                <Grid item xs={12} sm={4} style={{ textAlign: "center", color: "white" }}>
+                                    <h2>{this.state.sendTo.username}</h2>
+                                </Grid>
+                                <Grid item xs={12} sm={8}>
+                                    <div className="send-message">
+                                        <TextField
+                                            id="standard-basic"
+                                            placeholder="Send message..."
+                                            multiline
+                                            className="message-field"
+                                            onChange={this.handleInputChange}
+                                            value={this.state.sendMessage}
+                                            onKeyDown={this.pushSendMessage}
+                                        />
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<Icon>send</Icon>}
+                                            onClick={this.pushSendMessage}
+                                        >
+                                        </Button>
+                                    </div>
+                                </Grid>
+                            </Grid>
 
-                                            <Divider component="li" />
-                                        </Paper>
-                                    ))}
-                                </List>
+                            <Grid container>
+                                <Grid item sm={1}></Grid>
+                                <Grid item xs={12} sm={10} item={true}>
+                                    <List>
+                                        {this.state.showMessages.map(message => (
+                                            <Paper>
+                                                {message.senderId == this.state.user.userid ?
+                                                    <ListItem
+                                                        button>
+                                                        <ListItemText
+                                                            primary={`Me: ${message.message}`}
+                                                            secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                        />
+                                                    </ListItem> :
+                                                    <ListItem
+                                                        className={classes.listItemThem}
+                                                        button>
+                                                        <ListItemText
+                                                            primary={`${message.User.username}: ${message.message}`}
+                                                            secondary={moment(message.createdAt).format("MMDDYYYY") === moment(new Date).format("MMDDYYYY") ? `Today ${moment(message.createdAt).format("h:mm A")}` : moment(message.createdAt).format("M/DD/YY")}
+                                                        />
+                                                    </ListItem>
+                                                }
+
+                                                <Divider component="li" />
+                                            </Paper>
+                                        ))}
+                                    </List>
+                                </Grid>
                             </Grid>
                         </Grid >
                     </Box>

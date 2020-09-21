@@ -28,13 +28,18 @@
 } */
 
 .send-message {
-    padding: 20px;
-    background-color: #91e631;
+    /* padding-bottom: 10px; */
+    /* background-color: #91e631; */
     width: 100%;
     display: flex;
     justify-content: center;
     /* position: sticky; */
     bottom: 0;
+}
+
+.chat-banner{
+    background-color: #91e631;
+    padding: 5px;
 }
 
 .message-from-me {
