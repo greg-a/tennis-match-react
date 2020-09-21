@@ -38,6 +38,7 @@ class Messenger extends Component {
         sendTo: {},
         room: "",
         users: [],
+        rooms: [],
         userSearch: "",
         navValue: "",
         userId: "",
@@ -47,7 +48,7 @@ class Messenger extends Component {
 
 
     componentDidMount() {
-        
+
         this.connectToSocket();
         this.getProfileInfo();
     };
@@ -98,8 +99,8 @@ class Messenger extends Component {
                 socket.disconnect()
             };
         });
-         //listens for new messages being emitted by the socket server
-         socket.on("output", data => {
+        //listens for new messages being emitted by the socket server
+        socket.on("output", data => {
             console.log(data);
 
             let showMessages = this.state.showMessages;
@@ -188,11 +189,17 @@ class Messenger extends Component {
             })
                 .catch(err => console.log(err));
 
+            const allRooms = this.state.rooms
+            //checks current room connections and joins room
+            if (!this.state.rooms.includes(room)) {
+                socket.emit("joinRoom", { username, room, userId });
+                alert("Joined room: " + room)
+                allRooms.push(room);
+            };
+            
             this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
 
-            //sends server username and name of room
-            socket.emit("joinRoom", { username, room, userId });
-            
+
             this.setState({ userSearch: "", users: [] })
         }
         else {
