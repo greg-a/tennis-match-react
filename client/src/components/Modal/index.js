@@ -1,9 +1,14 @@
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery, useTheme } from "@material-ui/core";
+
 
 export function SchedulerModal(props) {
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+
     return (
         <Dialog
+            fullScreen={fullScreen}
             open={props.show}
             onClose={props.onHide}
             aria-labelledby="alert-dialog-title"
@@ -28,8 +33,12 @@ export function SchedulerModal(props) {
 }
 
 export function EventDetailsModal(props) {
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+    
     return (
         <Dialog
+            fullScreen={fullScreen}
             open={props.show}
             onClose={props.onHide}
             aria-labelledby="alert-dialog-title"
