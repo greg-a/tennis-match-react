@@ -52,7 +52,6 @@ class Messenger extends Component {
 
     connectToSocket = () => {
         socket.on("output", data => {
-            console.log(data);
             data.createdAt = new Date();
 
             let allMessages = this.state.allMessages;
@@ -102,7 +101,6 @@ class Messenger extends Component {
         fetch("/api/profile")
             .then(res => res.json())
             .then((profileInfo) => {
-                console.log(profileInfo);
                 this.setState({
                     user: {
                         username: profileInfo.username,
@@ -115,7 +113,6 @@ class Messenger extends Component {
         fetch("/api/messages")
             .then(res => res.json())
             .then((messages) => {
-                console.log("messages: " + JSON.stringify(messages));
                 let newArr = [];
                 let existing = [];
                 messages.forEach(message => {
@@ -133,12 +130,9 @@ class Messenger extends Component {
         fetch("api/username?username=" + event.target.value)
             .then(res => res.json())
             .then((users) => {
-                console.log(users);
                 this.setState({ users: users })
             })
             .catch(err => console.log(err));
-
-        console.log(event.target.value)
     };
 
     createRoom = (x, y) => {
@@ -159,8 +153,6 @@ class Messenger extends Component {
             const recipientId = event.target.parentElement.dataset.id;
             const room = this.createRoom(recipientId, userId);
             this.setChatPage();
-            console.log("redirecting to chat tab; messenger.js:... handleInputChange -> this.setChatPage()")
-            console.log("checking messages: " + this.state.allMessages.filter(message => message.read === false))
 
             // updates all unread messages to read for clicked user
             fetch("/api/messages/read/" + recipientId, {
@@ -219,7 +211,6 @@ class Messenger extends Component {
             })
                 .then(res => {
                     console.log("Your message was sent!");
-                    console.log(res);
                 })
                 .catch(err => console.log(err));
 
@@ -235,7 +226,6 @@ class Messenger extends Component {
             fetch(searchURL)
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res)
                     this.setState({
                         users: res
                     }, () => {
@@ -256,7 +246,6 @@ class Messenger extends Component {
 
     handleNewChange = (event, newValue) => {
         if (newValue.id !== this.state.sendTo.id) {
-            console.log("newValue id: " + newValue.id)
             const room = this.createRoom(newValue.id, this.state.user.userid);
             const username = this.state.user.username;
             this.setChatPage();
@@ -315,7 +304,7 @@ class Messenger extends Component {
                                     onInputChange={this.handleUsernameChange}
                                     options={this.state.users}
                                     getOptionLabel={(option) => option.username}
-                                    renderOption={(option) => <span>{option.username} ({option.firstname} {option.lastname})</span>}
+                                    renderOption={(option)=> (option.firstname ? <span>{option.username} ({option.firstname} {option.lastname})</span> : <span>{option.username}</span>)}
                                     renderInput={(params) => (
                                         <TextField {...params}
                                             label="User Search"

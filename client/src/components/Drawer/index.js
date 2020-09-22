@@ -63,7 +63,6 @@ const Drawer = (props) => {
   const handleLogout = () => {
     fetch("/logout")
       .then(res => {
-        console.log(res);
         window.location.href = "/";
       })
       .catch(err => console.log(err));
@@ -79,7 +78,6 @@ const Drawer = (props) => {
 
       fetch("/api/notifications").then(res => res.json())
         .then((notifications) => {
-          console.log(notifications)
           if (notifications.messages > 0 || notifications.matches > 0) {
             setNotificationState({ userid: notifications.userid, messages: notifications.messages, matches: notifications.matches, notifications: true });
           }
@@ -97,7 +95,6 @@ const Drawer = (props) => {
   const getNotifications = () => {
     fetch("/api/notifications").then(res => res.json())
       .then((notifications) => {
-        console.log(notifications)
         if (notifications.messages > 0 || notifications.matches > 0) {
           setNotificationState({ userid: notifications.userid, messages: notifications.messages, matches: notifications.matches, notifications: true });
         }
