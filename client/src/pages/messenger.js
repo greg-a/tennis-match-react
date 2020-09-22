@@ -10,7 +10,13 @@ const socket = io();
 
 const useStyles = {
     listItemThem: {
-        backgroundColor: "#d5f7ad"
+        backgroundColor: "#E2FB70"
+    },
+    unreadMessage: {
+        backgroundColor: "#E2FB70"
+    },
+    readMessage: {
+        color: "grey"
     },
     underline: {
         '&:before': {
@@ -327,7 +333,7 @@ class Messenger extends Component {
                                             {(conversation.senderId !== this.state.user.userid && conversation.read == false) ?
                                                 <ListItem
                                                     onClick={this.handleInputChange}
-                                                    className={classes.listItemThem}
+                                                    className={classes.unreadMessage}
                                                     button>
                                                     <ListItemText
                                                         primary={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
@@ -338,6 +344,7 @@ class Messenger extends Component {
                                                 </ListItem> :
                                                 <ListItem
                                                     onClick={this.handleInputChange}
+                                                    className={classes.readMessage}
                                                     button>
                                                     <ListItemText
                                                         primary={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
