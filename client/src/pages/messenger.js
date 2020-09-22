@@ -17,15 +17,15 @@ const useStyles = {
     },
     underline: {
         '&:before': {
-          borderBottomColor: "white",
+            borderBottomColor: "white",
         },
         '&:after': {
-          borderBottomColor: "white",
+            borderBottomColor: "white",
         },
         '&:hover:before': {
-          borderBottomColor: ["white", '!important'],
+            borderBottomColor: ["white", '!important'],
         },
-      }
+    }
 };
 
 class Messenger extends Component {
@@ -195,7 +195,7 @@ class Messenger extends Component {
                 socket.emit("joinRoom", { username, room, userId });
                 allRooms.push(room);
             };
-            
+
             this.setState({ sendTo: { id: parseInt(recipientId), username: recipientUsername, active: false }, room: room, showMessages: this.state.allMessages.filter(message => message.recipientId == recipientId || message.senderId == recipientId) });
 
 
@@ -298,6 +298,7 @@ class Messenger extends Component {
 
     setInboxPage = () => {
         this.setState({ subsectionShow: "inbox", bottomNavValue: "inbox-tab" });
+        this.getProfileInfo();
         this.subsectionRender();
     }
 
@@ -349,16 +350,30 @@ class Messenger extends Component {
                                     {/* <Box overflow="auto"> */}
                                     {this.state.conversations.map(conversation => (
                                         <Paper>
-                                            <ListItem
-                                                onClick={this.handleInputChange}
-                                                button>
-                                                <ListItemText
-                                                    primary={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
-                                                    secondary={conversation.message}
-                                                    data-id={conversation.senderId === this.state.user.userid ? conversation.recipientId : conversation.senderId}
-                                                    data-username={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
-                                                />
-                                            </ListItem>
+                                            {/* {(conversation.senderId !== this.state.user.userid) && (conversation.read == false) ? */}
+                                            {(conversation.senderId !== this.state.user.userid && conversation.read == false) ?
+                                                <ListItem
+                                                    onClick={this.handleInputChange}
+                                                    className={classes.listItemThem}
+                                                    button>
+                                                    <ListItemText
+                                                        primary={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
+                                                        secondary={conversation.message}
+                                                        data-id={conversation.senderId === this.state.user.userid ? conversation.recipientId : conversation.senderId}
+                                                        data-username={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
+                                                    />
+                                                </ListItem> :
+                                                <ListItem
+                                                    onClick={this.handleInputChange}
+                                                    button>
+                                                    <ListItemText
+                                                        primary={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
+                                                        secondary={conversation.message}
+                                                        data-id={conversation.senderId === this.state.user.userid ? conversation.recipientId : conversation.senderId}
+                                                        data-username={conversation.User.username === this.state.user.username ? conversation.recipient.username : conversation.User.username}
+                                                    />
+                                                </ListItem>
+                                            }
                                             <Divider component="li" />
                                         </Paper>
                                     ))}
@@ -383,7 +398,7 @@ class Messenger extends Component {
                                     <div className="send-message-wrapper">
                                         <div className="send-message">
                                             <TextField
-                                                InputProps={{classes: {underline: classes.underline}}}
+                                                InputProps={{ classes: { underline: classes.underline } }}
                                                 id="standard-basic"
                                                 placeholder="Send message..."
                                                 multiline
