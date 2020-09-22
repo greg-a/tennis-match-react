@@ -30,7 +30,7 @@ export function FeedListItem({
                     primary={`${organizer} scheduled a match with ${confirmer} on ${month}/${day} at ${hour}`}
                 />
                 <ListItemAvatar>
-                    <Avatar alt={organizer} src={thumbnail} />
+                    <Avatar alt={confirmer} src={thumbnail} />
                 </ListItemAvatar>
             </ListItem>
             <Divider component="li" />
