@@ -8,12 +8,17 @@ import {
     DialogContentText,
     DialogTitle,
     MenuItem,
-    Grid
+    Grid,
+    useMediaQuery, 
+    useTheme
 } from "@material-ui/core";
 
 function ProposeMuiModal(props) {
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+
     return (
-        <Dialog open={props.show} onClose={props.onHide}>
+        <Dialog open={props.show} onClose={props.onHide} fullScreen={fullScreen}>
             <DialogTitle>{props.title}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
