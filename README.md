@@ -1,68 +1,75 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# TennisMatch
 
-## Available Scripts
+Deployed application: <https://tennis-match-react.herokuapp.com/>
 
-In the project directory, you can run:
+### Developers
+[Greg Allebach](https://www.github.com/greg-a), [Jarrett Dougherty](https://www.github.com/JarrettD5309) & [Patrick Urbankowski](https://www.github.com/psu23)
 
-### `npm start`
+### Deployed
+September 2020
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### **App Pictures**
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+<kbd><img src="md_images/tennis-match-login.png" alt="TennisMatch login" width="500"/></kbd>
 
-### `npm test`
+<kbd><img src="md_images/tennis-match-cal.png" alt="TennisMatch scheduler" width="500"/></kbd>
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<kbd><img src="md_images/tennis-match-chat.png" alt="TennisMatch messenger" width="500"/></kbd>
 
-### `npm run build`
+<kbd><img src="md_images/tennis-match-requests.png" alt="TennisMatch requests" width="500"/></kbd>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### **What is TennisMatch?** 
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+TennisMatch is an interactive scheduling application that helps players to schedule tennis matches with other players. It allows app users to share their availability and find other people to play tennis with. An easy-to-use interface assists with this process and allows others to schedule games with you based on your availability. Through the messenger, users can communicate directly with other players.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<!-- The messenger allows you to communicate directly with other players.   -->
 
-### `npm run eject`
+<!-- The app lets you find others to play with, and allows others to schedule games with you based on your availability in an easy-to-use interface.  -->
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Motivation behind developing TennisMatch**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+We wanted an easy way to schedule tennis matches with other people in our area.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### **How do I use TennisMatch?**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+* First, create an account or log in. If you do not wish to create an account, feel free to log in with the dummy account: 
+```
+username: TennisUser 
+password: TennisPassword
+```
+* On the home page you will see the feed which shows you recently confirmed events by yourself and other users.
+* On the Profile page you may include more information about yourself including your location.
+* If you want to share you availability (this will be public and allow others to find you) you can either click on the (+) or the (calendar) tab. 
+* If you want to search for others' availability, you can go to Propose Match, and search for the date you wish to play on. It will list all the players who are seeking someone to play with on the choosen date. Here, you may then propose a specific time to play with a player within their availability.
+* You can also propose a match to a specific player by clicking 'Propose Match to Player'. 
+* Watch for notifications in the [tennis racket icon] drawer. If somebody has sent you a request to play, there will be a notification dot. Requests from other players to play with you will appear in Requests. You may then confirm or deny these requests.
+* All of your availability, proposed matches and confirmed events will appear on the [scheduler (calendar icon here)] page.
+* You may also communicate with other players directly by going to Messenger (messenger icon here). 
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### **Technologies used**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* MySQL
+* Express.js
+* React.js
+* Node.js
+* Crypto
+* CSS3
+* FullCalendar
+* HTML5
+* Javascript
+* Material-UI
+* Moment.js
+* React Router
+* Sequelize
+* Socket.io
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### **Plans for future development**
+            
+* Integrate other social media platforms to aid in building your profile and connections
+* Integrate a map to find local courts
+* Sync app's calendar with Google Calendar API
+* Group chat
+* Convert app to React Native
+* Finding and matching user with other users based on their skill level
+* More robust login system (including: password recovery and email authentication).

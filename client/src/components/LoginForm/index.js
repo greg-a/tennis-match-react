@@ -49,7 +49,7 @@ function LoginForm(props) {
                 </Box>
                
                <Box display="flex" justifyContent="center" alignItems="center">
-                <TextField type="password" id="loginPassword" name="loginPassword" label="Password" onChange={props.handleInputChange}
+                <TextField type="password" id="loginPassword" name="loginPassword" label="Password" InputProps={{classes: classes}} onChange={props.handleInputChange}
                         value={props.passwordValue}/>
                 </Box>
                 
