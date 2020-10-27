@@ -138,13 +138,11 @@ class NewEvent extends Component {
                             openSnackbar: true,
                             severity: "error"
                         });
-                    }
+                    };
                 })
                 .catch(err => console.log(err));
-        }
-
-        
-    }
+        };        
+    };
 
 
     render() {

@@ -2,7 +2,6 @@ var db = require("../models");
 // const { request } = require("express");
 var crypto = require('crypto');
 const { Sequelize, sequelize } = require("../models");
-const { timeStamp } = require("console");
 const Op = Sequelize.Op;
 
 module.exports = function (app) {
@@ -19,6 +18,7 @@ module.exports = function (app) {
                     password: hashed_password
                 }
             }).then(function (results) {
+                console.log(results)
                 if (results.length > 0) {
                     console.log("YOU ARE LOGGED IN");
                     req.session.loggedin = true;
@@ -97,6 +97,7 @@ module.exports = function (app) {
     // get profile info
     app.get("/api/profile", function (req, res) {
         if (req.session.loggedin) {
+            console.log(req.session.id)
             db.User.findOne({
                 where: {
                     id: req.session.userID
@@ -112,9 +113,11 @@ module.exports = function (app) {
 
     });
 
+
     // update user info
-    app.put("/api", function (req, res) {
+    app.put("/api/profileupdate", function (req, res) {
         if (req.session.loggedin) {
+            console.log(req.body)
             db.User.update(
                 req.body,
                 {
@@ -124,7 +127,7 @@ module.exports = function (app) {
                 }
             ).then(function (result) {
                 res.sendStatus(200)
-            })
+            }).catch(err => res.send(err))
         } else {
             res.status(400).end();
         }
