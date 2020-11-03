@@ -97,7 +97,6 @@ module.exports = function (app) {
     // get profile info
     app.get("/api/profile", function (req, res) {
         if (req.session.loggedin) {
-            console.log(req.session.id)
             db.User.findOne({
                 where: {
                     id: req.session.userID
@@ -206,6 +205,7 @@ module.exports = function (app) {
                     ]
 
                 },
+                order: [["start"]],
                 include: [
                     { model: db.User,
                     attributes: ["username", "firstname", "lastname", "id"]
@@ -398,9 +398,6 @@ module.exports = function (app) {
         if (req.session.loggedin) {
             let requestData = req.body;
             requestData.UserId = req.session.userID;
-
-
-            console.log("send message to db: " + JSON.stringify(requestData))
             db.Messages.create(requestData)
                 .then(function (results) {
                     res.json(results);
@@ -435,6 +432,31 @@ module.exports = function (app) {
                     [Op.or]: [
                         { UserId: req.session.userID },
                         { secondUser: req.session.userID }
+                    ],
+                }, 
+                order: [["createdAt", "DESC"]],
+                include: [
+                    { model: db.User, attributes: ["username", "firstname", "lastname"] },
+                    { model: db.User, as: "recipient", attributes: ["username", "firstname", "lastname"] }
+                ]
+            })
+                .then(function (results) {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
+        } else {
+            res.sendStatus(404)
+        }
+    });
+
+    app.get("/api/conversation/:recipient", function (req, res) {
+        if (req.session.loggedin) {
+            db.Messages.findAll({
+                attributes: ["id", "message", "read", "createdAt", ["UserId", "senderId"], ["secondUser", "recipientId"]],
+                where: {
+                    [Op.or]: [
+                        { userId: req.session.userID, secondUser: req.params.recipient },
+                        { secondUser: req.session.userID, userId: req.params.recipient }
                     ],
                 },
                 limit: 100, 
