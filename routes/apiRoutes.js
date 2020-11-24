@@ -42,7 +42,6 @@ module.exports = function (app) {
                 statusString: "noPassOrUser"
             });
         }
-
     });
 
     //authenticate user logged in w react router
@@ -135,14 +134,14 @@ module.exports = function (app) {
     // search for usernames
     app.get("/api/username", function (req, res) {
         if (req.session.loggedin) {
-            if (req.query.username==="") {
+            if (req.query.username === "") {
 
             } else {
                 if ((req.query.username).split(" ").length > 1) {
                     let userArr = (req.query.username).split(" ");
 
                     db.User.findAll({
-                        attributes: ["username", "firstname", "lastname", "id"],
+                        attributes: ["username", "firstname", "lastname", "id", "pushToken", "pushEnabled"],
                         where: {
                             [Op.and]: [
                                 { firstname: { [Op.substring]: userArr[0] } },
@@ -155,7 +154,7 @@ module.exports = function (app) {
                     });
                 } else {
                     db.User.findAll({
-                        attributes: ["username", "firstname", "lastname", "id"],
+                        attributes: ["username", "firstname", "lastname", "id", "pushToken", "pushEnabled"],
                         where: {
                             id: { [Op.not]: req.session.userID },
                             [Op.or]: [
@@ -207,8 +206,9 @@ module.exports = function (app) {
                 },
                 order: [["start"]],
                 include: [
-                    { model: db.User,
-                    attributes: ["username", "firstname", "lastname", "id"]
+                    {
+                        model: db.User,
+                        attributes: ["username", "firstname", "lastname", "id"]
                     },
                     {
                         model: db.User,
@@ -216,7 +216,7 @@ module.exports = function (app) {
                         attributes: ["username", "firstname", "lastname", "id"]
                     }]
             }).then(function (results) {
-                res.json(results);
+                res.json({ results: results, myUserId: req.session.userID });
             });
         } else {
             res.status(400).end();
@@ -237,7 +237,7 @@ module.exports = function (app) {
                         model: db.User,
                         as: 'secondUser'
                     }],
-                    order: [["createdAt", "DESC"]]
+                order: [["createdAt", "DESC"]]
             }).then(function (results) {
                 res.json(results)
             })
@@ -260,7 +260,7 @@ module.exports = function (app) {
                         model: db.User,
                         as: 'secondUser'
                     }],
-                    order: [["createdAt", "DESC"]]
+                order: [["createdAt", "DESC"]]
             }).then(function (results) {
                 res.json(results)
             })
@@ -271,17 +271,49 @@ module.exports = function (app) {
 
     // searching for players with availibility on chosen day
     app.get("/api/calendar/propose", function (req, res) {
+        console.log('DATE!!!!: ' + req.query.date);
+        let dateSearch;
+        if (req.query.date) {
+            dateSearch = { start: { [Op.like]: req.query.date + "%" } };
+        }
+
+        let locationSearch;
+        if (req.query.location) {
+            locationSearch = { location: req.query.location }
+        }
+
+        let skillUserSearch = {};
+        if (req.query.skill) {
+            // skillSearch = {
+            //     skilllevel: req.query.skill
+            // }
+            skillUserSearch.skilllevel = req.query.skill;
+        }
+        if (req.query.user) {
+            // userSearch = {
+            //     id: req.query.user
+            // }
+            skillUserSearch.id = req.query.user;
+        }
         if (req.session.loggedin) {
             db.Event.findAll({
                 where: {
                     [Op.and]: [
-                        { start: { [Op.like]: req.query.date + "%" } },
+
+                        // { start: { [Op.like]: req.query.date + "%" } },
+                        dateSearch,
+                        locationSearch,
+
+
                         { UserId: { [Op.not]: req.session.userID } },
                         { eventStatus: "available" }]
                 },
                 include: [
-                    {model: db.User,
-                        attributes: ["username","firstname","lastname","id","skilllevel"],}]
+                    {
+                        model: db.User,
+                        attributes: ["username", "firstname", "lastname", "id", "skilllevel", "pushToken", "pushEnabled"],
+                        where: skillUserSearch
+                    }]
             }).then(function (results) {
                 res.json(results);
             });
@@ -301,10 +333,12 @@ module.exports = function (app) {
                         { eventStatus: "propose" }]
                 },
                 include: [
-                    {model: db.User,
-                        attributes: ["username","firstname","lastname","id","skilllevel"],}]
+                    {
+                        model: db.User,
+                        attributes: ["username", "firstname", "lastname", "id", "skilllevel", "pushToken", "pushEnabled"],
+                    }]
             }).then(function (results) {
-                results = {results: results, userid: req.session.userID}
+                results = { results: results, userid: req.session.userID }
                 res.json(results);
             });
         } else {
@@ -334,7 +368,7 @@ module.exports = function (app) {
 
     });
 
-    app.delete("/api/overlap/destroy", function(req,res) {
+    app.delete("/api/overlap/destroy", function (req, res) {
         if (req.session.loggedin) {
             db.Event.destroy({
                 where: {
@@ -357,7 +391,7 @@ module.exports = function (app) {
                         }
                     ]
                 }
-            }).then(function(result) {
+            }).then(function (result) {
                 res.json(result);
             })
         } else {
@@ -433,11 +467,11 @@ module.exports = function (app) {
                         { UserId: req.session.userID },
                         { secondUser: req.session.userID }
                     ],
-                }, 
+                },
                 order: [["createdAt", "DESC"]],
                 include: [
-                    { model: db.User, attributes: ["username", "firstname", "lastname"] },
-                    { model: db.User, as: "recipient", attributes: ["username", "firstname", "lastname"] }
+                    { model: db.User, attributes: ["username", "firstname", "lastname", "pushToken", "pushEnabled"] },
+                    { model: db.User, as: "recipient", attributes: ["username", "firstname", "lastname", "pushToken", "pushEnabled"] }
                 ]
             })
                 .then(function (results) {
@@ -459,11 +493,11 @@ module.exports = function (app) {
                         { secondUser: req.session.userID, userId: req.params.recipient }
                     ],
                 },
-                limit: 100, 
+                limit: 100,
                 order: [["createdAt", "DESC"]],
                 include: [
-                    { model: db.User, attributes: ["username", "firstname", "lastname"] },
-                    { model: db.User, as: "recipient", attributes: ["username", "firstname", "lastname"] }
+                    { model: db.User, attributes: ["username", "firstname", "lastname", "pushToken", "pushEnabled"] },
+                    { model: db.User, as: "recipient", attributes: ["username", "firstname", "lastname", "pushToken", "pushEnabled"] }
                 ]
             })
                 .then(function (results) {
@@ -486,11 +520,11 @@ module.exports = function (app) {
                     where: {
                         UserId: req.params.id,
                         secondUser: req.session.userID,
-                        read: false 
+                        read: false
                     }
                 }
             ).then(function (result) {
-                res.send(result);
+                console.log("message update result: " + result)
             })
         } else {
             res.status(400).end();
@@ -506,7 +540,8 @@ module.exports = function (app) {
                         { read: false }
                     ]
                 }
-            });
+            })
+            .catch(err => console.log(err));;
 
             const matchNotifications = db.Event.count({
                 where: {
@@ -516,17 +551,18 @@ module.exports = function (app) {
                         { eventStatus: "propose" }
                     ]
                 }
-            });
+            })
+            .catch(err => console.log(err));;
 
             Promise
                 .all([messageNotifications, matchNotifications])
                 .then(responses => {
                     res.json({ messages: responses[0], matches: responses[1], userid: req.session.userID })
-                    console.log(responses)
+                    // console.log(responses)
                 })
                 .catch(err => console.log(err));
         }
-    })
+    });
 
     // user can deny request from other user
     app.put("/api/event/deny", function (req, res) {
@@ -550,7 +586,7 @@ module.exports = function (app) {
     });
 
     app.delete("/api/event/delete/:id", function (req, res) {
-        db.Event.destroy({ where: {id: req.params.id }}).then(function(event) {
+        db.Event.destroy({ where: { id: req.params.id } }).then(function (event) {
             res.json(event)
         })
     })
