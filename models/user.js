@@ -53,7 +53,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         pushEnabled: {
             type: DataTypes.BOOLEAN,
-            defaultValue: true
+            defaultValue: false
         }
     });
 
