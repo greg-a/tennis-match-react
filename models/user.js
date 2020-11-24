@@ -35,13 +35,25 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: true
         },
+        lat: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        lng: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
         skilllevel: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        oppskilllevel: {
-            type: DataTypes.INTEGER,
+        pushToken: {
+            type: DataTypes.STRING,
             allowNull: true
+        },
+        pushEnabled: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
         }
     });
 
