@@ -25,21 +25,22 @@ class Scheduler extends Component {
   }
 
   componentDidMount() {
-    this.getDates();
-    
-  }
+    this.getDates();  
+  };
 
   getDates = () => {
     fetch("/api/calendar")
       .then(res => res.json())
       .then((dates) => {
-        dates.forEach(date => {
+        const calendarEvents = dates.results;
+        
+        calendarEvents.forEach(date => {
           if (moment(new Date).format("YYYYMMDD") > moment(date.end).format("YYYYMMDD")) {
             date.eventStatus = "expired"
           }
         })
 
-        dates.map(date => {
+        calendarEvents.map(date => {
           switch (date.eventStatus) {
             case "available":
               date.color = "#3c70f2";
@@ -61,7 +62,7 @@ class Scheduler extends Component {
         })        
         let tempArr = [];
 
-        dates.forEach(date => {
+        calendarEvents.forEach(date => {
           tempArr.push(new CalendarEvent(date.id, date.title, date.start, date.color))
         });
 
