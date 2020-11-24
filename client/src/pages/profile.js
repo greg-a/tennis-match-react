@@ -65,8 +65,8 @@ class Profile extends React.Component {
             zipcode: this.state.updateZipcode === null ? this.state.zipcode : this.state.updateZipcode,
             skilllevel: this.state.updateSkilllevel === null ? this.state.skilllevel : this.state.updateSkilllevel
         }
-
-        fetch("/api", {
+        console.log(updateObj)
+        fetch("/api/profileupdate", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"

@@ -25,21 +25,22 @@ class Scheduler extends Component {
   }
 
   componentDidMount() {
-    this.getDates();
-    
-  }
+    this.getDates();  
+  };
 
   getDates = () => {
     fetch("/api/calendar")
       .then(res => res.json())
       .then((dates) => {
-        dates.forEach(date => {
+        const calendarEvents = dates.results;
+        
+        calendarEvents.forEach(date => {
           if (moment(new Date).format("YYYYMMDD") > moment(date.end).format("YYYYMMDD")) {
             date.eventStatus = "expired"
           }
         })
 
-        dates.map(date => {
+        calendarEvents.map(date => {
           switch (date.eventStatus) {
             case "available":
               date.color = "#3c70f2";
@@ -61,11 +62,11 @@ class Scheduler extends Component {
         })        
         let tempArr = [];
 
-        dates.forEach(date => {
+        calendarEvents.forEach(date => {
           tempArr.push(new CalendarEvent(date.id, date.title, date.start, date.color))
         });
 
-        this.setState({ savedDates: dates, calendarEvents: tempArr });
+        this.setState({ savedDates: calendarEvents, calendarEvents: tempArr });
       })
       .catch(err => console.log(err));
   }
@@ -99,6 +100,7 @@ class Scheduler extends Component {
   };
 
   deleteEvent = () => {
+    console.log("clicked on delete")
     fetch("api/event/delete/" + this.state.selectedEvent.id, {
       method: "DELETE"
     }).then(res => {
