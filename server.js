@@ -27,20 +27,23 @@ io.on('connection', (socket) => {
       io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
     }
 
+    socket.on('disconnecting', () => {
+      // the rooms array contains at least the socket ID
+      const rooms = Object.keys(socket.rooms);
+    });
+
     //updates number of users connected to room when someone leaves
     socket.on("disconnect", () => {
       if (io.sockets.adapter.rooms[room]) {
         io.in(user.room).emit("active", io.sockets.adapter.rooms[room].length);
-      }
+      };
     })
   });
 
   socket.on("notifyMe", userid => {
-    console.log(userid)
     const user = { socketId: socket.id, room: userid, userid: userid };
     socket.join(user.room);
-    console.log(user.userid + " is listening for notifications.")
-  })
+  });
 
   //Receives a new message
   socket.on("input", data => {
@@ -48,19 +51,17 @@ io.on('connection', (socket) => {
 
     //emits new message to specific room
     io.in(user.room).in(user.recipientid).emit("output", data);
-    console.log("New message: " + JSON.stringify(data))
   });
 
   socket.on("newMatchNotification", userid => {
 
-    //emits new message to specific room
+    //emits new match update to specific room
     socket.to(userid).emit("output", "update");
-    console.log("new match notification!", userid)
   });
 
-  socket.on("disconnect", () => {
-    console.log("user disconnected")
-  })
+  socket.on('unsubscribe', room => {
+    socket.leave(room);
+  });
 
 });
 

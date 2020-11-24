@@ -66,7 +66,7 @@ class Scheduler extends Component {
           tempArr.push(new CalendarEvent(date.id, date.title, date.start, date.color))
         });
 
-        this.setState({ savedDates: dates, calendarEvents: tempArr });
+        this.setState({ savedDates: calendarEvents, calendarEvents: tempArr });
       })
       .catch(err => console.log(err));
   }
@@ -100,6 +100,7 @@ class Scheduler extends Component {
   };
 
   deleteEvent = () => {
+    console.log("clicked on delete")
     fetch("api/event/delete/" + this.state.selectedEvent.id, {
       method: "DELETE"
     }).then(res => {
