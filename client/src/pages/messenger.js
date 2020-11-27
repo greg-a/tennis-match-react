@@ -118,7 +118,8 @@ class Messenger extends Component {
 
         fetch("/api/messages")
             .then(res => res.json())
-            .then((messages) => {
+            .then((res) => {
+                const messages = res.results;
                 let newArr = [];
                 let existing = [];
                 messages.forEach(message => {

@@ -475,7 +475,8 @@ module.exports = function (app) {
                 ]
             })
                 .then(function (results) {
-                    res.json(results);
+                    const resArr = { results: results, myUserId: req.session.userID };
+                    res.json(resArr);
                 })
                 .catch(err => console.log(err));
         } else {
@@ -541,7 +542,7 @@ module.exports = function (app) {
                     ]
                 }
             })
-            .catch(err => console.log(err));;
+                .catch(err => console.log(err));;
 
             const matchNotifications = db.Event.count({
                 where: {
@@ -552,7 +553,7 @@ module.exports = function (app) {
                     ]
                 }
             })
-            .catch(err => console.log(err));;
+                .catch(err => console.log(err));;
 
             Promise
                 .all([messageNotifications, matchNotifications])
