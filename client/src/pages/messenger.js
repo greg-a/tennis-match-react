@@ -56,6 +56,11 @@ class Messenger extends Component {
         this.getProfileInfo();
     };
 
+    componentWillUnmount() {
+
+        socket.emit('unsubscribe', this.state.room);
+    };
+
     connectToSocket = () => {
         socket.on("output", data => {
             data.createdAt = new Date();
@@ -137,7 +142,8 @@ class Messenger extends Component {
         fetch("api/username?username=" + event.target.value)
             .then(res => res.json())
             .then((users) => {
-                this.setState({ users: users })
+                this.setState({ users: users });
+                console.log("user info: " + users)
             })
             .catch(err => console.log(err));
     };
@@ -313,7 +319,7 @@ class Messenger extends Component {
                                     onInputChange={this.handleUsernameChange}
                                     options={this.state.users}
                                     getOptionLabel={(option) => option.username}
-                                    renderOption={(option)=> (option.firstname ? <span>{option.username} ({option.firstname} {option.lastname})</span> : <span>{option.username}</span>)}
+                                    renderOption={(option) => (option.firstname ? <span>{option.username} ({option.firstname} {option.lastname})</span> : <span>{option.username}</span>)}
                                     renderInput={(params) => (
                                         <TextField {...params}
                                             label="User Search"
