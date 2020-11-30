@@ -559,7 +559,7 @@ module.exports = function (app) {
                 .all([messageNotifications, matchNotifications])
                 .then(responses => {
                     res.json({ messages: responses[0], matches: responses[1], userid: req.session.userID })
-                    // console.log(responses)
+                    console.log("unread notifications: " + responses)
                 })
                 .catch(err => console.log(err));
         }
