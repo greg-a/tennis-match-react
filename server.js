@@ -76,7 +76,10 @@ if (process.env.NODE_ENV === "production") {
 app.use(session({
   secret: "tennis123",
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 100 * 365 * 24 * 60 * 60 * 1000
+  }
 }));
 
 // Routes
