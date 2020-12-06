@@ -527,6 +527,7 @@ module.exports = function (app) {
             ).then(function (result) {
                 console.log("message update result: " + result)
             })
+            .catch(err => console.log(err));
         } else {
             res.status(400).end();
         }
@@ -559,7 +560,7 @@ module.exports = function (app) {
                 .all([messageNotifications, matchNotifications])
                 .then(responses => {
                     res.json({ messages: responses[0], matches: responses[1], userid: req.session.userID })
-                    console.log("unread notifications: " + responses)
+                    console.log(`unread notifications for ${req.session.id}: ${responses}`)
                 })
                 .catch(err => console.log(err));
         }
