@@ -2,11 +2,17 @@
 
 Deployed application: <https://tennis-match-react.herokuapp.com/>
 
+Due to Heroku's removal of free deployment services (how this repository was initially deployed), this project may no longer be available after November 2022. If the deployed application is no longer active, please view the App Demo and App Pictures for further glimpse at how this project worked.
+
 ### Developers
 [Greg Allebach](https://www.github.com/greg-a), [Jarrett Dougherty](https://www.github.com/JarrettD5309) & [Patrick Urbankowski](https://www.github.com/psu23)
 
 ### Deployed
 September 2020
+
+### **App Demo**
+
+https://user-images.githubusercontent.com/61880220/196535336-c98eb207-0aa7-44df-ae1e-4b99617828b1.mov
 
 ### **App Pictures**
 
